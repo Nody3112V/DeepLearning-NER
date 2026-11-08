@@ -1,0 +1,47 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+.env
+venv/
+env/
+
+# Dữ liệu nặng (Tuân thủ quy chế: không đẩy dữ liệu lớn lên Git)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/**/.gitkeep
+
+# Trọng số mô hình đã huấn luyện (Checkpoints)
+outputs/checkpoints/*
+!outputs/checkpoints/.gitkeep
+*.pt
+*.pth
+*.bin
+*.onnx
+
+# Nhật ký huấn luyện cục bộ
+wandb/
+runs/
+*.log
+
+# Tệp sinh ra khi biên dịch LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+*.vrb
+report/acl_latex/*.pdf
+report/slides/*.pdf
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
