@@ -7,7 +7,7 @@ __pycache__/
 venv/
 env/
 
-# Dữ liệu nặng (Tuân thủ quy chế: không đẩy dữ liệu lớn lên Git)
+# Dữ liệu nặng 
 data/raw/*
 !data/raw/.gitkeep
 data/processed/*
