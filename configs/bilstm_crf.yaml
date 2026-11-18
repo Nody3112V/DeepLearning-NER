@@ -1,0 +1,52 @@
+# Cấu hình nhánh 1: BiLSTM-CNN-CRF (Phụ trách: Thành viên 1)
+experiment_name: "bilstm_cnn_crf_phoner_word"
+seed: 42
+
+data:
+  dataset: "phoner_covid19"
+  granularity: "word"  # Đổi thành "syllable" ở Tuần 5 khi so sánh mức từ vs. âm tiết
+  train_path: "data/processed/phoner_covid19/word/train.jsonl"
+  dev_path: "data/processed/phoner_covid19/word/dev.jsonl"
+  test_path: "data/processed/phoner_covid19/word/test.jsonl"
+  test_indices_path: "data/splits/test_indices.json"
+  min_word_freq: 1
+  max_seq_len: 256
+  max_word_len: 25
+
+model:
+  word_emb_dim: 100
+  pretrained_word_emb: null  # Có thể nạp PhoW2V/FastText nếu mở rộng
+  freeze_word_emb: false
+
+  # Tầng biểu diễn ký tự (Char-CNN / Char-LSTM) - Bật/tắt khi chạy Ablation ở Tuần 4
+  use_char_encoder: true
+  char_encoder_type: "cnn"   # "cnn" (Ma & Hovy, 2016) hoặc "lstm" (Lample et al., 2016)
+  char_emb_dim: 30
+  char_hidden_dim: 50        # Số bộ lọc (filters) cho CNN hoặc hidden size cho Char-LSTM
+  char_kernel_size: 3
+
+  # Tầng mã hóa ngữ cảnh hai chiều BiLSTM
+  bilstm_hidden_dim: 256     # 128 mỗi chiều (Forward + Backward = 256)
+  bilstm_num_layers: 1
+  dropout: 0.5
+
+  # Tầng suy luận cấu trúc CRF - Bật/tắt khi chạy Ablation (BiLSTM+Softmax vs BiLSTM+CRF)
+  use_crf: true
+
+train:
+  batch_size: 32
+  num_epochs: 30
+  optimizer: "adamw"
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  lr_scheduler: "reduce_on_plateau"
+  lr_factor: 0.5
+  lr_patience: 2
+  grad_clip: 5.0
+  early_stopping_patience: 5
+
+logging:
+  use_wandb: true
+  project_name: "vietnamese-ner-acl"
+  checkpoint_dir: "outputs/checkpoints/bilstm_crf"
+  prediction_out: "outputs/predictions/bilstm_crf_test.jsonl"
