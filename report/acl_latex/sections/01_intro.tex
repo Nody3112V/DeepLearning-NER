@@ -1,0 +1,32 @@
+\section{Giới thiệu và Phát biểu Bài toán}
+\label{sec:intro}
+
+\subsection{Động lực nghiên cứu}
+Nhận dạng thực thể có tên (\textit{Named Entity Recognition} -- NER) là bài toán nền tảng trong xử lý ngôn ngữ tự nhiên, đóng vai trò trích xuất các thực thể mang thông tin định danh (như tên người, tổ chức, địa điểm, hay triệu chứng dịch tễ) từ văn bản phi cấu trúc. Khác với các ngôn ngữ biến hình dùng khoảng trắng làm ranh giới từ như tiếng Anh, tiếng Việt là ngôn ngữ đơn lập và phân tích tính, trong đó khoảng trắng chỉ đóng vai trò phân tách âm tiết (\textit{syllable}) thay vì từ vựng (\textit{word}). Đặc trưng này tạo ra thách thức lớn về xác định biên thực thể (\textit{boundary ambiguity}) và hiện tượng từ ngoài từ điển (\textit{Out-of-Vocabulary} -- OOV), đặc biệt trong các miền chuyên biệt như thông tin dịch tễ COVID-19 \citep{truong-etal-2021-covid}.
+
+Trong dự án này, nhóm thực hiện nghiên cứu đối chiếu toàn diện ba hướng tiếp cận tiêu biểu cho bài toán NER tiếng Việt trên hai bộ dữ liệu chuẩn là PhoNER\_COVID19 \citep{truong-etal-2021-covid} và VLSP 2016/2018:
+\begin{enumerate}
+    \item \textbf{Nhánh 1 (Mô hình gán nhãn chuỗi truyền thống):} Tự cài đặt từ đầu kiến trúc \textbf{BiLSTM-CNN-CRF} kết hợp biểu diễn ký tự và quy hoạch động \citep{lample-etal-2016-neural, ma-hovy-2016-end}.
+    \item \textbf{Nhánh 2 (Mô hình ngôn ngữ tiền huấn luyện -- PLM):} Tinh chỉnh các mô hình Transformer đơn ngữ và đa ngữ gồm PhoBERT và XLM-RoBERTa.
+    \item \textbf{Nhánh 3 (Mô hình ngôn ngữ lớn -- LLM):} Học trong ngữ cảnh (\textit{In-Context Learning}) ở chế độ Zero-shot và Few-shot không cập nhật trọng số.
+\end{enumerate}
+
+\subsection{Phát biểu bài toán hình thức}
+Cho một câu tiếng Việt đầu vào biểu diễn dưới dạng chuỗi $n$ đơn vị từ vựng $\mathbf{x} = (x_1, x_2, \dots, x_n)$, trong đó mỗi $x_i$ có thể là một từ đã qua tách từ (\textit{word-level}) hoặc một âm tiết đơn lẻ (\textit{syllable-level}). Gọi $\mathcal{C}$ là tập hợp các loại thực thể đích (với $|\mathcal{C}| = 10$ trên PhoNER\_COVID19). Theo lược đồ gán nhãn \textbf{BIO} (\textit{Beginning -- Inside -- Outside}), không gian nhãn đầu ra được định nghĩa là:
+\begin{equation}
+    \mathcal{Y} = \{\text{O}\} \cup \{\text{B-}c, \text{I-}c \mid c \in \mathcal{C}\}, \quad |\mathcal{Y}| = 2|\mathcal{C}| + 1 = 21.
+\end{equation}
+
+Mục tiêu của mô hình gán nhãn chuỗi là tìm ánh xạ $f_{\Theta}: \mathcal{X}^n \to \mathcal{Y}^n$ để dự đoán chuỗi nhãn tối ưu $\hat{\mathbf{y}} = (\hat{y}_1, \hat{y}_2, \dots, \hat{y}_n) \in \mathcal{Y}^n$ thỏa mãn ràng buộc chuyển tiếp hợp lệ của cấu trúc BIO:
+\begin{equation}
+    \forall i \in \{1, \dots, n\}, \quad \hat{y}_i = \text{I-}c \implies i > 1 \;\wedge\; \hat{y}_{i-1} \in \{\text{B-}c, \text{I-}c\}.
+\end{equation}
+Từ chuỗi nhãn $\hat{\mathbf{y}}$, hệ thống khôi phục tập hợp các thực thể dự đoán $\hat{\mathcal{E}} = \{(s_k, e_k, c_k)\}_{k=1}^{m}$, với $1 \le s_k \le e_k \le n$ là chỉ số token bắt đầu và kết thúc của thực thể thứ $k$ thuộc lớp $c_k \in \mathcal{C}$. Chất lượng mô hình được đánh giá nghiêm ngặt bằng chỉ số \textbf{Entity-level $\text{F}_1$} (khớp chính xác đồng thời cả hai biên $[s_k, e_k]$ lẫn loại thực thể $c_k$).
+
+\subsection{Định hướng Baseline Nhánh 1: BiLSTM-CNN-CRF tự cài đặt}
+Dựa trên kiến trúc của \citet{lample-etal-2016-neural} và \citet{ma-hovy-2016-end}, mô hình cơ sở ở Nhánh 1 gồm ba tầng tính toán tuần tự:
+\begin{itemize}
+    \item \textbf{Tầng biểu diễn từ kết hợp ký tự:} Mỗi từ $x_i$ được ghép nối từ vector nhúng từ $\mathbf{e}^{\text{word}}(x_i) \in \mathbb{R}^{d_w}$ và vector hình thái ký tự $\mathbf{e}^{\text{char}}(x_i) \in \mathbb{R}^{d_c}$ trích xuất qua mạng tích chập 1 chiều (Char-CNN + Max-Pooling) hoặc Char-LSTM nhằm xử lý từ hiếm và cấu trúc viết hoa.
+    \item \textbf{Tầng mã hóa ngữ cảnh BiLSTM:} Chuỗi vector ghép nối được đưa qua mạng LSTM hai chiều để thu nhận ngữ cảnh trái--phải, sau đó chiếu tuyến tính ra ma trận điểm phát xạ (\textit{emission scores}) $\mathbf{P} \in \mathbb{R}^{n \times |\mathcal{Y}|}$.
+    \item \textbf{Tầng suy luận cấu trúc CRF:} Mô hình hóa phụ thuộc bậc một giữa các nhãn liền kề thông qua ma trận chuyển tiếp $\mathbf{A} \in \mathbb{R}^{(|\mathcal{Y}|+2) \times (|\mathcal{Y}|+2)}$. Hàm mất mát âm log-hợp lý $\mathcal{L}_{\text{CRF}} = \log \sum_{\tilde{\mathbf{y}}} \exp s(\mathbf{x}, \tilde{\mathbf{y}}) - s(\mathbf{x}, \mathbf{y})$ được tính bằng thuật toán quy hoạch động \textbf{Forward} trên miền \textit{log-sum-exp}, và quá trình giải mã chuỗi nhãn tốt nhất lúc suy luận sử dụng thuật toán \textbf{Viterbi} với độ phức tạp $\mathcal{O}(n \cdot |\mathcal{Y}|^2)$.
+\end{itemize}

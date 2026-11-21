@@ -1,3 +1,8 @@
 py_vncorenlp
 wandb
 tensorboard
+torch
+numpy
+pyyaml
+tqdm
+seqeval
