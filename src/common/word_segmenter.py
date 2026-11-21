@@ -166,6 +166,20 @@ class WordSegmenter:
 
     def _load(self) -> Callable[[str], List[str]]:
         if self._segment_fn is None:
+            if "JAVA_HOME" not in os.environ and os.name == "nt":
+                for java_dir in [
+                    Path(r"C:\Program Files\Java\jdk-26.0.2"),
+                    Path(r"C:\Program Files\Java\latest"),
+                    Path(r"C:\Program Files\Java"),
+                ]:
+                    if java_dir.exists():
+                        if (java_dir / "bin" / "java.exe").exists():
+                            os.environ["JAVA_HOME"] = str(java_dir)
+                            break
+                        for sub in java_dir.glob("jdk*"):
+                            if (sub / "bin" / "java.exe").exists():
+                                os.environ["JAVA_HOME"] = str(sub)
+                                break
             import py_vncorenlp  # import muộn để module vẫn import được khi chưa cài
             save_dir = self.save_dir.resolve()
             _ensure_model(save_dir)

@@ -26,9 +26,10 @@ must_fail(lambda: ok(granularity="char").validate())
 ok(tags=["O", "O", "I-NAME", "O", "O"]).validate()                    # mặc định: cho phép I- lẻ
 must_fail(lambda: ok(tags=["O", "O", "I-NAME", "O", "O"]).validate(strict_bio=True))
 ok(tags=["B-NAME", "I-NAME", "O", "O", "O"]).validate(strict_bio=True)
-# VLSP chưa khai báo loại -> chỉ kiểm tra định dạng
-assert get_tag_set("vlsp") is None
+# VLSP đã khai báo 4 loại chuẩn -> kiểm tra bộ nhãn VLSP
+assert get_tag_set("vlsp") == frozenset(["O", "B-PER", "I-PER", "B-LOC", "I-LOC", "B-ORG", "I-ORG", "B-MISC", "I-MISC"])
 ok(id="vlsp_word_train_00001", dataset="vlsp", tags=["O", "O", "B-PER", "O", "B-LOC"]).validate()
+must_fail(lambda: ok(id="vlsp_word_train_00001", dataset="vlsp", tags=["O", "O", "B-INVALID", "O", "O"]).validate())
 
 # --- id ---
 assert parse_sample_id("phoner_word_train_00001") == {
