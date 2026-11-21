@@ -1,3 +1,6 @@
+py_vncorenlp
+wandb
+tensorboard
 torch
 numpy
 pyyaml
