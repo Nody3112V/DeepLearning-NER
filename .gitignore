@@ -45,3 +45,9 @@ report/slides/*.pdf
 # Hệ điều hành
 .DS_Store
 Thumbs.db
+
+# Tài nguyên mô hình tách từ (VnCoreNLP jar + models)
+resources/
+
+#skills
+.agent

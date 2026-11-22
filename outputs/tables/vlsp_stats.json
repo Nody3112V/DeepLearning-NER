@@ -1,0 +1,215 @@
+{
+  "word": {
+    "train": {
+      "num_sentences": 13486,
+      "total_tokens": 294501,
+      "min_length": 1,
+      "max_length": 118,
+      "avg_length": 21.84,
+      "bio_fixes": 2,
+      "total_entities": 12083,
+      "entity_counts": {
+        "LOC": 4932,
+        "MISC": 228,
+        "ORG": 946,
+        "PER": 5977
+      },
+      "entity_ratios": {
+        "LOC": 40.82,
+        "MISC": 1.89,
+        "ORG": 7.83,
+        "PER": 49.47
+      },
+      "o_token_ratio": 93.58,
+      "tag_distribution": {
+        "B-LOC": 4932,
+        "B-MISC": 228,
+        "B-ORG": 946,
+        "B-PER": 5977,
+        "I-LOC": 2187,
+        "I-MISC": 223,
+        "I-ORG": 1578,
+        "I-PER": 2830,
+        "O": 275600
+      }
+    },
+    "dev": {
+      "num_sentences": 1500,
+      "total_tokens": 32233,
+      "min_length": 1,
+      "max_length": 83,
+      "avg_length": 21.49,
+      "bio_fixes": 1,
+      "total_entities": 1333,
+      "entity_counts": {
+        "LOC": 545,
+        "MISC": 24,
+        "ORG": 107,
+        "PER": 657
+      },
+      "entity_ratios": {
+        "LOC": 40.89,
+        "MISC": 1.8,
+        "ORG": 8.03,
+        "PER": 49.29
+      },
+      "o_token_ratio": 93.46,
+      "tag_distribution": {
+        "B-LOC": 545,
+        "B-MISC": 24,
+        "B-ORG": 107,
+        "B-PER": 657,
+        "I-LOC": 258,
+        "I-MISC": 27,
+        "I-ORG": 205,
+        "I-PER": 285,
+        "O": 30125
+      }
+    },
+    "test": {
+      "num_sentences": 1872,
+      "total_tokens": 42666,
+      "min_length": 1,
+      "max_length": 104,
+      "avg_length": 22.79,
+      "bio_fixes": 0,
+      "total_entities": 1804,
+      "entity_counts": {
+        "LOC": 770,
+        "MISC": 30,
+        "ORG": 159,
+        "PER": 845
+      },
+      "entity_ratios": {
+        "LOC": 42.68,
+        "MISC": 1.66,
+        "ORG": 8.81,
+        "PER": 46.84
+      },
+      "o_token_ratio": 93.33,
+      "tag_distribution": {
+        "B-LOC": 770,
+        "B-MISC": 30,
+        "B-ORG": 159,
+        "B-PER": 845,
+        "I-LOC": 335,
+        "I-MISC": 29,
+        "I-ORG": 272,
+        "I-PER": 407,
+        "O": 39819
+      }
+    }
+  },
+  "syllable": {
+    "train": {
+      "num_sentences": 13486,
+      "total_tokens": 348783,
+      "min_length": 1,
+      "max_length": 137,
+      "avg_length": 25.86,
+      "bio_fixes": 0,
+      "total_entities": 12083,
+      "entity_counts": {
+        "LOC": 4932,
+        "MISC": 228,
+        "ORG": 946,
+        "PER": 5977
+      },
+      "entity_ratios": {
+        "LOC": 40.82,
+        "MISC": 1.89,
+        "ORG": 7.83,
+        "PER": 49.47
+      },
+      "o_token_ratio": 93.32,
+      "tag_distribution": {
+        "B-LOC": 4932,
+        "B-MISC": 228,
+        "B-ORG": 946,
+        "B-PER": 5977,
+        "I-LOC": 5285,
+        "I-MISC": 230,
+        "I-ORG": 2826,
+        "I-PER": 2881,
+        "O": 325478
+      }
+    },
+    "dev": {
+      "num_sentences": 1500,
+      "total_tokens": 38279,
+      "min_length": 1,
+      "max_length": 94,
+      "avg_length": 25.52,
+      "bio_fixes": 0,
+      "total_entities": 1333,
+      "entity_counts": {
+        "LOC": 545,
+        "MISC": 24,
+        "ORG": 107,
+        "PER": 657
+      },
+      "entity_ratios": {
+        "LOC": 40.89,
+        "MISC": 1.8,
+        "ORG": 8.03,
+        "PER": 49.29
+      },
+      "o_token_ratio": 93.16,
+      "tag_distribution": {
+        "B-LOC": 545,
+        "B-MISC": 24,
+        "B-ORG": 107,
+        "B-PER": 657,
+        "I-LOC": 604,
+        "I-MISC": 27,
+        "I-ORG": 367,
+        "I-PER": 288,
+        "O": 35660
+      }
+    },
+    "test": {
+      "num_sentences": 1872,
+      "total_tokens": 50612,
+      "min_length": 1,
+      "max_length": 135,
+      "avg_length": 27.04,
+      "bio_fixes": 0,
+      "total_entities": 1804,
+      "entity_counts": {
+        "LOC": 770,
+        "MISC": 30,
+        "ORG": 159,
+        "PER": 845
+      },
+      "entity_ratios": {
+        "LOC": 42.68,
+        "MISC": 1.66,
+        "ORG": 8.81,
+        "PER": 46.84
+      },
+      "o_token_ratio": 93.05,
+      "tag_distribution": {
+        "B-LOC": 770,
+        "B-MISC": 30,
+        "B-ORG": 159,
+        "B-PER": 845,
+        "I-LOC": 791,
+        "I-MISC": 30,
+        "I-ORG": 478,
+        "I-PER": 414,
+        "O": 47095
+      }
+    }
+  },
+  "metadata": {},
+  "leakage": {
+    "unique_sentences": {
+      "train": 13438,
+      "dev": 1498,
+      "test": 1870
+    },
+    "overlap_train_dev": 9,
+    "overlap_train_test": 10,
+    "overlap_dev_test": 1
+  }
+}

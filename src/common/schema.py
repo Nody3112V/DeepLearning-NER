@@ -44,9 +44,8 @@ PHONER_BIO_TAGS = ["O"] + [
     for prefix in ("B", "I")
 ]
 
-# VLSP: TV2 điền danh sách loại thực thể thật vào đây (vd: ["PER", "LOC", ...]).
-# Khi còn để trống, validate() chỉ kiểm tra ĐỊNH DẠNG B-/I- mà chưa kiểm tra loại.
-VLSP_ENTITY_TYPES: List[str] = []
+# VLSP: TV2 điền danh sách loại thực thể thật vào đây (4 loại chuẩn CoNLL).
+VLSP_ENTITY_TYPES: List[str] = ["PER", "LOC", "ORG", "MISC"]
 
 VLSP_BIO_TAGS = ["O"] + [
     f"{prefix}-{etype}"
