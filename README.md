@@ -55,7 +55,6 @@ Dữ liệu gốc và dữ liệu đã xử lý không được đẩy lên GitH
 ```bash
 # 1. Tải dữ liệu
 bash data/download_data.sh
-bash data/download_vlsp.sh
 
 # 2. Tiền xử lý về chuẩn JSONL (mức từ & mức âm tiết)
 PYTHONUTF8=1 python src/data_prep/process_phoner.py

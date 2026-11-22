@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 from datasets import load_dataset
 
-RAW_DIR = Path("data/raw/vlsp")
+RAW_DIR = Path(__file__).resolve().parent / "raw" / "vlsp"
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 TAG_MAP = {
