@@ -1,6 +1,6 @@
 # Core & Deep Learning
-torch==2.15.0
-numpy==2.4.6
+torch==2.5.1
+numpy>=1.26.0,<2.3.0
 PyYAML==6.0.3
 tqdm==4.70.1
 
