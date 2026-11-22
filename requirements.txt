@@ -1,8 +1,21 @@
-py_vncorenlp
-wandb
-tensorboard
-torch
-numpy
-pyyaml
-tqdm
-seqeval
+# Core & Deep Learning
+torch==2.15.0
+numpy==2.4.6
+PyYAML==6.0.3
+tqdm==4.70.1
+
+# Pretrained Language Models & Datasets (TV2)
+transformers>=4.40.0
+datasets>=2.19.0
+sentencepiece>=0.2.0
+
+# Vietnamese NLP & Evaluation (TV1, TV2, TV3)
+py_vncorenlp>=0.1.4
+seqeval==1.2.2
+scikit-learn==1.9.1
+
+# Experiment Tracking & Visualization (TV2, TV3)
+wandb>=0.17.0
+tensorboard>=2.16.0
+matplotlib>=3.8.0
+seaborn>=0.13.0

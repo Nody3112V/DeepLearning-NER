@@ -51,3 +51,6 @@ resources/
 
 #skills
 .agent
+
+# IDE / Editor
+.vscode/
