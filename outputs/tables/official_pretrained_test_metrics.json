@@ -1,0 +1,107 @@
+{
+  "checkpoint": "outputs/checkpoints/pretrained/exp10_phobert_pooling_concat4/best_model.pt",
+  "model_name": "vinai/phobert-base-v2",
+  "pooling_strategy": "concat_4",
+  "dataset": "vlsp",
+  "granularity": "word",
+  "num_test_samples": 1872,
+  "inference_time_s": 4.6206464767456055,
+  "ms_per_sentence": 2.468294058090601,
+  "overall": {
+    "precision": 0.9414340448823207,
+    "recall": 0.9534368070953437,
+    "f1": 0.9473974111814928,
+    "tp": 1720,
+    "fp": 107,
+    "fn": 84,
+    "support": 1804
+  },
+  "macro_f1": 0.9113626745875737,
+  "per_type": {
+    "LOC": {
+      "precision": 0.9416342412451362,
+      "recall": 0.9428571428571428,
+      "f1": 0.9422452952628163,
+      "tp": 726,
+      "fp": 45,
+      "fn": 44,
+      "support": 770
+    },
+    "MISC": {
+      "precision": 0.8529411764705882,
+      "recall": 0.9666666666666667,
+      "f1": 0.90625,
+      "tp": 29,
+      "fp": 5,
+      "fn": 1,
+      "support": 30
+    },
+    "ORG": {
+      "precision": 0.7894736842105263,
+      "recall": 0.8490566037735849,
+      "f1": 0.8181818181818182,
+      "tp": 135,
+      "fp": 36,
+      "fn": 24,
+      "support": 159
+    },
+    "PER": {
+      "precision": 0.9753231492361927,
+      "recall": 0.9822485207100592,
+      "f1": 0.9787735849056604,
+      "tp": 830,
+      "fp": 21,
+      "fn": 15,
+      "support": 845
+    }
+  },
+  "entity_counts": {
+    "total_gold_entities": 1804,
+    "total_predicted_entities": 1827,
+    "overall_tp": 1720,
+    "overall_fp": 107,
+    "overall_fn": 84,
+    "per_type_breakdown": {
+      "LOC": {
+        "tp": 726,
+        "fp": 45,
+        "fn": 44,
+        "gold_support": 770,
+        "pred_count": 771,
+        "precision": 0.9416342412451362,
+        "recall": 0.9428571428571428,
+        "f1": 0.9422452952628163
+      },
+      "MISC": {
+        "tp": 29,
+        "fp": 5,
+        "fn": 1,
+        "gold_support": 30,
+        "pred_count": 34,
+        "precision": 0.8529411764705882,
+        "recall": 0.9666666666666667,
+        "f1": 0.90625
+      },
+      "ORG": {
+        "tp": 135,
+        "fp": 36,
+        "fn": 24,
+        "gold_support": 159,
+        "pred_count": 171,
+        "precision": 0.7894736842105263,
+        "recall": 0.8490566037735849,
+        "f1": 0.8181818181818182
+      },
+      "PER": {
+        "tp": 830,
+        "fp": 21,
+        "fn": 15,
+        "gold_support": 845,
+        "pred_count": 851,
+        "precision": 0.9753231492361927,
+        "recall": 0.9822485207100592,
+        "f1": 0.9787735849056604
+      }
+    }
+  }
+}

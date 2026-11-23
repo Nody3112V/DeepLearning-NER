@@ -1,0 +1,126 @@
+{
+  "PhoBERT-base-v2": {
+    "pooling_strategies": {
+      "last": {
+        "total_params": 135005193,
+        "trainable_params": 135005193,
+        "classifier_params": 6921
+      },
+      "concat_4": {
+        "total_params": 135025929,
+        "trainable_params": 135025929,
+        "classifier_params": 27657
+      },
+      "mean_4": {
+        "total_params": 135005193,
+        "trainable_params": 135005193,
+        "classifier_params": 6921
+      },
+      "weighted": {
+        "total_params": 135005206,
+        "trainable_params": 135005206,
+        "classifier_params": 6921
+      }
+    },
+    "freezing_strategies": {
+      "Full Fine-tuning (0 freeze)": {
+        "total_params": 135005193,
+        "trainable_params": 135005193,
+        "frozen_params": 0,
+        "trainable_ratio_pct": 100.0
+      },
+      "Freeze Embeddings only": {
+        "total_params": 135005193,
+        "trainable_params": 85651977,
+        "frozen_params": 49353216,
+        "trainable_ratio_pct": 63.443
+      },
+      "Freeze Embeddings + 3 Layers": {
+        "total_params": 135005193,
+        "trainable_params": 64388361,
+        "frozen_params": 70616832,
+        "trainable_ratio_pct": 47.693
+      },
+      "Freeze Embeddings + 6 Layers": {
+        "total_params": 135005193,
+        "trainable_params": 43124745,
+        "frozen_params": 91880448,
+        "trainable_ratio_pct": 31.943
+      },
+      "Freeze Embeddings + 9 Layers": {
+        "total_params": 135005193,
+        "trainable_params": 21861129,
+        "frozen_params": 113144064,
+        "trainable_ratio_pct": 16.193
+      },
+      "Freeze Entire Encoder (Head-only)": {
+        "total_params": 135005193,
+        "trainable_params": 6921,
+        "frozen_params": 134998272,
+        "trainable_ratio_pct": 0.005
+      }
+    }
+  },
+  "XLM-RoBERTa-base": {
+    "pooling_strategies": {
+      "last": {
+        "total_params": 278050569,
+        "trainable_params": 278050569,
+        "classifier_params": 6921
+      },
+      "concat_4": {
+        "total_params": 278071305,
+        "trainable_params": 278071305,
+        "classifier_params": 27657
+      },
+      "mean_4": {
+        "total_params": 278050569,
+        "trainable_params": 278050569,
+        "classifier_params": 6921
+      },
+      "weighted": {
+        "total_params": 278050582,
+        "trainable_params": 278050582,
+        "classifier_params": 6921
+      }
+    },
+    "freezing_strategies": {
+      "Full Fine-tuning (0 freeze)": {
+        "total_params": 278050569,
+        "trainable_params": 278050569,
+        "frozen_params": 0,
+        "trainable_ratio_pct": 100.0
+      },
+      "Freeze Embeddings only": {
+        "total_params": 278050569,
+        "trainable_params": 85651977,
+        "frozen_params": 192398592,
+        "trainable_ratio_pct": 30.804
+      },
+      "Freeze Embeddings + 3 Layers": {
+        "total_params": 278050569,
+        "trainable_params": 64388361,
+        "frozen_params": 213662208,
+        "trainable_ratio_pct": 23.157
+      },
+      "Freeze Embeddings + 6 Layers": {
+        "total_params": 278050569,
+        "trainable_params": 43124745,
+        "frozen_params": 234925824,
+        "trainable_ratio_pct": 15.51
+      },
+      "Freeze Embeddings + 9 Layers": {
+        "total_params": 278050569,
+        "trainable_params": 21861129,
+        "frozen_params": 256189440,
+        "trainable_ratio_pct": 7.862
+      },
+      "Freeze Entire Encoder (Head-only)": {
+        "total_params": 278050569,
+        "trainable_params": 6921,
+        "frozen_params": 278043648,
+        "trainable_ratio_pct": 0.002
+      }
+    }
+  }
+}

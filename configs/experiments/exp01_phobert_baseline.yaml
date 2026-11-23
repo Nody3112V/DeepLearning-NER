@@ -1,0 +1,36 @@
+seed: 42
+data:
+  dataset: vlsp
+  granularity: word
+  train_path: data/processed/vlsp/word/train.jsonl
+  dev_path: data/processed/vlsp/word/dev.jsonl
+  test_path: data/processed/vlsp/word/test.jsonl
+  max_seq_len: 256
+model:
+  model_name_or_path: vinai/phobert-base-v2
+  num_labels: 9
+  pooling_strategy: last
+  freeze_embeddings: false
+  freeze_encoder_layers: 0
+  freeze_entire_encoder: false
+  classifier_dropout: 0.2
+train:
+  batch_size: 32
+  num_epochs: 4
+  encoder_lr: 2.0e-05
+  classifier_lr: 0.0001
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  lr_scheduler: linear
+  grad_clip: 1.0
+  early_stopping_patience: 2
+  use_amp: true
+  num_workers: 0
+  pin_memory: true
+logging:
+  backends: local
+  project_name: vietnamese-ner-acl
+  checkpoint_dir: outputs/checkpoints/pretrained
+  prediction_out: outputs/predictions/exp01_phobert_baseline_test.jsonl
+  table_out: outputs/tables/exp01_phobert_baseline_metrics.json
+experiment_name: exp01_phobert_baseline

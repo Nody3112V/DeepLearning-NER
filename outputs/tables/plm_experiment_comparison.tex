@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Kết quả thực nghiệm so sánh các chiến lược fine-tuning cho PhoBERT và XLM-R trên tập VLSP 2016.}
+\label{tab:plm_experiments}
+\begin{tabular}{llcccccc}
+\hline
+\textbf{Exp ID} & \textbf{Mô hình \& Cấu hình} & \textbf{Trainable} & \textbf{VRAM} & \textbf{Time} & \textbf{Test P (\%)} & \textbf{Test R (\%)} & \textbf{Test F1 (\%)} \\
+\hline
+`exp01_phobert_baseline` & PhoBERT-base-v2 (Full fine-tuning (0 freeze)) & 100.0\% & 4482 MB & 414s & 93.74 & 94.68 & \textbf{94.21} \\
+`exp02_xlmr_baseline` & XLM-RoBERTa-base (Full fine-tuning (0 freeze)) & 100.0\% & 7250 MB & 1480s & 92.98 & 93.96 & \textbf{93.47} \\
+`exp03_phobert_freeze_backbone` & PhoBERT-base-v2 (Frozen backbone (Head-only)) & 0.0\% & 1349 MB & 172s & 55.38 & 11.97 & \textbf{19.69} \\
+`exp05_phobert_freeze_embeddings` & PhoBERT-base-v2 (Freeze Embeddings only) & 63.4\% & 4090 MB & 222s & 93.47 & 94.46 & \textbf{93.96} \\
+`exp08_phobert_sched_cosine` & PhoBERT-base-v2 (Full fine-tuning (0 freeze)) & 100.0\% & 4482 MB & 568s & 93.93 & 94.40 & \textbf{94.17} \\
+`exp10_phobert_pooling_concat4` & PhoBERT-base-v2 (Full fine-tuning (0 freeze)) & 100.0\% & 4560 MB & 610s & 94.14 & 95.34 & \textbf{94.74} \\
+\hline
+\end{tabular}
+\end{table*}
