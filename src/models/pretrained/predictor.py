@@ -37,9 +37,12 @@ class PLMPredictor:
         self.device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         # Nạp checkpoint
-        ckpt = torch.load(checkpoint_path, map_location=self.device)
+        try:
+            ckpt = torch.load(checkpoint_path, map_location=self.device, weights_only=False)
+        except TypeError:
+            ckpt = torch.load(checkpoint_path, map_location=self.device)
         self.config = ckpt["config"]
-        self.id2tag: Dict[int, str] = ckpt["id2tag"]
+        self.id2tag: Dict[int, str] = {int(k): v for k, v in ckpt["id2tag"].items()}
         self.tag2id: Dict[str, int] = {v: k for k, v in self.id2tag.items()}
 
         model_cfg = self.config.get("model", {})
@@ -48,10 +51,17 @@ class PLMPredictor:
         self.granularity = data_cfg.get("granularity", "word")
 
         # Khởi tạo Tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name,
-            use_fast=False if "phobert" in model_name.lower() else True
-        )
+        try:
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                model_name,
+                use_fast=False if "phobert" in model_name.lower() else True,
+                local_files_only=True,
+            )
+        except Exception:
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                model_name,
+                use_fast=False if "phobert" in model_name.lower() else True,
+            )
 
         # Khởi tạo mô hình
         self.model = PretrainedNERModel(

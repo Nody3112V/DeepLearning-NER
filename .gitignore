@@ -25,6 +25,7 @@ outputs/checkpoints/*
 wandb/
 runs/
 *.log
+*.tfevents.*
 
 # Tệp sinh ra khi biên dịch LaTeX
 *.aux

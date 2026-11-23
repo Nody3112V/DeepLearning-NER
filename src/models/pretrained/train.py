@@ -62,7 +62,7 @@ def export_predictions(
 def run_pipeline(cfg: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any]:
     """Quy trình chạy chính."""
     # 1. Cấu hình seed và device
-    seed = cfg.get("seed", 42)
+    seed = int(cfg.get("seed", 42))
     set_seed(seed)
     device = torch.device(args.device if args.device else ("cuda" if torch.cuda.is_available() else "cpu"))
     print(f"Thiết bị thực thi: {device}")
@@ -93,17 +93,35 @@ def run_pipeline(cfg: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any
     max_seq_len = int(args.max_seq_len or data_cfg.get("max_seq_len", 256))
 
     print(f"Đang nạp Tokenizer từ: {model_name}...")
-    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False if "phobert" in model_name.lower() else True)
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            use_fast=False if "phobert" in model_name.lower() else True,
+            local_files_only=True,
+        )
+    except Exception:
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            use_fast=False if "phobert" in model_name.lower() else True,
+        )
 
     train_samples = list(load_jsonl(str(train_path)))
     dev_samples = list(load_jsonl(str(dev_path)))
     test_samples = list(load_jsonl(str(test_path)))
 
+    # Nếu chạy smoke test, chỉ lấy tập con nhỏ để kiểm định end-to-end nhanh
+    if args.smoke_test:
+        print("[!] Chế độ SMOKE TEST: giới hạn 32 mẫu train, 16 mẫu dev, 16 mẫu test.")
+        train_samples = train_samples[:32]
+        dev_samples = dev_samples[:16]
+        test_samples = test_samples[:16]
+        cfg.setdefault("train", {})["num_epochs"] = 1
+
     print(f"Số lượng mẫu: Train={len(train_samples)}, Dev={len(dev_samples)}, Test={len(test_samples)}")
 
-    train_dataset = NERDataset(train_samples, tokenizer, tag2id, max_length=max_seq_len)
-    dev_dataset = NERDataset(dev_samples, tokenizer, tag2id, max_length=max_seq_len)
-    test_dataset = NERDataset(test_samples, tokenizer, tag2id, max_length=max_seq_len)
+    train_dataset = NERDataset(train_samples, tokenizer, tag2id, max_seq_len=max_seq_len)
+    dev_dataset = NERDataset(dev_samples, tokenizer, tag2id, max_seq_len=max_seq_len)
+    test_dataset = NERDataset(test_samples, tokenizer, tag2id, max_seq_len=max_seq_len)
 
     pad_token_id = tokenizer.pad_token_id if tokenizer.pad_token_id is not None else 0
     collate_fn = create_ner_collate_fn(pad_token_id=pad_token_id)
@@ -112,14 +130,36 @@ def run_pipeline(cfg: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any
     batch_size = int(args.batch_size or train_cfg.get("batch_size", 16))
     num_workers = int(train_cfg.get("num_workers", 0))
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, num_workers=num_workers, pin_memory=(device.type == "cuda"))
-    dev_loader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn, num_workers=num_workers, pin_memory=(device.type == "cuda"))
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn, num_workers=num_workers, pin_memory=(device.type == "cuda"))
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        collate_fn=collate_fn,
+        num_workers=num_workers,
+        pin_memory=(device.type == "cuda"),
+    )
+    dev_loader = DataLoader(
+        dev_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        collate_fn=collate_fn,
+        num_workers=num_workers,
+        pin_memory=(device.type == "cuda"),
+    )
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        collate_fn=collate_fn,
+        num_workers=num_workers,
+        pin_memory=(device.type == "cuda"),
+    )
 
     # 4. Khởi tạo mô hình
     pooling_strategy = args.pooling or model_cfg.get("pooling_strategy", "last")
     freeze_embeddings = args.freeze_embeddings if args.freeze_embeddings is not None else model_cfg.get("freeze_embeddings", False)
     freeze_layers = int(args.freeze_layers if args.freeze_layers is not None else model_cfg.get("freeze_encoder_layers", 0))
+    freeze_entire_encoder = args.freeze_entire_encoder if args.freeze_entire_encoder is not None else model_cfg.get("freeze_entire_encoder", False)
     dropout = float(model_cfg.get("classifier_dropout", 0.2))
 
     print(f"Khởi tạo mô hình PretrainedNERModel...")
@@ -130,12 +170,13 @@ def run_pipeline(cfg: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any
         pooling_strategy=pooling_strategy,
         freeze_embeddings=freeze_embeddings,
         freeze_encoder_layers=freeze_layers,
+        freeze_entire_encoder=freeze_entire_encoder,
         classifier_dropout=dropout,
     )
 
     # Cập nhật số epochs nếu được ghi đè từ CLI
     if args.epochs:
-        cfg["train"]["num_epochs"] = int(args.epochs)
+        cfg.setdefault("train", {})["num_epochs"] = int(args.epochs)
 
     # 5. Huấn luyện hoặc nạp Checkpoint
     trainer = PLMTrainer(
@@ -144,6 +185,7 @@ def run_pipeline(cfg: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any
         dev_dataloader=dev_loader,
         id2tag=id2tag,
         config=cfg,
+        tokenizer=tokenizer,
         device=device,
     )
 
@@ -155,15 +197,13 @@ def run_pipeline(cfg: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any
         # Nạp lại checkpoint tốt nhất trước khi test
         if best_ckpt_path.exists():
             print(f"Nạp lại checkpoint tốt nhất từ: {best_ckpt_path}")
-            ckpt = torch.load(best_ckpt_path, map_location=device)
-            model.load_state_dict(ckpt["model_state_dict"])
+            model, _ = PLMTrainer.load_checkpoint(best_ckpt_path, model=model, device=device)
     else:
         ckpt_to_load = Path(args.checkpoint) if args.checkpoint else best_ckpt_path
         if not ckpt_to_load.exists():
             raise FileNotFoundError(f"Không tìm thấy checkpoint để đánh giá: {ckpt_to_load}")
         print(f"Nạp checkpoint từ: {ckpt_to_load}")
-        ckpt = torch.load(ckpt_to_load, map_location=device)
-        model.load_state_dict(ckpt["model_state_dict"])
+        model, _ = PLMTrainer.load_checkpoint(ckpt_to_load, model=model, device=device)
 
     # 6. Đánh giá toàn diện trên tập Test
     print(f"\n==========================================")
@@ -230,12 +270,14 @@ def main():
     parser.add_argument("--pooling", type=str, choices=["last", "concat_4", "mean_4", "weighted"], default=None)
     parser.add_argument("--freeze_embeddings", action="store_true", default=None)
     parser.add_argument("--freeze_layers", type=int, default=None)
+    parser.add_argument("--freeze_entire_encoder", action="store_true", default=None)
     parser.add_argument("--batch_size", type=int, default=None)
     parser.add_argument("--epochs", type=int, default=None)
     parser.add_argument("--max_seq_len", type=int, default=None)
     parser.add_argument("--device", type=str, default=None)
     parser.add_argument("--eval_only", action="store_true", help="Chỉ đánh giá checkpoint mà không huấn luyện")
     parser.add_argument("--checkpoint", type=str, default=None)
+    parser.add_argument("--smoke_test", action="store_true", help="Chạy thử 1 epoch trên tập mẫu nhỏ để kiểm định pipeline")
     args = parser.parse_args()
 
     config_path = Path(args.config)
@@ -246,6 +288,9 @@ def main():
         cfg = yaml.safe_load(f)
 
     run_pipeline(cfg, args)
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(0)
 
 
 if __name__ == "__main__":
