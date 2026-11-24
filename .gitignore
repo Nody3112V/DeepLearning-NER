@@ -1,57 +1,61 @@
-# Byte-compiled / cache files
+# Byte-compiled / cache / môi trường ảo
 __pycache__/
 *.py[cod]
 *$py.class
 .ipynb_checkpoints/
 .env
 venv/
+.venv/
 env/
 
-# Dữ liệu nặng 
+# Dữ liệu nặng (chỉ giữ khung thư mục con bằng .gitkeep)
 data/raw/*
 !data/raw/.gitkeep
-data/processed/*
+
+data/processed/**
+!data/processed/**/
 !data/processed/**/.gitkeep
 
 # Trọng số mô hình đã huấn luyện (Checkpoints)
-outputs/checkpoints/*
-!outputs/checkpoints/.gitkeep
+outputs/checkpoints/**
+!outputs/checkpoints/**/
+!outputs/checkpoints/**/.gitkeep
 *.pt
 *.pth
 *.bin
+*.safetensors
+*.ckpt
 *.onnx
 
-# Nhật ký huấn luyện cục bộ
+# Nhật ký huấn luyện và tệp log chung
 wandb/
 runs/
 *.log
 *.tfevents.*
 
-# Tệp sinh ra khi biên dịch LaTeX
+# Tệp tạm sinh ra khi biên dịch LaTeX (XeLaTeX / LuaLaTeX)
 *.aux
 *.bbl
+*.bcf
 *.blg
-*.log
 *.out
+*.run.xml
 *.toc
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+*.xdv
 *.nav
 *.snm
 *.vrb
 report/acl_latex/*.pdf
 report/slides/*.pdf
 
-# Hệ điều hành
-.DS_Store
-Thumbs.db
-
 # Tài nguyên mô hình tách từ (VnCoreNLP jar + models)
 resources/
 
-#skills
-.agent
-
-# IDE / Editor
+# Hệ điều hành, IDE & công cụ hỗ trợ
+.DS_Store
+Thumbs.db
 .vscode/
+.agent/
