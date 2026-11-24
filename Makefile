@@ -21,4 +21,4 @@ prep:
 	$(PYTHON) src/data_prep/process_vlsp.py
 
 test:
-	$(PYTHON) -m unittest tests_schema.py tests_metrics.py tests_logger.py tests_word_segmenter.py tests_process_vlsp.py -v
+	$(PYTHON) -m unittest tests_schema.py tests_metrics.py tests_logger.py tests_word_segmenter.py tests_process_vlsp.py tests_bilstm.py -v
