@@ -135,6 +135,19 @@ class TestBiLSTMBaseline(unittest.TestCase):
         decoded = model.decode(batch["word_ids"], batch["mask"], batch["lengths"])
         self.assertEqual([len(seq) for seq in decoded], [4, 8])
 
+    def test_dataloader_no_truncation_when_max_seq_len_none(self) -> None:
+        loader_full = create_dataloader(
+            self.jsonl_path, self.vocab, batch_size=2, shuffle=False, max_seq_len=None
+        )
+        batch_full = next(iter(loader_full))
+        self.assertEqual(batch_full["lengths"].tolist(), [4, 8])
+
+        loader_trunc = create_dataloader(
+            self.jsonl_path, self.vocab, batch_size=2, shuffle=False, max_seq_len=3
+        )
+        batch_trunc = next(iter(loader_trunc))
+        self.assertEqual(batch_trunc["lengths"].tolist(), [3, 3])
+
     def test_odd_hidden_dim_raises_value_error(self) -> None:
         with self.assertRaises(ValueError):
             BiLSTMCRF(vocab_size=10, num_tags=5, bilstm_hidden_dim=65)

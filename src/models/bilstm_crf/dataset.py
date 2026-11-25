@@ -12,7 +12,7 @@ class NERDataset(Dataset):
         self,
         jsonl_path: str,
         vocab: Vocabulary,
-        max_seq_len: int = 256,
+        max_seq_len: Optional[int] = 256,
         max_word_len: int = 25,
     ) -> None:
         self.samples: List[Dict] = []
@@ -26,8 +26,16 @@ class NERDataset(Dataset):
                 if not line:
                     continue
                 record = json.loads(line)
-                tokens = record["tokens"][:max_seq_len]
-                tags = record["tags"][:max_seq_len]
+                tokens = (
+                    record["tokens"][:max_seq_len]
+                    if max_seq_len is not None
+                    else record["tokens"]
+                )
+                tags = (
+                    record["tags"][:max_seq_len]
+                    if max_seq_len is not None
+                    else record["tags"]
+                )
 
                 self.samples.append(
                     {
@@ -93,7 +101,7 @@ def create_dataloader(
     vocab: Vocabulary,
     batch_size: int = 32,
     shuffle: bool = False,
-    max_seq_len: int = 256,
+    max_seq_len: Optional[int] = 256,
     max_word_len: int = 25,
 ) -> DataLoader:
     dataset = NERDataset(

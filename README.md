@@ -63,9 +63,22 @@ PYTHONUTF8=1 python src/data_prep/process_vlsp.py
 
 ## 6. Kiểm thử hạ tầng (Unit Tests)
 ```bash
-PYTHONUTF8=1 python -m unittest tests_schema.py tests_metrics.py tests_logger.py tests_word_segmenter.py tests_process_vlsp.py -v
+PYTHONUTF8=1 python -m unittest tests_schema.py tests_metrics.py tests_logger.py tests_word_segmenter.py tests_process_vlsp.py tests_bilstm.py -v
 ```
 
 ## 7. Huấn luyện, đánh giá và theo dõi thí nghiệm
-- **Nhật ký huấn luyện (Weights & Biases):** *(Cập nhật link project W&B công khai/chia sẻ với giảng viên tại đây)*
-- **Huấn luyện & Tái tạo kết quả:** Các lệnh chạy huấn luyện từng nhánh và kịch bản tái tạo bảng kết quả chính (`scripts/reproduce_main_table.sh`) sẽ được cập nhật đầy đủ từ Tuần 2–4.
+- **Nhật ký huấn luyện (Weights & Biases):** https://wandb.ai/nody3112v-vietnam-national-university-hanoi/vietnamese-ner-acl
+- **Nhánh 1 — Baseline BiLSTM (Tuần 2):**
+```bash
+# Huấn luyện Baseline BiLSTM trên PhoNER_COVID19 (word-level)
+PYTHONUTF8=1 python -m src.models.bilstm_crf.train \
+  --config configs/bilstm_crf.yaml \
+  --exp-name baseline_bilstm_word \
+  --no-char --no-crf
+
+# Kiểm tra lại Entity-level F1 trên tệp dự đoán tập test bằng hàm chấm chung
+PYTHONUTF8=1 python -m src.common.metrics \
+  --gold data/processed/phoner_covid19/word/test.jsonl \
+  --pred outputs/predictions/baseline_bilstm_word_test.jsonl
+```
+- **Tái tạo kết quả toàn dự án:** Kịch bản tái tạo bảng kết quả chính (`scripts/reproduce_main_table.sh`) sẽ được hoàn thiện sau khi các nhánh hoàn tất thực nghiệm.
