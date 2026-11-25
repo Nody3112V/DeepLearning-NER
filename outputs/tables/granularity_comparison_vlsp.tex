@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llcccccccc}
+\hline
+\textbf{Model} & \textbf{Granularity} & \textbf{P (\%)} & \textbf{R (\%)} & \textbf{Micro-F1} & \textbf{Macro-F1} & \textbf{Time (s)} & \textbf{VRAM (MB)} & \textbf{Avg Tok} & \textbf{Avg SW} \\
+\hline
+PhoBERT-base-v2 & word & 93.74 & 94.68 & \textbf{94.21} & 89.76 & 419.5 & 4482 & 22.79 & 25.59 (1.03$\times$) \\
+PhoBERT-base-v2 & syllable & 91.56 & 93.79 & 92.66 & 86.78 & 443.0 & 4877 & 27.04 & 29.46 (1.02$\times$) \\
+XLM-RoBERTa-base & syllable & 92.98 & 93.96 & 93.47 & 89.25 & 1479.8 & 7250 & 27.04 & 33.85 (1.18$\times$) \\
+XLM-RoBERTa-base & word & 92.02 & 93.90 & 92.95 & 88.53 & 2664.5 & 9380 & 22.79 & 42.41 (1.77$\times$) \\
+\hline
+\end{tabular}
+\caption{So sánh hiệu năng và chi phí tài nguyên theo ma trận $2\times 2$ (Mô hình $\times$ Mức biểu diễn) trên tập test VLSP 2016 (1.872 câu).}
+\label{tab:granularity-vlsp}
+\end{table*}

@@ -1,0 +1,45 @@
+{
+  "experiment_name": "exp18_xlmr_phoner_word",
+  "seed": 42,
+  "data": {
+    "dataset": "phoner_covid19",
+    "granularity": "word",
+    "train_path": "data/processed/phoner_covid19/word/train.jsonl",
+    "dev_path": "data/processed/phoner_covid19/word/dev.jsonl",
+    "test_path": "data/processed/phoner_covid19/word/test.jsonl",
+    "test_indices_path": "data/splits/test_indices.json",
+    "max_seq_len": 256
+  },
+  "model": {
+    "model_name_or_path": "xlm-roberta-base",
+    "num_labels": 21,
+    "pooling_strategy": "last",
+    "freeze_embeddings": false,
+    "freeze_encoder_layers": 0,
+    "freeze_entire_encoder": false,
+    "classifier_dropout": 0.2
+  },
+  "train": {
+    "batch_size": 32,
+    "num_epochs": 6,
+    "encoder_lr": 2e-05,
+    "classifier_lr": 0.0001,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "lr_scheduler": "linear",
+    "grad_clip": 1.0,
+    "early_stopping_patience": 3,
+    "use_amp": true,
+    "num_workers": 0,
+    "pin_memory": true,
+    "save_fp16": true
+  },
+  "logging": {
+    "backends": "local",
+    "project_name": "vietnamese-ner-acl",
+    "checkpoint_dir": "outputs/checkpoints/pretrained",
+    "prediction_out": "outputs/predictions/exp18_xlmr_phoner_word_test.jsonl",
+    "table_out": "outputs/tables/exp18_xlmr_phoner_word_test_metrics.json"
+  },
+  "member": "tv2"
+}

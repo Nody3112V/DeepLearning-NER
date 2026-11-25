@@ -285,6 +285,22 @@ class TestSubwordAlign(unittest.TestCase):
         # Nhãn: [-100, 3 (B-LOC), -100, 0 (O), -100]
         self.assertEqual(res["labels"], [-100, 3, -100, 0, -100])
 
+    def test_11_recover_word_predictions_truncation_and_zero_width(self):
+        """Kiểm tra phục hồi 1-1 khi có subword phụ, truncation, hoặc token không sinh subword."""
+        from src.models.pretrained.subword_align import recover_word_predictions
+
+        id2tag = {0: "O", 1: "B-PER", 2: "I-PER", 3: "B-LOC"}
+        # Giả lập câu 5 từ:
+        #   word 0 -> 2 subwords (chỉ lấy subword đầu: pred=1 -> B-PER, bỏ qua pred=2)
+        #   word 1 -> 0 subwords (vd: zero-width \u200b -> fallback "O")
+        #   word 2 -> 1 subword (pred=3 -> B-LOC)
+        #   word 3, 4 -> bị cắt do truncation -> fallback "O"
+        word_ids = [None, 0, 0, 2, None, None]
+        pred_ids = [3, 1, 2, 3, 1, 0]
+        recovered = recover_word_predictions(pred_ids, word_ids, num_tokens=5, id2tag=id2tag)
+        self.assertEqual(recovered, ["B-PER", "O", "B-LOC", "O", "O"])
+        self.assertEqual(len(recovered), 5)
+
 
 def run_unit_tests():
     suite = unittest.TestLoader().loadTestsFromTestCase(TestSubwordAlign)

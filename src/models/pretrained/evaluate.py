@@ -38,7 +38,11 @@ from transformers import AutoTokenizer
 from src.common.schema import load_jsonl, save_jsonl, NERSample, TAG_SETS
 from src.common.metrics import compute_metrics, format_report, evaluate_files, to_latex_table
 from src.models.pretrained.model import PretrainedNERModel
-from src.models.pretrained.subword_align import NERDataCollator
+from src.models.pretrained.subword_align import (
+    NERDataCollator,
+    tokenize_and_get_word_ids,
+    recover_word_predictions,
+)
 
 
 # --------------------------------------------------------------------------- #
@@ -108,46 +112,21 @@ class InferenceSampleDataset(Dataset):
         sample = self.samples[idx]
         tokens = sample.tokens
 
-        subword_ids: List[int] = []
-        token_to_sw_idx: List[int] = []
-
-        cls_id = self.tokenizer.cls_token_id if self.tokenizer.cls_token_id is not None else self.tokenizer.bos_token_id
-        sep_id = self.tokenizer.sep_token_id if self.tokenizer.sep_token_id is not None else self.tokenizer.eos_token_id
-
-        if cls_id is not None:
-            subword_ids.append(cls_id)
-
-        for tok in tokens:
-            sws = self.tokenizer.encode(tok, add_special_tokens=False)
-            if not sws:
-                sws = [self.tokenizer.unk_token_id]
-
-            # Ghi nhận chỉ số subword đầu tiên nếu còn trong phạm vi max_length
-            if len(subword_ids) < self.max_length - (1 if sep_id is not None else 0):
-                token_to_sw_idx.append(len(subword_ids))
-            else:
-                token_to_sw_idx.append(-1)  # Token bị truncated
-
-            subword_ids.extend(sws)
-
-        # Truncation
-        if sep_id is not None:
-            if len(subword_ids) >= self.max_length:
-                subword_ids = subword_ids[:self.max_length - 1] + [sep_id]
-            else:
-                subword_ids.append(sep_id)
-        else:
-            subword_ids = subword_ids[:self.max_length]
-
-        attention_mask = [1] * len(subword_ids)
+        subword_ids, attention_mask, word_ids = tokenize_and_get_word_ids(
+            tokenizer=self.tokenizer,
+            tokens=tokens,
+            max_length=self.max_length,
+        )
 
         return {
             "id": sample.id,
+            "dataset": sample.dataset,
+            "granularity": sample.granularity,
             "tokens": tokens,
             "gold_tags": sample.tags,
             "input_ids": subword_ids,
             "attention_mask": attention_mask,
-            "token_to_sw_idx": token_to_sw_idx,
+            "word_ids": word_ids,
         }
 
 
@@ -157,18 +136,22 @@ def inference_collate_fn(pad_token_id: int):
         max_len = max(len(item["input_ids"]) for item in batch)
         batch_input_ids = []
         batch_attention_mask = []
+        batch_word_ids = []
 
         for item in batch:
             cur_len = len(item["input_ids"])
             pad_len = max_len - cur_len
             batch_input_ids.append(item["input_ids"] + [pad_token_id] * pad_len)
             batch_attention_mask.append(item["attention_mask"] + [0] * pad_len)
+            batch_word_ids.append(item["word_ids"] + [None] * pad_len)
 
         return {
             "ids": [item["id"] for item in batch],
+            "datasets": [item["dataset"] for item in batch],
+            "granularities": [item["granularity"] for item in batch],
             "tokens": [item["tokens"] for item in batch],
             "gold_tags": [item["gold_tags"] for item in batch],
-            "token_to_sw_idx": [item["token_to_sw_idx"] for item in batch],
+            "word_ids": batch_word_ids,
             "input_ids": torch.tensor(batch_input_ids, dtype=torch.long),
             "attention_mask": torch.tensor(batch_attention_mask, dtype=torch.long),
         }
@@ -183,6 +166,7 @@ def predict_and_recover_tokens(
     samples: List[NERSample],
     batch_size: int = 32,
     device: Optional[torch.device] = None,
+    max_length: int = 256,
 ) -> Tuple[List[NERSample], float]:
     """
     Thực hiện dự đoán và phục hồi nhãn về mức token gốc.
@@ -194,7 +178,7 @@ def predict_and_recover_tokens(
     model = model.to(device)
     model.eval()
 
-    ds = InferenceSampleDataset(samples, tokenizer, max_length=256)
+    ds = InferenceSampleDataset(samples, tokenizer, max_length=max_length)
     pad_id = tokenizer.pad_token_id if tokenizer.pad_token_id is not None else 0
     loader = DataLoader(ds, batch_size=batch_size, shuffle=False, collate_fn=inference_collate_fn(pad_id))
 
@@ -213,19 +197,19 @@ def predict_and_recover_tokens(
 
         for b in range(len(batch["ids"])):
             s_id = batch["ids"][b]
+            ds_name = batch["datasets"][b]
+            gran = batch["granularities"][b]
             tokens = batch["tokens"][b]
-            gold_tags = batch["gold_tags"][b]
-            token_map = batch["token_to_sw_idx"][b]
+            wids = batch["word_ids"][b]
             sent_preds = preds[b]
 
-            recovered_tags: List[str] = []
-            for t_idx, sw_idx in enumerate(token_map):
-                if sw_idx != -1 and sw_idx < len(sent_preds):
-                    label_id = int(sent_preds[sw_idx])
-                    recovered_tags.append(id2tag.get(label_id, "O"))
-                else:
-                    # Trường hợp bị truncation vượt quá 256 subwords
-                    recovered_tags.append("O")
+            recovered_tags = recover_word_predictions(
+                pred_ids=sent_preds,
+                word_ids=wids,
+                num_tokens=len(tokens),
+                id2tag=id2tag,
+                fallback_tag="O",
+            )
 
             # Bất biến: số nhãn phục hồi phải bằng đúng số token gốc
             assert len(recovered_tags) == len(tokens), (
@@ -234,8 +218,8 @@ def predict_and_recover_tokens(
 
             pred_sample = NERSample(
                 id=s_id,
-                dataset="vlsp",
-                granularity="word",
+                dataset=ds_name,
+                granularity=gran,
                 tokens=tokens,
                 tags=recovered_tags,
             )
@@ -298,12 +282,16 @@ def run_official_evaluation(
     gold_path: str = "data/processed/vlsp/word/test.jsonl",
     output_pred_path: str = "outputs/predictions/pretrained_test.jsonl",
     dataset_name: str = "vlsp",
+    expected_count: Optional[int] = None,
     device: Optional[torch.device] = None,
 ) -> Dict[str, Any]:
     """
     Quy trình đánh giá chính thức khép kín.
     """
     device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if expected_count is None:
+        expected_count = 1872 if dataset_name == "vlsp" else (3000 if dataset_name == "phoner_covid19" else None)
+
     print(f"\n=======================================================")
     print(f"  QUY TRÌNH ĐÁNH GIÁ CHÍNH THỨC - PRETRAINED PLM")
     print(f"  Checkpoint: {checkpoint_path}")
@@ -313,7 +301,8 @@ def run_official_evaluation(
     print(f"=======================================================\n")
 
     # BƯỚC 1: Xác nhận Evaluation Protocol
-    gold_samples = validate_evaluation_protocol(gold_path, dataset_name=dataset_name, expected_count=1872)
+    gold_samples = validate_evaluation_protocol(gold_path, dataset_name=dataset_name, expected_count=expected_count)
+    granularity = gold_samples[0].granularity if gold_samples else "word"
 
     # BƯỚC 2: Nạp Checkpoint & Tokenizer
     if not os.path.exists(checkpoint_path):
@@ -329,12 +318,13 @@ def run_official_evaluation(
     model_cfg = cfg.get("model", {})
     model_name = model_cfg.get("model_name_or_path", "vinai/phobert-base-v2")
     pooling_strategy = model_cfg.get("pooling_strategy", "last")
+    use_fast = False if "phobert" in model_name.lower() else True
 
-    print(f"[*] Nạp Tokenizer: {model_name}...")
+    print(f"[*] Nạp Tokenizer: {model_name} (use_fast={use_fast})...")
     try:
-        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, local_files_only=True)
+        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=use_fast, local_files_only=True)
     except Exception:
-        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=use_fast)
 
     print(f"[*] Khởi tạo mô hình PretrainedNERModel (pooling={pooling_strategy}, labels={len(id2tag)})...")
     model = PretrainedNERModel(
@@ -347,7 +337,7 @@ def run_official_evaluation(
     model.to(device)
 
     # BƯỚC 3: Dự đoán & Phục hồi về mức token gốc
-    print(f"[*] Đang thực hiện suy luận trên 1,872 câu test...")
+    print(f"[*] Đang thực hiện suy luận trên {len(gold_samples):,} câu test ({dataset_name}/{granularity})...")
     pred_samples, infer_time = predict_and_recover_tokens(
         model=model,
         tokenizer=tokenizer,
@@ -386,7 +376,7 @@ def run_official_evaluation(
     print(f"  - Số thực thể dự đoán đúng (True Positives)    : {entity_analysis['overall_tp']:,}")
     print(f"  - Số thực thể dự đoán sai (False Positives)    : {entity_analysis['overall_fp']:,}")
     print(f"  - Số thực thể bỏ sót (False Negatives)         : {entity_analysis['overall_fn']:,}")
-    print(f"  - Thời gian suy luận toàn bộ 1,872 câu         : {infer_time:.2f}s ({infer_time/1872*1000:.2f} ms/câu)")
+    print(f"  - Thời gian suy luận toàn bộ {len(gold_samples):,} câu        : {infer_time:.2f}s ({infer_time/len(gold_samples)*1000:.2f} ms/câu)")
 
     # BƯỚC 7: Xuất bảng kết quả JSON, Markdown, LaTeX
     out_table_dir = Path("outputs/tables")
@@ -397,7 +387,7 @@ def run_official_evaluation(
         "model_name": model_name,
         "pooling_strategy": pooling_strategy,
         "dataset": dataset_name,
-        "granularity": "word",
+        "granularity": granularity,
         "num_test_samples": len(gold_samples),
         "inference_time_s": infer_time,
         "ms_per_sentence": infer_time / len(gold_samples) * 1000,
@@ -419,7 +409,7 @@ def run_official_evaluation(
         "# Báo cáo Đánh giá Chính thức - Nhánh Pretrained PLM",
         "",
         f"- **Mô hình**: `{model_name}` (Pooling: `{pooling_strategy}`)",
-        f"- **Tập dữ liệu**: `{dataset_name}` (Mức: `word`)",
+        f"- **Tập dữ liệu**: `{dataset_name}` (Mức: `{granularity}`)",
         f"- **Số lượng câu test**: `{len(gold_samples):,}`",
         f"- **Tốc độ suy luận**: `{infer_time:.2f}s` (`{infer_time/len(gold_samples)*1000:.2f} ms/câu` trên GPU)",
         "",
@@ -439,9 +429,9 @@ def run_official_evaluation(
         f"| **MACRO-F1** | - | - | - | - | - | **{metrics['macro_f1']*100:.2f}%** |",
         "",
         "## 2. Kiểm định Tính Toàn vẹn & Error Handling",
-        "- [x] 100% mẫu test (1,872 câu) được phục hồi nhãn ở mức token gốc.",
+        f"- [x] 100% mẫu test ({len(gold_samples):,} câu) được phục hồi nhãn ở mức token gốc.",
         "- [x] Độ dài `tokens` và `tags` khớp 1-1 trên mọi câu.",
-        "- [x] Mọi ID khớp 100% với file chuẩn `data/processed/vlsp/word/test.jsonl`.",
+        f"- [x] Mọi ID khớp 100% với file chuẩn `{gold_path}`.",
         "- [x] Xử lý an toàn các câu không có thực thể và câu có nhiều thực thể.",
     ])
     with open(md_path, "w", encoding="utf-8") as f:
@@ -451,8 +441,8 @@ def run_official_evaluation(
     # 3. LaTeX Table
     tex_path = out_table_dir / "official_pretrained_test_table.tex"
     latex_code = to_latex_table(
-        {f"PhoBERT ({pooling_strategy})": metrics},
-        caption="Kết quả đánh giá chính thức của PhoBERT trên tập test VLSP 2016."
+        {f"{model_name} ({granularity}, {pooling_strategy})": metrics},
+        caption=f"Kết quả đánh giá chính thức trên tập test {dataset_name} ({granularity})."
     )
     with open(tex_path, "w", encoding="utf-8") as f:
         f.write(latex_code)
@@ -484,6 +474,7 @@ def main():
         default="outputs/predictions/pretrained_test.jsonl",
         help="Đường dẫn xuất file dự đoán JSONL",
     )
+    parser.add_argument("--dataset", type=str, choices=["vlsp", "phoner_covid19"], default="vlsp")
     parser.add_argument("--device", type=str, default=None)
     args = parser.parse_args()
 
@@ -492,6 +483,7 @@ def main():
         checkpoint_path=args.checkpoint,
         gold_path=args.gold,
         output_pred_path=args.output_pred,
+        dataset_name=args.dataset,
         device=device,
     )
 
