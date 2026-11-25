@@ -68,17 +68,26 @@ PYTHONUTF8=1 python -m unittest tests_schema.py tests_metrics.py tests_logger.py
 
 ## 7. Huấn luyện, đánh giá và theo dõi thí nghiệm
 - **Nhật ký huấn luyện (Weights & Biases):** https://wandb.ai/nody3112v-vietnam-national-university-hanoi/vietnamese-ner-acl
-- **Nhánh 1 — Baseline BiLSTM (Tuần 2):**
+- **Nhánh 1 — BiLSTM & BiLSTM-CNN-CRF (Tuần 2–3):**
 ```bash
-# Huấn luyện Baseline BiLSTM trên PhoNER_COVID19 (word-level)
+# 1. Huấn luyện Baseline BiLSTM (Tuần 2 - không CharEncoder, không CRF)
 PYTHONUTF8=1 python -m src.models.bilstm_crf.train \
   --config configs/bilstm_crf.yaml \
   --exp-name baseline_bilstm_word \
   --no-char --no-crf
 
-# Kiểm tra lại Entity-level F1 trên tệp dự đoán tập test bằng hàm chấm chung
+# 2. Huấn luyện BiLSTM-CNN-CRF hoàn chỉnh (Tuần 3 - tự cài đặt từ đầu)
+PYTHONUTF8=1 python -m src.models.bilstm_crf.train \
+  --config configs/bilstm_crf.yaml
+
+# 3. Kiểm tra lại Entity-level F1 trên tệp dự đoán tập test bằng hàm chấm chung
 PYTHONUTF8=1 python -m src.common.metrics \
   --gold data/processed/phoner_covid19/word/test.jsonl \
-  --pred outputs/predictions/baseline_bilstm_word_test.jsonl
+  --pred outputs/predictions/bilstm_crf_test.jsonl
 ```
+
+| Mô hình (PhoNER_COVID19 — word-level) | Best Dev F1 | Test Precision | Test Recall | Test Micro-F1 | Test Macro-F1 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| Baseline BiLSTM (Tuần 2) | 89.05% | 86.61% | 89.71% | 88.13% | 83.00% |
+| **BiLSTM-CNN-CRF tự cài đặt (Tuần 3)** | **93.54%** | **93.23%** | **92.09%** | **92.66%** | **89.16%** |
 - **Tái tạo kết quả toàn dự án:** Kịch bản tái tạo bảng kết quả chính (`scripts/reproduce_main_table.sh`) sẽ được hoàn thiện sau khi các nhánh hoàn tất thực nghiệm.
