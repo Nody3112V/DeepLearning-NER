@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lcccc}
+\hline
+\textbf{Loại thực thể} & \textbf{Support} & \textbf{BiLSTM} & \textbf{BiLSTM-CNN-CRF} & $\Delta \mathbf{F_1}$ \\
+\hline
+AGE                 & 582   & 93.50 & \textbf{95.17} & +1.67 \\
+DATE                & 1654  & 95.89 & \textbf{98.40} & +2.51 \\
+GENDER              & 462   & \textbf{93.21} & 93.17 & -0.04 \\
+JOB                 & 173   & 55.80 & \textbf{62.99} & +7.19 \\
+LOCATION            & 4441  & 88.18 & \textbf{92.64} & +4.46 \\
+NAME                & 318   & 67.58 & \textbf{90.94} & +23.36 \\
+ORGANIZATION        & 771   & 75.02 & \textbf{83.90} & +8.88 \\
+PATIENT\_ID         & 2005  & 94.05 & \textbf{97.67} & +3.62 \\
+SYMPTOM\_AND\_DISEASE & 1136 & 79.61 & \textbf{83.61} & +4.00 \\
+TRANSPORTATION      & 193   & 87.21 & \textbf{93.16} & +5.95 \\
+\hline
+\textbf{Micro-F1}   & 11735 & 88.13 & \textbf{92.66} & \textbf{+4.53} \\
+\textbf{Macro-F1}   & ---   & 83.00 & \textbf{89.16} & \textbf{+6.16} \\
+\hline
+\end{tabular}
+\caption{So sánh Entity-level $\text{F}_1$ (\%) trên tập test PhoNER\_COVID19 (mức từ) giữa mô hình cơ sở BiLSTM (Tuần 2) và mô hình BiLSTM-CNN-CRF tự cài đặt hoàn chỉnh (Tuần 3).}
+\label{tab:bilstm-milestone}
+\end{table}

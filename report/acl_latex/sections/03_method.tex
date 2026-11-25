@@ -7,7 +7,7 @@
 Nhánh 1 xây dựng hoàn toàn từ đầu kiến trúc gán nhãn chuỗi kết hợp mạng hồi quy hai chiều và trường ngẫu nhiên có điều kiện (\textbf{BiLSTM-CRF}) trên thư viện PyTorch \citep{lample-etal-2016-neural, ma-hovy-2016-end}. Toàn bộ bộ từ điển (\texttt{vocab.py}), cơ chế đệm động kèm mặt nạ (\texttt{dataset.py}), tầng trích xuất ký tự (\texttt{char\_encoder.py}) và tầng quy hoạch động CRF (\texttt{crf.py}) đều do nhóm tự lập trình nhằm kiểm soát chặt chẽ từng thành phần trong thí nghiệm cắt bỏ (\textit{ablation study}).
 
 \paragraph{Tầng biểu diễn từ và ký tự.}
-Với chuỗi đầu vào $\mathbf{x} = (x_1, x_2, \dots, x_n)$, mỗi token $x_i$ được ánh xạ sang vector nhúng từ $\mathbf{e}^{\text{word}}(x_i) \in \mathbb{R}^{d_w}$ ($d_w = 100$) thông qua bảng tra cứu học trực tiếp từ tập huấn luyện, trong đó token đệm \texttt{<PAD>} có chỉ số $0$ (\texttt{padding\_idx=0}) và các từ ngoài từ điển được gán về \texttt{<UNK>}. Để xử lý hiện tượng từ hiếm (OOV) và tận dụng hình thái viết hoa của tên riêng tiếng Việt, vector từ được ghép nối với vector biểu diễn cấp ký tự $\mathbf{e}^{\text{char}}(x_i) \in \mathbb{R}^{d_c}$ trích xuất bởi Char-CNN (tích chập 1D kết hợp \textit{Max-Pooling}) hoặc Char-LSTM:
+Với chuỗi đầu vào $\mathbf{x} = (x_1, x_2, \dots, x_n)$, mỗi token $x_i$ được ánh xạ sang vector nhúng từ $\mathbf{e}^{\text{word}}(x_i) \in \mathbb{R}^{d_w}$ ($d_w = 100$) thông qua bảng tra cứu học trực tiếp từ tập huấn luyện, trong đó token đệm \texttt{<PAD>} có chỉ số $0$ (\texttt{padding\_idx=0}) và các từ ngoài từ điển được gán về \texttt{<UNK>}. Để xử lý hiện tượng từ hiếm (OOV) và tận dụng hình thái viết hoa hoặc cấu trúc số của thực thể tiếng Việt (ví dụ tên riêng, mã bệnh nhân), vector từ được ghép nối với vector biểu diễn cấp ký tự $\mathbf{e}^{\text{char}}(x_i) \in \mathbb{R}^{d_c}$ trích xuất từ \texttt{char\_encoder.py} (hỗ trợ cả \textbf{Char-CNN} với $d_{\text{char}}=30$, $50$ bộ lọc kích thước $k=3$ kèm \textit{Max-Pooling} và \textbf{Char-LSTM} hai chiều, cùng mặt nạ triệt tiêu các token đệm về $0$):
 \begin{equation}
     \mathbf{u}_i = \left[\,\mathbf{e}^{\text{word}}(x_i) \,;\, \mathbf{e}^{\text{char}}(x_i)\,\right] \in \mathbb{R}^{d_w + d_c}.
 \end{equation}
@@ -19,8 +19,13 @@ Chuỗi biểu diễn sau khi đi qua lớp điều chuẩn \textit{Dropout} ($p
 \end{equation}
 với tổng kích thước ẩn $2d_h = 256$. Một tầng chiếu tuyến tính ánh xạ $\mathbf{h}_i$ sang vector điểm phát xạ (\textit{emission scores}) $\mathbf{P}_i \in \mathbb{R}^{|\mathcal{Y}|}$ tương ứng với $|\mathcal{Y}| = 21$ nhãn BIO.
 
-\paragraph{Mô hình cơ sở (Baseline) và Tầng CRF.}
-Ở cấu hình cơ sở (\textit{Baseline BiLSTM}), mô hình dự đoán độc lập tại từng bước thời gian và tối ưu hàm mất mát \textit{Masked Cross-Entropy} (bỏ qua vị trí đệm bằng mặt nạ nhị phân \texttt{mask}). Ở cấu hình đầy đủ, tầng \textbf{CRF} bổ sung ma trận chuyển tiếp $\mathbf{A} \in \mathbb{R}^{(|\mathcal{Y}|+2)\times(|\mathcal{Y}|+2)}$ để mô hình hóa ràng buộc hợp lệ giữa các nhãn BIO liên tiếp, tối ưu hàm âm log-hợp lý bằng thuật toán Forward trên miền \textit{log-sum-exp} và giải mã chuỗi tối ưu bằng thuật toán Viterbi.
+\paragraph{Mô hình cơ sở (Baseline) và Tầng CRF tự cài đặt.}
+Ở cấu hình cơ sở Tuần 2 (\textit{Baseline BiLSTM}), mô hình dự đoán độc lập tại từng bước thời gian và tối ưu hàm mất mát \textit{Masked Cross-Entropy} (bỏ qua vị trí đệm bằng mặt nạ nhị phân \texttt{mask}). Ở cấu hình đầy đủ Tuần 3 (\textbf{BiLSTM-CNN-CRF}), tầng \textbf{CRF} (\texttt{crf.py}) bổ sung bộ tham số chuyển tiếp học được gồm $\mathbf{A} \in \mathbb{R}^{|\mathcal{Y}|\times|\mathcal{Y}|}$, $\mathbf{a}_{\text{start}}, \mathbf{a}_{\text{end}} \in \mathbb{R}^{|\mathcal{Y}|}$ để mô hình hóa ràng buộc hợp lệ giữa các nhãn BIO liên tiếp. Điểm của chuỗi nhãn $\mathbf{y}$ và hàm mất mát âm log-hợp lý (NLL) được định nghĩa như sau:
+\begin{align}
+    s(\mathbf{x}, \mathbf{y}) &= a_{\text{start}, y_1} + \sum_{t=1}^{n} P_{t, y_t} + \sum_{t=2}^{n} A_{y_{t-1}, y_t} + a_{y_n, \text{end}}, \\
+    \mathcal{L}_{\text{CRF}} &= \log \sum_{\tilde{\mathbf{y}} \in \mathcal{Y}^n} \exp s(\mathbf{x}, \tilde{\mathbf{y}}) - s(\mathbf{x}, \mathbf{y}).
+\end{align}
+Hàm phân hoạch $\log Z(\mathbf{x})$ được tính chính xác bằng thuật toán quy hoạch động \textbf{Forward} trên miền \textit{log-sum-exp} kết hợp mặt nạ \texttt{mask} theo từng bước thời gian, và quá trình suy luận tìm chuỗi nhãn tối ưu $\hat{\mathbf{y}} = \arg\max_{\tilde{\mathbf{y}}} s(\mathbf{x}, \tilde{\mathbf{y}})$ sử dụng thuật toán \textbf{Viterbi} có truy vết ngược (\textit{backtracking}) với độ phức tạp $\mathcal{O}(n \cdot |\mathcal{Y}|^2)$. Toàn bộ thuật toán Forward và Viterbi đã được kiểm chứng khớp tuyệt đối với cách tính vét cạn trên các câu ngắn trong bộ kiểm thử đơn vị \texttt{tests\_bilstm.py}.
 
 % --- [Phần của Thành viên 2: Nhánh 2 - PhoBERT & XLM-R sẽ được ghép tại đây] ---
 % --- [Phần của Thành viên 3: Nhánh 3 - LLM Few-shot sẽ được ghép tại đây] ---
