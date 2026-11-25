@@ -129,11 +129,11 @@ def main() -> None:
     )
     dev_loader = create_dataloader(
         cfg["data"]["dev_path"], vocab, batch_size=bs, shuffle=False,
-        max_seq_len=max_seq_len, max_word_len=max_word_len,
+        max_seq_len=None, max_word_len=max_word_len,
     )
     test_loader = create_dataloader(
         cfg["data"]["test_path"], vocab, batch_size=bs, shuffle=False,
-        max_seq_len=max_seq_len, max_word_len=max_word_len,
+        max_seq_len=None, max_word_len=max_word_len,
     )
 
     # 3. Khởi tạo CharEncoder và CRF nếu có (Tuần 3 sẽ tự cài đặt 2 module này)
@@ -195,8 +195,10 @@ def main() -> None:
     best_dev_f1 = -1.0
     patience_counter = 0
     history = []
+    last_epoch = 0
 
     for epoch in range(1, num_epochs + 1):
+        last_epoch = epoch
         t0 = time.time()
         model.train()
         train_loss_sum = 0.0
@@ -311,7 +313,7 @@ def main() -> None:
     )
     print(format_report(test_metrics))
 
-    logger.log_ner_metrics(test_metrics, prefix="test", step=num_epochs + 1)
+    logger.log_ner_metrics(test_metrics, prefix="test", step=last_epoch + 1)
     logger.log_summary({
         "best_dev_f1": best_dev_f1,
         "test_loss": test_loss,
