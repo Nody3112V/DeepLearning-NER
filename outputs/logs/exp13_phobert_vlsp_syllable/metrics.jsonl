@@ -1,0 +1,52 @@
+{"step": 42, "time": "2026-11-25T18:36:59", "metrics": {"train/step_loss": 1.4339669942855835, "train/lr": 5e-06, "train/gpu_mem_mb": 1756.26220703125}}
+{"step": 84, "time": "2026-11-25T18:37:05", "metrics": {"train/step_loss": 0.4666529595851898, "train/lr": 1e-05, "train/gpu_mem_mb": 1760.533203125}}
+{"step": 126, "time": "2026-11-25T18:37:12", "metrics": {"train/step_loss": 0.15875646471977234, "train/lr": 1.5000000000000002e-05, "train/gpu_mem_mb": 1760.310546875}}
+{"step": 168, "time": "2026-11-25T18:37:18", "metrics": {"train/step_loss": 0.20502473413944244, "train/lr": 2e-05, "train/gpu_mem_mb": 1732.53173828125}}
+{"step": 210, "time": "2026-11-25T18:37:24", "metrics": {"train/step_loss": 0.21825696527957916, "train/lr": 1.9447368421052633e-05, "train/gpu_mem_mb": 1743.69677734375}}
+{"step": 252, "time": "2026-11-25T18:37:31", "metrics": {"train/step_loss": 0.05917105823755264, "train/lr": 1.8894736842105264e-05, "train/gpu_mem_mb": 1787.96630859375}}
+{"step": 294, "time": "2026-11-25T18:37:37", "metrics": {"train/step_loss": 0.04932989925146103, "train/lr": 1.8342105263157896e-05, "train/gpu_mem_mb": 1774.38134765625}}
+{"step": 336, "time": "2026-11-25T18:37:43", "metrics": {"train/step_loss": 0.048427969217300415, "train/lr": 1.7789473684210527e-05, "train/gpu_mem_mb": 1822.51953125}}
+{"step": 378, "time": "2026-11-25T18:37:49", "metrics": {"train/step_loss": 0.0345047265291214, "train/lr": 1.723684210526316e-05, "train/gpu_mem_mb": 1764.30712890625}}
+{"step": 420, "time": "2026-11-25T18:37:56", "metrics": {"train/step_loss": 0.04579535499215126, "train/lr": 1.6684210526315793e-05, "train/gpu_mem_mb": 1737.21484375}}
+{"step": 422, "time": "2026-11-25T18:37:56", "metrics": {"train/step_loss": 0.06150021031498909, "train/lr": 1.6657894736842105e-05, "train/gpu_mem_mb": 1664.34326171875}}
+{"step": 1, "time": "2026-11-25T18:37:58", "metrics": {"epoch": 1, "train/epoch_loss": 0.37530469831732494, "train/lr": 1.6657894736842105e-05, "train/epoch_duration_s": 63.98055672645569, "dev/loss": 0.04747337087037715, "dev/precision": 0.8326210826210826, "dev/recall": 0.8769692423105776, "dev/f1_micro": 0.8542199488491049, "dev/f1_macro": 0.5659407236594836, "gpu/max_memory_mb": 4796.33251953125}}
+{"step": 1, "time": "2026-11-25T18:37:58", "metrics": {"dev/precision": 0.8326210826210826, "dev/recall": 0.8769692423105776, "dev/f1": 0.8542199488491049, "dev/macro_f1": 0.5659407236594836, "dev/f1/LOC": 0.8271068635968724, "dev/f1/MISC": 0.0, "dev/f1/ORG": 0.47659574468085103, "dev/f1/PER": 0.960060286360211}}
+{"step": 464, "time": "2026-11-25T18:38:08", "metrics": {"train/step_loss": 0.03433157131075859, "train/lr": 1.6105263157894736e-05, "train/gpu_mem_mb": 1746.439453125}}
+{"step": 506, "time": "2026-11-25T18:38:19", "metrics": {"train/step_loss": 0.018242768943309784, "train/lr": 1.555263157894737e-05, "train/gpu_mem_mb": 1948.2275390625}}
+{"step": 548, "time": "2026-11-25T18:38:32", "metrics": {"train/step_loss": 0.04900147393345833, "train/lr": 1.5000000000000002e-05, "train/gpu_mem_mb": 1730.60595703125}}
+{"step": 590, "time": "2026-11-25T18:38:44", "metrics": {"train/step_loss": 0.009098070673644543, "train/lr": 1.4447368421052632e-05, "train/gpu_mem_mb": 1800.1123046875}}
+{"step": 632, "time": "2026-11-25T18:38:57", "metrics": {"train/step_loss": 0.04986472800374031, "train/lr": 1.3894736842105265e-05, "train/gpu_mem_mb": 1835.0390625}}
+{"step": 674, "time": "2026-11-25T18:39:09", "metrics": {"train/step_loss": 0.011565553024411201, "train/lr": 1.3342105263157896e-05, "train/gpu_mem_mb": 1730.60595703125}}
+{"step": 716, "time": "2026-11-25T18:39:22", "metrics": {"train/step_loss": 0.05810113623738289, "train/lr": 1.2789473684210527e-05, "train/gpu_mem_mb": 1785.6875}}
+{"step": 758, "time": "2026-11-25T18:39:33", "metrics": {"train/step_loss": 0.01785624958574772, "train/lr": 1.2236842105263159e-05, "train/gpu_mem_mb": 1740.36865234375}}
+{"step": 800, "time": "2026-11-25T18:39:44", "metrics": {"train/step_loss": 0.01744457706809044, "train/lr": 1.1684210526315792e-05, "train/gpu_mem_mb": 1806.17822265625}}
+{"step": 842, "time": "2026-11-25T18:39:56", "metrics": {"train/step_loss": 0.029381154105067253, "train/lr": 1.1131578947368421e-05, "train/gpu_mem_mb": 1774.38134765625}}
+{"step": 844, "time": "2026-11-25T18:39:56", "metrics": {"train/step_loss": 0.04337877780199051, "train/lr": 1.1105263157894736e-05, "train/gpu_mem_mb": 1697.44482421875}}
+{"step": 2, "time": "2026-11-25T18:40:02", "metrics": {"epoch": 2, "train/epoch_loss": 0.034781899963068595, "train/lr": 1.1105263157894736e-05, "train/epoch_duration_s": 117.77323484420776, "dev/loss": 0.030337856914055474, "dev/precision": 0.8885651857246905, "dev/recall": 0.9152288072018004, "dev/f1_micro": 0.9016999260901699, "dev/f1_macro": 0.8236206283517202, "gpu/max_memory_mb": 4851.8154296875}}
+{"step": 2, "time": "2026-11-25T18:40:02", "metrics": {"dev/precision": 0.8885651857246905, "dev/recall": 0.9152288072018004, "dev/f1": 0.9016999260901699, "dev/macro_f1": 0.8236206283517202, "dev/f1/LOC": 0.9001814882032669, "dev/f1/MISC": 0.8846153846153847, "dev/f1/ORG": 0.547945205479452, "dev/f1/PER": 0.9617404351087772}}
+{"step": 886, "time": "2026-11-25T18:40:14", "metrics": {"train/step_loss": 0.013191714882850647, "train/lr": 1.055263157894737e-05, "train/gpu_mem_mb": 1695.27490234375}}
+{"step": 928, "time": "2026-11-25T18:40:26", "metrics": {"train/step_loss": 0.005365016870200634, "train/lr": 1e-05, "train/gpu_mem_mb": 1792.44677734375}}
+{"step": 970, "time": "2026-11-25T18:40:38", "metrics": {"train/step_loss": 0.004226340912282467, "train/lr": 9.447368421052632e-06, "train/gpu_mem_mb": 1785.4619140625}}
+{"step": 1012, "time": "2026-11-25T18:40:50", "metrics": {"train/step_loss": 0.03919040784239769, "train/lr": 8.894736842105264e-06, "train/gpu_mem_mb": 1774.38134765625}}
+{"step": 1054, "time": "2026-11-25T18:41:02", "metrics": {"train/step_loss": 0.02964535541832447, "train/lr": 8.342105263157897e-06, "train/gpu_mem_mb": 1819.27734375}}
+{"step": 1096, "time": "2026-11-25T18:41:14", "metrics": {"train/step_loss": 0.04033517464995384, "train/lr": 7.789473684210526e-06, "train/gpu_mem_mb": 1835.04443359375}}
+{"step": 1138, "time": "2026-11-25T18:41:26", "metrics": {"train/step_loss": 0.008391592651605606, "train/lr": 7.236842105263158e-06, "train/gpu_mem_mb": 2013.91455078125}}
+{"step": 1180, "time": "2026-11-25T18:41:36", "metrics": {"train/step_loss": 0.02268015220761299, "train/lr": 6.68421052631579e-06, "train/gpu_mem_mb": 1738.31982421875}}
+{"step": 1222, "time": "2026-11-25T18:41:47", "metrics": {"train/step_loss": 0.005618345458060503, "train/lr": 6.131578947368422e-06, "train/gpu_mem_mb": 1785.73583984375}}
+{"step": 1264, "time": "2026-11-25T18:42:00", "metrics": {"train/step_loss": 0.0823797956109047, "train/lr": 5.578947368421052e-06, "train/gpu_mem_mb": 1701.6142578125}}
+{"step": 1266, "time": "2026-11-25T18:42:00", "metrics": {"train/step_loss": 0.004571943543851376, "train/lr": 5.552631578947368e-06, "train/gpu_mem_mb": 1717.1337890625}}
+{"step": 3, "time": "2026-11-25T18:42:06", "metrics": {"epoch": 3, "train/epoch_loss": 0.01826059436414532, "train/lr": 5.552631578947368e-06, "train/epoch_duration_s": 117.70963454246521, "dev/loss": 0.028838849542266193, "dev/precision": 0.9076363636363637, "dev/recall": 0.9362340585146287, "dev/f1_micro": 0.9217134416543575, "dev/f1_macro": 0.8622531601063792, "gpu/max_memory_mb": 4877.21044921875}}
+{"step": 3, "time": "2026-11-25T18:42:06", "metrics": {"dev/precision": 0.9076363636363637, "dev/recall": 0.9362340585146287, "dev/f1": 0.9217134416543575, "dev/macro_f1": 0.8622531601063792, "dev/f1/LOC": 0.9104072398190046, "dev/f1/MISC": 0.8679245283018867, "dev/f1/ORG": 0.6986899563318777, "dev/f1/PER": 0.9719909159727479}}
+{"step": 1308, "time": "2026-11-25T18:42:20", "metrics": {"train/step_loss": 0.016189048066735268, "train/lr": 5e-06, "train/gpu_mem_mb": 1834.85693359375}}
+{"step": 1350, "time": "2026-11-25T18:42:32", "metrics": {"train/step_loss": 0.012487825006246567, "train/lr": 4.447368421052632e-06, "train/gpu_mem_mb": 1893.03271484375}}
+{"step": 1392, "time": "2026-11-25T18:42:44", "metrics": {"train/step_loss": 0.01693887636065483, "train/lr": 3.894736842105263e-06, "train/gpu_mem_mb": 1753.84423828125}}
+{"step": 1434, "time": "2026-11-25T18:42:56", "metrics": {"train/step_loss": 0.012589643709361553, "train/lr": 3.342105263157895e-06, "train/gpu_mem_mb": 1730.10546875}}
+{"step": 1476, "time": "2026-11-25T18:43:09", "metrics": {"train/step_loss": 0.014340659603476524, "train/lr": 2.789473684210526e-06, "train/gpu_mem_mb": 1895.689453125}}
+{"step": 1518, "time": "2026-11-25T18:43:21", "metrics": {"train/step_loss": 0.012778895907104015, "train/lr": 2.236842105263158e-06, "train/gpu_mem_mb": 1943.2626953125}}
+{"step": 1560, "time": "2026-11-25T18:43:33", "metrics": {"train/step_loss": 0.011092733591794968, "train/lr": 1.6842105263157895e-06, "train/gpu_mem_mb": 1839.44677734375}}
+{"step": 1602, "time": "2026-11-25T18:43:45", "metrics": {"train/step_loss": 0.006441830657422543, "train/lr": 1.1315789473684213e-06, "train/gpu_mem_mb": 1800.1123046875}}
+{"step": 1644, "time": "2026-11-25T18:43:56", "metrics": {"train/step_loss": 0.005501271225512028, "train/lr": 5.789473684210526e-07, "train/gpu_mem_mb": 1863.9501953125}}
+{"step": 1686, "time": "2026-11-25T18:44:08", "metrics": {"train/step_loss": 0.027268769219517708, "train/lr": 2.631578947368421e-08, "train/gpu_mem_mb": 1792.15625}}
+{"step": 1688, "time": "2026-11-25T18:44:09", "metrics": {"train/step_loss": 0.007497315760701895, "train/lr": 0.0, "train/gpu_mem_mb": 1681.4638671875}}
+{"step": 4, "time": "2026-11-25T18:44:14", "metrics": {"epoch": 4, "train/epoch_loss": 0.012825642515170295, "train/lr": 0.0, "train/epoch_duration_s": 121.86697793006897, "dev/loss": 0.029261416673878247, "dev/precision": 0.9153166421207658, "dev/recall": 0.932483120780195, "dev/f1_micro": 0.9238201412114455, "dev/f1_macro": 0.8734591917797785, "gpu/max_memory_mb": 4877.21044921875}}
+{"step": 4, "time": "2026-11-25T18:44:14", "metrics": {"dev/precision": 0.9153166421207658, "dev/recall": 0.932483120780195, "dev/f1": 0.9238201412114455, "dev/macro_f1": 0.8734591917797785, "dev/f1/LOC": 0.9124087591240876, "dev/f1/MISC": 0.9199999999999999, "dev/f1/ORG": 0.6872246696035242, "dev/f1/PER": 0.9742033383915023}}

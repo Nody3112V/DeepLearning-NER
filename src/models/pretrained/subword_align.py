@@ -298,6 +298,35 @@ def align_batch_tokens_and_labels(
     }
 
 
+def recover_word_predictions(
+    pred_ids: Sequence[int],
+    word_ids: Sequence[Optional[int]],
+    num_tokens: int,
+    id2tag: Dict[int, str],
+    fallback_tag: str = "O",
+) -> List[str]:
+    """
+    Phục hồi chuỗi nhãn dự đoán từ mức subword về đúng mức token gốc (1-1).
+
+    Quy tắc:
+      - Subword đầu tiên của từ `wid` quyết định nhãn dự đoán của từ đó.
+      - Special tokens và padding (`wid is None`) bị bỏ qua.
+      - Các subword phụ (`wid == current_word`) bị bỏ qua.
+      - Token bị cắt do truncation hoặc sinh 0 subword (vd: ký tự zero-width `\\u200b`)
+        nhận nhãn an toàn `fallback_tag` (mặc định "O"), đảm bảo
+        len(recovered) == num_tokens trên mọi câu.
+    """
+    recovered = [fallback_tag] * num_tokens
+    seen = set()
+    for p_id, wid in zip(pred_ids, word_ids):
+        if wid is None or wid in seen:
+            continue
+        if 0 <= wid < num_tokens:
+            recovered[wid] = id2tag.get(int(p_id), fallback_tag)
+            seen.add(wid)
+    return recovered
+
+
 class NERDataset(Dataset):
     """Dataset cho Transformer Token Classification."""
 
@@ -346,6 +375,7 @@ class NERDataset(Dataset):
             "input_ids": aligned["input_ids"],
             "attention_mask": aligned["attention_mask"],
             "labels": aligned["labels"],
+            "word_ids": aligned["word_ids"],
             "tokens": sample.tokens,
             "tags": sample.tags,
         }
@@ -369,6 +399,7 @@ class NERDataCollator:
         batch_input_ids = []
         batch_attention_mask = []
         batch_labels = []
+        batch_word_ids = []
         batch_tokens = []
         batch_tags = []
 
@@ -384,10 +415,12 @@ class NERDataCollator:
             padded_ids = item["input_ids"] + [self.pad_token_id] * pad_len
             padded_mask = item["attention_mask"] + [0] * pad_len
             padded_labels = item["labels"] + [self.ignore_index] * pad_len
+            padded_wids = item.get("word_ids", [None] * cur_len) + [None] * pad_len
 
             batch_input_ids.append(padded_ids)
             batch_attention_mask.append(padded_mask)
             batch_labels.append(padded_labels)
+            batch_word_ids.append(padded_wids)
 
         # [B, L]
         return {
@@ -395,6 +428,7 @@ class NERDataCollator:
             "input_ids": torch.tensor(batch_input_ids, dtype=torch.long),
             "attention_mask": torch.tensor(batch_attention_mask, dtype=torch.long),
             "labels": torch.tensor(batch_labels, dtype=torch.long),
+            "word_ids": batch_word_ids,
             "tokens": batch_tokens,
             "tags": batch_tags,
         }
@@ -403,5 +437,3 @@ class NERDataCollator:
 def create_ner_collate_fn(pad_token_id: int, ignore_index: int = -100) -> NERDataCollator:
     """Hàm bao bọc tương thích ngược trả về instance của NERDataCollator."""
     return NERDataCollator(pad_token_id=pad_token_id, ignore_index=ignore_index)
-
-    return collate_fn

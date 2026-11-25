@@ -1,0 +1,2023 @@
+{
+  "plm_experiments": [
+    {
+      "exp_id": "exp01_phobert_baseline",
+      "label": "PhoBERT (Word)",
+      "model_short": "PhoBERT-base-v2",
+      "model_name": "vinai/phobert-base-v2",
+      "dataset": "vlsp",
+      "granularity": "word",
+      "tokenizer_type": "BPE (Slow, 64k)",
+      "params": 135005193,
+      "epochs": 4,
+      "gold_path": "data/processed/vlsp/word/test.jsonl",
+      "train_path": "data/processed/vlsp/word/train.jsonl",
+      "pred_path": "outputs/predictions/exp01_phobert_baseline_test.jsonl",
+      "log_dir": "outputs/logs/exp01_phobert_baseline",
+      "metrics": {
+        "overall": {
+          "precision": 0.9374313940724479,
+          "recall": 0.9467849223946785,
+          "f1": 0.9420849420849421,
+          "tp": 1708,
+          "fp": 114,
+          "fn": 96,
+          "support": 1804
+        },
+        "per_type": {
+          "LOC": {
+            "precision": 0.9396325459317585,
+            "recall": 0.9298701298701298,
+            "f1": 0.9347258485639686,
+            "tp": 716,
+            "fp": 46,
+            "fn": 54,
+            "support": 770
+          },
+          "MISC": {
+            "precision": 0.7837837837837838,
+            "recall": 0.9666666666666667,
+            "f1": 0.8656716417910447,
+            "tp": 29,
+            "fp": 8,
+            "fn": 1,
+            "support": 30
+          },
+          "ORG": {
+            "precision": 0.7916666666666666,
+            "recall": 0.8364779874213837,
+            "f1": 0.8134556574923548,
+            "tp": 133,
+            "fp": 35,
+            "fn": 26,
+            "support": 159
+          },
+          "PER": {
+            "precision": 0.9707602339181286,
+            "recall": 0.9822485207100592,
+            "f1": 0.9764705882352941,
+            "tp": 830,
+            "fp": 25,
+            "fn": 15,
+            "support": 845
+          }
+        },
+        "macro_f1": 0.8975809340206655
+      },
+      "resources": {
+        "runtime_s": 419.4506289958954,
+        "max_gpu_memory_mb": 4482.44091796875,
+        "best_dev_f1": 0.9456440804169769,
+        "best_epoch": 4,
+        "num_logged_epochs": 4
+      },
+      "train_seq_stats": {
+        "num_sentences": 13486,
+        "avg_tokens": 21.84,
+        "max_tokens": 118,
+        "avg_subwords": 24.57,
+        "p95_subwords": 50.0,
+        "max_subwords": 122,
+        "subword_fertility": 1.033,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "test_seq_stats": {
+        "num_sentences": 1872,
+        "avg_tokens": 22.79,
+        "max_tokens": 104,
+        "avg_subwords": 25.59,
+        "p95_subwords": 53.0,
+        "max_subwords": 108,
+        "subword_fertility": 1.035,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "char_unified_metrics": {
+        "precision": 0.9374313940724479,
+        "recall": 0.9467849223946785,
+        "f1": 0.9420849420849421,
+        "tp": 1708,
+        "fp": 114,
+        "fn": 96,
+        "support": 1804
+      },
+      "char_unified_macro_f1": 0.8975809340206655,
+      "vlsp_word_to_syllable_projected_f1": 0.9420849420849421
+    },
+    {
+      "exp_id": "exp13_phobert_vlsp_syllable",
+      "label": "PhoBERT (Syllable)",
+      "model_short": "PhoBERT-base-v2",
+      "model_name": "vinai/phobert-base-v2",
+      "dataset": "vlsp",
+      "granularity": "syllable",
+      "tokenizer_type": "BPE (Slow, 64k)",
+      "params": 135005193,
+      "epochs": 4,
+      "gold_path": "data/processed/vlsp/syllable/test.jsonl",
+      "train_path": "data/processed/vlsp/syllable/train.jsonl",
+      "pred_path": "outputs/predictions/exp13_phobert_vlsp_syllable_test.jsonl",
+      "log_dir": "outputs/logs/exp13_phobert_vlsp_syllable",
+      "metrics": {
+        "overall": {
+          "precision": 0.9155844155844156,
+          "recall": 0.9379157427937915,
+          "f1": 0.9266155531215772,
+          "tp": 1692,
+          "fp": 156,
+          "fn": 112,
+          "support": 1804
+        },
+        "per_type": {
+          "LOC": {
+            "precision": 0.9187096774193548,
+            "recall": 0.9246753246753247,
+            "f1": 0.9216828478964401,
+            "tp": 712,
+            "fp": 63,
+            "fn": 58,
+            "support": 770
+          },
+          "MISC": {
+            "precision": 0.717948717948718,
+            "recall": 0.9333333333333333,
+            "f1": 0.8115942028985509,
+            "tp": 28,
+            "fp": 11,
+            "fn": 2,
+            "support": 30
+          },
+          "ORG": {
+            "precision": 0.7303370786516854,
+            "recall": 0.8176100628930818,
+            "f1": 0.771513353115727,
+            "tp": 130,
+            "fp": 48,
+            "fn": 29,
+            "support": 159
+          },
+          "PER": {
+            "precision": 0.9602803738317757,
+            "recall": 0.9727810650887574,
+            "f1": 0.9664902998236331,
+            "tp": 822,
+            "fp": 34,
+            "fn": 23,
+            "support": 845
+          }
+        },
+        "macro_f1": 0.8678201759335877
+      },
+      "resources": {
+        "runtime_s": 442.97522258758545,
+        "max_gpu_memory_mb": 4877.21044921875,
+        "best_dev_f1": 0.9238201412114455,
+        "best_epoch": 4,
+        "num_logged_epochs": 4
+      },
+      "train_seq_stats": {
+        "num_sentences": 13486,
+        "avg_tokens": 25.86,
+        "max_tokens": 137,
+        "avg_subwords": 28.25,
+        "p95_subwords": 58.0,
+        "max_subwords": 140,
+        "subword_fertility": 1.015,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "test_seq_stats": {
+        "num_sentences": 1872,
+        "avg_tokens": 27.04,
+        "max_tokens": 135,
+        "avg_subwords": 29.46,
+        "p95_subwords": 61.4,
+        "max_subwords": 139,
+        "subword_fertility": 1.016,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "char_unified_metrics": {
+        "precision": 0.9155844155844156,
+        "recall": 0.9379157427937915,
+        "f1": 0.9266155531215772,
+        "tp": 1692,
+        "fp": 156,
+        "fn": 112,
+        "support": 1804
+      },
+      "char_unified_macro_f1": 0.8678201759335877,
+      "vlsp_word_to_syllable_projected_f1": null
+    },
+    {
+      "exp_id": "exp02_xlmr_baseline",
+      "label": "XLM-R (Syllable)",
+      "model_short": "XLM-RoBERTa-base",
+      "model_name": "xlm-roberta-base",
+      "dataset": "vlsp",
+      "granularity": "syllable",
+      "tokenizer_type": "SentencePiece (Fast, 250k)",
+      "params": 278050569,
+      "epochs": 4,
+      "gold_path": "data/processed/vlsp/syllable/test.jsonl",
+      "train_path": "data/processed/vlsp/syllable/train.jsonl",
+      "pred_path": "outputs/predictions/exp02_xlmr_baseline_test.jsonl",
+      "log_dir": "outputs/logs/exp02_xlmr_baseline",
+      "metrics": {
+        "overall": {
+          "precision": 0.929786066922655,
+          "recall": 0.9395787139689579,
+          "f1": 0.9346567411083541,
+          "tp": 1695,
+          "fp": 128,
+          "fn": 109,
+          "support": 1804
+        },
+        "per_type": {
+          "LOC": {
+            "precision": 0.9270833333333334,
+            "recall": 0.9246753246753247,
+            "f1": 0.9258777633289987,
+            "tp": 712,
+            "fp": 56,
+            "fn": 58,
+            "support": 770
+          },
+          "MISC": {
+            "precision": 0.8285714285714286,
+            "recall": 0.9666666666666667,
+            "f1": 0.8923076923076922,
+            "tp": 29,
+            "fp": 6,
+            "fn": 1,
+            "support": 30
+          },
+          "ORG": {
+            "precision": 0.7636363636363637,
+            "recall": 0.7924528301886793,
+            "f1": 0.7777777777777778,
+            "tp": 126,
+            "fp": 39,
+            "fn": 33,
+            "support": 159
+          },
+          "PER": {
+            "precision": 0.968421052631579,
+            "recall": 0.9798816568047337,
+            "f1": 0.9741176470588235,
+            "tp": 828,
+            "fp": 27,
+            "fn": 17,
+            "support": 845
+          }
+        },
+        "macro_f1": 0.8925202201183231
+      },
+      "resources": {
+        "runtime_s": 1479.8385922908783,
+        "max_gpu_memory_mb": 7249.51123046875,
+        "best_dev_f1": 0.9357249626307923,
+        "best_epoch": 4,
+        "num_logged_epochs": 4
+      },
+      "train_seq_stats": {
+        "num_sentences": 13486,
+        "avg_tokens": 25.86,
+        "max_tokens": 137,
+        "avg_subwords": 32.44,
+        "p95_subwords": 67.0,
+        "max_subwords": 158,
+        "subword_fertility": 1.177,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "test_seq_stats": {
+        "num_sentences": 1872,
+        "avg_tokens": 27.04,
+        "max_tokens": 135,
+        "avg_subwords": 33.85,
+        "p95_subwords": 70.4,
+        "max_subwords": 150,
+        "subword_fertility": 1.178,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "char_unified_metrics": {
+        "precision": 0.929786066922655,
+        "recall": 0.9395787139689579,
+        "f1": 0.9346567411083541,
+        "tp": 1695,
+        "fp": 128,
+        "fn": 109,
+        "support": 1804
+      },
+      "char_unified_macro_f1": 0.8925202201183231,
+      "vlsp_word_to_syllable_projected_f1": null
+    },
+    {
+      "exp_id": "exp14_xlmr_vlsp_word",
+      "label": "XLM-R (Word)",
+      "model_short": "XLM-RoBERTa-base",
+      "model_name": "xlm-roberta-base",
+      "dataset": "vlsp",
+      "granularity": "word",
+      "tokenizer_type": "SentencePiece (Fast, 250k)",
+      "params": 278050569,
+      "epochs": 4,
+      "gold_path": "data/processed/vlsp/word/test.jsonl",
+      "train_path": "data/processed/vlsp/word/train.jsonl",
+      "pred_path": "outputs/predictions/exp14_xlmr_vlsp_word_test.jsonl",
+      "log_dir": "outputs/logs/exp14_xlmr_vlsp_word",
+      "metrics": {
+        "overall": {
+          "precision": 0.9201520912547528,
+          "recall": 0.9390243902439024,
+          "f1": 0.9294924554183812,
+          "tp": 1694,
+          "fp": 147,
+          "fn": 110,
+          "support": 1804
+        },
+        "per_type": {
+          "LOC": {
+            "precision": 0.9114249037227214,
+            "recall": 0.922077922077922,
+            "f1": 0.9167204648160103,
+            "tp": 710,
+            "fp": 69,
+            "fn": 60,
+            "support": 770
+          },
+          "MISC": {
+            "precision": 0.8055555555555556,
+            "recall": 0.9666666666666667,
+            "f1": 0.8787878787878789,
+            "tp": 29,
+            "fp": 7,
+            "fn": 1,
+            "support": 30
+          },
+          "ORG": {
+            "precision": 0.7470588235294118,
+            "recall": 0.7987421383647799,
+            "f1": 0.7720364741641337,
+            "tp": 127,
+            "fp": 43,
+            "fn": 32,
+            "support": 159
+          },
+          "PER": {
+            "precision": 0.9672897196261683,
+            "recall": 0.9798816568047337,
+            "f1": 0.9735449735449736,
+            "tp": 828,
+            "fp": 28,
+            "fn": 17,
+            "support": 845
+          }
+        },
+        "macro_f1": 0.8852724478282491
+      },
+      "resources": {
+        "runtime_s": 2664.5236670970917,
+        "max_gpu_memory_mb": 9380.28466796875,
+        "best_dev_f1": 0.9365020423319719,
+        "best_epoch": 4,
+        "num_logged_epochs": 4
+      },
+      "train_seq_stats": {
+        "num_sentences": 13486,
+        "avg_tokens": 21.84,
+        "max_tokens": 118,
+        "avg_subwords": 40.48,
+        "p95_subwords": 86.0,
+        "max_subwords": 224,
+        "subword_fertility": 1.762,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "test_seq_stats": {
+        "num_sentences": 1872,
+        "avg_tokens": 22.79,
+        "max_tokens": 104,
+        "avg_subwords": 42.41,
+        "p95_subwords": 91.0,
+        "max_subwords": 241,
+        "subword_fertility": 1.773,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "char_unified_metrics": {
+        "precision": 0.9201520912547528,
+        "recall": 0.9390243902439024,
+        "f1": 0.9294924554183812,
+        "tp": 1694,
+        "fp": 147,
+        "fn": 110,
+        "support": 1804
+      },
+      "char_unified_macro_f1": 0.8852724478282491,
+      "vlsp_word_to_syllable_projected_f1": 0.9294924554183812
+    },
+    {
+      "exp_id": "exp15_phobert_phoner_word",
+      "label": "PhoBERT (Word)",
+      "model_short": "PhoBERT-base-v2",
+      "model_name": "vinai/phobert-base-v2",
+      "dataset": "phoner_covid19",
+      "granularity": "word",
+      "tokenizer_type": "BPE (Slow, 64k)",
+      "params": 135014421,
+      "epochs": 6,
+      "gold_path": "data/processed/phoner_covid19/word/test.jsonl",
+      "train_path": "data/processed/phoner_covid19/word/train.jsonl",
+      "pred_path": "outputs/predictions/exp15_phobert_phoner_word_test.jsonl",
+      "log_dir": "outputs/logs/exp15_phobert_phoner_word",
+      "metrics": {
+        "overall": {
+          "precision": 0.9274589822603482,
+          "recall": 0.9489561141883255,
+          "f1": 0.9380844073793279,
+          "tp": 11136,
+          "fp": 871,
+          "fn": 599,
+          "support": 11735
+        },
+        "per_type": {
+          "AGE": {
+            "precision": 0.9478114478114478,
+            "recall": 0.9673539518900344,
+            "f1": 0.9574829931972789,
+            "tp": 563,
+            "fp": 31,
+            "fn": 19,
+            "support": 582
+          },
+          "DATE": {
+            "precision": 0.9820574162679426,
+            "recall": 0.992744860943168,
+            "f1": 0.9873722188815395,
+            "tp": 1642,
+            "fp": 30,
+            "fn": 12,
+            "support": 1654
+          },
+          "GENDER": {
+            "precision": 0.9459459459459459,
+            "recall": 0.9848484848484849,
+            "f1": 0.9650053022269353,
+            "tp": 455,
+            "fp": 26,
+            "fn": 7,
+            "support": 462
+          },
+          "JOB": {
+            "precision": 0.4720812182741117,
+            "recall": 0.5375722543352601,
+            "f1": 0.5027027027027028,
+            "tp": 93,
+            "fp": 104,
+            "fn": 80,
+            "support": 173
+          },
+          "LOCATION": {
+            "precision": 0.9357535753575358,
+            "recall": 0.9576671920738572,
+            "f1": 0.9465835744491431,
+            "tp": 4253,
+            "fp": 292,
+            "fn": 188,
+            "support": 4441
+          },
+          "NAME": {
+            "precision": 0.8716417910447761,
+            "recall": 0.9182389937106918,
+            "f1": 0.8943338437978561,
+            "tp": 292,
+            "fp": 43,
+            "fn": 26,
+            "support": 318
+          },
+          "ORGANIZATION": {
+            "precision": 0.861850443599493,
+            "recall": 0.8819714656290532,
+            "f1": 0.8717948717948717,
+            "tp": 680,
+            "fp": 109,
+            "fn": 91,
+            "support": 771
+          },
+          "PATIENT_ID": {
+            "precision": 0.9732540861812778,
+            "recall": 0.9800498753117207,
+            "f1": 0.9766401590457257,
+            "tp": 1965,
+            "fp": 54,
+            "fn": 40,
+            "support": 2005
+          },
+          "SYMPTOM_AND_DISEASE": {
+            "precision": 0.8596938775510204,
+            "recall": 0.8899647887323944,
+            "f1": 0.8745674740484429,
+            "tp": 1011,
+            "fp": 165,
+            "fn": 125,
+            "support": 1136
+          },
+          "TRANSPORTATION": {
+            "precision": 0.914572864321608,
+            "recall": 0.9430051813471503,
+            "f1": 0.9285714285714286,
+            "tp": 182,
+            "fp": 17,
+            "fn": 11,
+            "support": 193
+          }
+        },
+        "macro_f1": 0.8905054568715924
+      },
+      "resources": {
+        "runtime_s": 327.08751487731934,
+        "max_gpu_memory_mb": 5910.6376953125,
+        "best_dev_f1": 0.9481432360742705,
+        "best_epoch": 5,
+        "num_logged_epochs": 6
+      },
+      "train_seq_stats": {
+        "num_sentences": 5027,
+        "avg_tokens": 26.36,
+        "max_tokens": 161,
+        "avg_subwords": 29.49,
+        "p95_subwords": 55.0,
+        "max_subwords": 177,
+        "subword_fertility": 1.043,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "test_seq_stats": {
+        "num_sentences": 3000,
+        "avg_tokens": 28.56,
+        "max_tokens": 162,
+        "avg_subwords": 32.2,
+        "p95_subwords": 60.0,
+        "max_subwords": 177,
+        "subword_fertility": 1.058,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "char_unified_metrics": {
+        "precision": 0.9262929957524777,
+        "recall": 0.9477631018321261,
+        "f1": 0.9369050627579816,
+        "tp": 11122,
+        "fp": 885,
+        "fn": 613,
+        "support": 11735
+      },
+      "char_unified_macro_f1": 0.8887708457856313,
+      "vlsp_word_to_syllable_projected_f1": null
+    },
+    {
+      "exp_id": "exp16_phobert_phoner_syllable",
+      "label": "PhoBERT (Syllable)",
+      "model_short": "PhoBERT-base-v2",
+      "model_name": "vinai/phobert-base-v2",
+      "dataset": "phoner_covid19",
+      "granularity": "syllable",
+      "tokenizer_type": "BPE (Slow, 64k)",
+      "params": 135014421,
+      "epochs": 6,
+      "gold_path": "data/processed/phoner_covid19/syllable/test.jsonl",
+      "train_path": "data/processed/phoner_covid19/syllable/train.jsonl",
+      "pred_path": "outputs/predictions/exp16_phobert_phoner_syllable_test.jsonl",
+      "log_dir": "outputs/logs/exp16_phobert_phoner_syllable",
+      "metrics": {
+        "overall": {
+          "precision": 0.9161402925531915,
+          "recall": 0.9393268001704304,
+          "f1": 0.9275886733706399,
+          "tp": 11023,
+          "fp": 1009,
+          "fn": 712,
+          "support": 11735
+        },
+        "per_type": {
+          "AGE": {
+            "precision": 0.9364548494983278,
+            "recall": 0.9621993127147767,
+            "f1": 0.9491525423728815,
+            "tp": 560,
+            "fp": 38,
+            "fn": 22,
+            "support": 582
+          },
+          "DATE": {
+            "precision": 0.9808955223880597,
+            "recall": 0.9933494558645707,
+            "f1": 0.9870832081706218,
+            "tp": 1643,
+            "fp": 32,
+            "fn": 11,
+            "support": 1654
+          },
+          "GENDER": {
+            "precision": 0.9505376344086022,
+            "recall": 0.9567099567099567,
+            "f1": 0.9536138079827401,
+            "tp": 442,
+            "fp": 23,
+            "fn": 20,
+            "support": 462
+          },
+          "JOB": {
+            "precision": 0.5894736842105263,
+            "recall": 0.6473988439306358,
+            "f1": 0.6170798898071624,
+            "tp": 112,
+            "fp": 78,
+            "fn": 61,
+            "support": 173
+          },
+          "LOCATION": {
+            "precision": 0.9357349344007115,
+            "recall": 0.9475343391128125,
+            "f1": 0.9415976728574625,
+            "tp": 4208,
+            "fp": 289,
+            "fn": 233,
+            "support": 4441
+          },
+          "NAME": {
+            "precision": 0.7275204359673024,
+            "recall": 0.839622641509434,
+            "f1": 0.7795620437956204,
+            "tp": 267,
+            "fp": 100,
+            "fn": 51,
+            "support": 318
+          },
+          "ORGANIZATION": {
+            "precision": 0.8329268292682926,
+            "recall": 0.8858625162127107,
+            "f1": 0.8585795097423004,
+            "tp": 683,
+            "fp": 137,
+            "fn": 88,
+            "support": 771
+          },
+          "PATIENT_ID": {
+            "precision": 0.9795613160518445,
+            "recall": 0.9800498753117207,
+            "f1": 0.9798055347793568,
+            "tp": 1965,
+            "fp": 41,
+            "fn": 40,
+            "support": 2005
+          },
+          "SYMPTOM_AND_DISEASE": {
+            "precision": 0.8447837150127226,
+            "recall": 0.8767605633802817,
+            "f1": 0.860475161987041,
+            "tp": 996,
+            "fp": 183,
+            "fn": 140,
+            "support": 1136
+          },
+          "TRANSPORTATION": {
+            "precision": 0.625531914893617,
+            "recall": 0.7616580310880829,
+            "f1": 0.6869158878504674,
+            "tp": 147,
+            "fp": 88,
+            "fn": 46,
+            "support": 193
+          }
+        },
+        "macro_f1": 0.8613865259345654
+      },
+      "resources": {
+        "runtime_s": 286.12444281578064,
+        "max_gpu_memory_mb": 6765.48681640625,
+        "best_dev_f1": 0.9361477572559367,
+        "best_epoch": 6,
+        "num_logged_epochs": 6
+      },
+      "train_seq_stats": {
+        "num_sentences": 5027,
+        "avg_tokens": 33.33,
+        "max_tokens": 186,
+        "avg_subwords": 36.33,
+        "p95_subwords": 67.0,
+        "max_subwords": 202,
+        "subword_fertility": 1.03,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "test_seq_stats": {
+        "num_sentences": 3000,
+        "avg_tokens": 36.12,
+        "max_tokens": 185,
+        "avg_subwords": 39.52,
+        "p95_subwords": 74.0,
+        "max_subwords": 194,
+        "subword_fertility": 1.039,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "char_unified_metrics": {
+        "precision": 0.9161402925531915,
+        "recall": 0.9393268001704304,
+        "f1": 0.9275886733706399,
+        "tp": 11023,
+        "fp": 1009,
+        "fn": 712,
+        "support": 11735
+      },
+      "char_unified_macro_f1": 0.8613865259345654,
+      "vlsp_word_to_syllable_projected_f1": null
+    },
+    {
+      "exp_id": "exp17_xlmr_phoner_syllable",
+      "label": "XLM-R (Syllable)",
+      "model_short": "XLM-RoBERTa-base",
+      "model_name": "xlm-roberta-base",
+      "dataset": "phoner_covid19",
+      "granularity": "syllable",
+      "tokenizer_type": "SentencePiece (Fast, 250k)",
+      "params": 278059797,
+      "epochs": 6,
+      "gold_path": "data/processed/phoner_covid19/syllable/test.jsonl",
+      "train_path": "data/processed/phoner_covid19/syllable/train.jsonl",
+      "pred_path": "outputs/predictions/exp17_xlmr_phoner_syllable_test.jsonl",
+      "log_dir": "outputs/logs/exp17_xlmr_phoner_syllable",
+      "metrics": {
+        "overall": {
+          "precision": 0.9316132264529058,
+          "recall": 0.9507456327226246,
+          "f1": 0.9410821981358863,
+          "tp": 11157,
+          "fp": 819,
+          "fn": 578,
+          "support": 11735
+        },
+        "per_type": {
+          "AGE": {
+            "precision": 0.9560067681895094,
+            "recall": 0.9707903780068728,
+            "f1": 0.9633418584825234,
+            "tp": 565,
+            "fp": 26,
+            "fn": 17,
+            "support": 582
+          },
+          "DATE": {
+            "precision": 0.981437125748503,
+            "recall": 0.9909310761789601,
+            "f1": 0.9861612515042117,
+            "tp": 1639,
+            "fp": 31,
+            "fn": 15,
+            "support": 1654
+          },
+          "GENDER": {
+            "precision": 0.9380165289256198,
+            "recall": 0.9826839826839827,
+            "f1": 0.9598308668076111,
+            "tp": 454,
+            "fp": 30,
+            "fn": 8,
+            "support": 462
+          },
+          "JOB": {
+            "precision": 0.63,
+            "recall": 0.7283236994219653,
+            "f1": 0.675603217158177,
+            "tp": 126,
+            "fp": 74,
+            "fn": 47,
+            "support": 173
+          },
+          "LOCATION": {
+            "precision": 0.9355555555555556,
+            "recall": 0.9479846881333033,
+            "f1": 0.9417291130746002,
+            "tp": 4210,
+            "fp": 290,
+            "fn": 231,
+            "support": 4441
+          },
+          "NAME": {
+            "precision": 0.9376947040498442,
+            "recall": 0.9465408805031447,
+            "f1": 0.9420970266040688,
+            "tp": 301,
+            "fp": 20,
+            "fn": 17,
+            "support": 318
+          },
+          "ORGANIZATION": {
+            "precision": 0.8416565164433617,
+            "recall": 0.8962386511024644,
+            "f1": 0.8680904522613064,
+            "tp": 691,
+            "fp": 130,
+            "fn": 80,
+            "support": 771
+          },
+          "PATIENT_ID": {
+            "precision": 0.9772389905987136,
+            "recall": 0.9850374064837906,
+            "f1": 0.981122702434178,
+            "tp": 1975,
+            "fp": 46,
+            "fn": 30,
+            "support": 2005
+          },
+          "SYMPTOM_AND_DISEASE": {
+            "precision": 0.8620102214650767,
+            "recall": 0.8908450704225352,
+            "f1": 0.8761904761904763,
+            "tp": 1012,
+            "fp": 162,
+            "fn": 124,
+            "support": 1136
+          },
+          "TRANSPORTATION": {
+            "precision": 0.9484536082474226,
+            "recall": 0.9533678756476683,
+            "f1": 0.9509043927648577,
+            "tp": 184,
+            "fp": 10,
+            "fn": 9,
+            "support": 193
+          }
+        },
+        "macro_f1": 0.914507135728201
+      },
+      "resources": {
+        "runtime_s": 1598.9687316417694,
+        "max_gpu_memory_mb": 10372.84619140625,
+        "best_dev_f1": 0.9493368700265251,
+        "best_epoch": 6,
+        "num_logged_epochs": 6
+      },
+      "train_seq_stats": {
+        "num_sentences": 5027,
+        "avg_tokens": 33.33,
+        "max_tokens": 186,
+        "avg_subwords": 41.18,
+        "p95_subwords": 75.0,
+        "max_subwords": 256,
+        "subword_fertility": 1.176,
+        "truncated_sentences": 1,
+        "truncated_tokens": 27
+      },
+      "test_seq_stats": {
+        "num_sentences": 3000,
+        "avg_tokens": 36.12,
+        "max_tokens": 185,
+        "avg_subwords": 45.06,
+        "p95_subwords": 82.0,
+        "max_subwords": 233,
+        "subword_fertility": 1.192,
+        "truncated_sentences": 0,
+        "truncated_tokens": 0
+      },
+      "char_unified_metrics": {
+        "precision": 0.9316132264529058,
+        "recall": 0.9507456327226246,
+        "f1": 0.9410821981358863,
+        "tp": 11157,
+        "fp": 819,
+        "fn": 578,
+        "support": 11735
+      },
+      "char_unified_macro_f1": 0.914507135728201,
+      "vlsp_word_to_syllable_projected_f1": null
+    },
+    {
+      "exp_id": "exp18_xlmr_phoner_word",
+      "label": "XLM-R (Word)",
+      "model_short": "XLM-RoBERTa-base",
+      "model_name": "xlm-roberta-base",
+      "dataset": "phoner_covid19",
+      "granularity": "word",
+      "tokenizer_type": "SentencePiece (Fast, 250k)",
+      "params": 278059797,
+      "epochs": 6,
+      "gold_path": "data/processed/phoner_covid19/word/test.jsonl",
+      "train_path": "data/processed/phoner_covid19/word/train.jsonl",
+      "pred_path": "outputs/predictions/exp18_xlmr_phoner_word_test.jsonl",
+      "log_dir": "outputs/logs/exp18_xlmr_phoner_word",
+      "metrics": {
+        "overall": {
+          "precision": 0.9304974041199129,
+          "recall": 0.9469109501491265,
+          "f1": 0.9386324280947754,
+          "tp": 11112,
+          "fp": 830,
+          "fn": 623,
+          "support": 11735
+        },
+        "per_type": {
+          "AGE": {
+            "precision": 0.9622641509433962,
+            "recall": 0.9639175257731959,
+            "f1": 0.9630901287553648,
+            "tp": 561,
+            "fp": 22,
+            "fn": 21,
+            "support": 582
+          },
+          "DATE": {
+            "precision": 0.9832234871180348,
+            "recall": 0.9921402660217654,
+            "f1": 0.9876617514294312,
+            "tp": 1641,
+            "fp": 28,
+            "fn": 13,
+            "support": 1654
+          },
+          "GENDER": {
+            "precision": 0.9519832985386222,
+            "recall": 0.987012987012987,
+            "f1": 0.9691817215727949,
+            "tp": 456,
+            "fp": 23,
+            "fn": 6,
+            "support": 462
+          },
+          "JOB": {
+            "precision": 0.6067961165048543,
+            "recall": 0.7225433526011561,
+            "f1": 0.6596306068601583,
+            "tp": 125,
+            "fp": 81,
+            "fn": 48,
+            "support": 173
+          },
+          "LOCATION": {
+            "precision": 0.9349955476402493,
+            "recall": 0.9457329430308489,
+            "f1": 0.9403335945371096,
+            "tp": 4200,
+            "fp": 292,
+            "fn": 241,
+            "support": 4441
+          },
+          "NAME": {
+            "precision": 0.8871951219512195,
+            "recall": 0.9150943396226415,
+            "f1": 0.9009287925696595,
+            "tp": 291,
+            "fp": 37,
+            "fn": 27,
+            "support": 318
+          },
+          "ORGANIZATION": {
+            "precision": 0.8286755771567437,
+            "recall": 0.8845654993514915,
+            "f1": 0.8557089084065245,
+            "tp": 682,
+            "fp": 141,
+            "fn": 89,
+            "support": 771
+          },
+          "PATIENT_ID": {
+            "precision": 0.9752107089737233,
+            "recall": 0.9810473815461347,
+            "f1": 0.9781203381402287,
+            "tp": 1967,
+            "fp": 50,
+            "fn": 38,
+            "support": 2005
+          },
+          "SYMPTOM_AND_DISEASE": {
+            "precision": 0.8682842287694974,
+            "recall": 0.8820422535211268,
+            "f1": 0.8751091703056768,
+            "tp": 1002,
+            "fp": 152,
+            "fn": 134,
+            "support": 1136
+          },
+          "TRANSPORTATION": {
+            "precision": 0.9790575916230366,
+            "recall": 0.9689119170984456,
+            "f1": 0.9739583333333333,
+            "tp": 187,
+            "fp": 4,
+            "fn": 6,
+            "support": 193
+          }
+        },
+        "macro_f1": 0.9103723345910282
+      },
+      "resources": {
+        "runtime_s": 3577.14018201828,
+        "max_gpu_memory_mb": 10563.18896484375,
+        "best_dev_f1": 0.9472635494155155,
+        "best_epoch": 6,
+        "num_logged_epochs": 6
+      },
+      "train_seq_stats": {
+        "num_sentences": 5027,
+        "avg_tokens": 26.36,
+        "max_tokens": 161,
+        "avg_subwords": 55.21,
+        "p95_subwords": 103.0,
+        "max_subwords": 256,
+        "subword_fertility": 2.018,
+        "truncated_sentences": 2,
+        "truncated_tokens": 56
+      },
+      "test_seq_stats": {
+        "num_sentences": 3000,
+        "avg_tokens": 28.56,
+        "max_tokens": 162,
+        "avg_subwords": 60.19,
+        "p95_subwords": 112.0,
+        "max_subwords": 256,
+        "subword_fertility": 2.037,
+        "truncated_sentences": 2,
+        "truncated_tokens": 18
+      },
+      "char_unified_metrics": {
+        "precision": 0.9293250711773572,
+        "recall": 0.9457179377929271,
+        "f1": 0.9374498458419562,
+        "tp": 11098,
+        "fp": 844,
+        "fn": 637,
+        "support": 11735
+      },
+      "char_unified_macro_f1": 0.9086307756947196,
+      "vlsp_word_to_syllable_projected_f1": null
+    }
+  ],
+  "tv1_bilstm_experiments": [
+    {
+      "exp_id": "baseline_bilstm_word",
+      "label": "BiLSTM Baseline (TV1)",
+      "model_short": "BiLSTM (TV1)",
+      "dataset": "phoner_covid19",
+      "granularity": "word",
+      "gold_path": "data/processed/phoner_covid19/word/test.jsonl",
+      "pred_path": "outputs/predictions/baseline_bilstm_word_test.jsonl",
+      "log_dir": "outputs/logs/baseline_bilstm_word",
+      "metrics": {
+        "overall": {
+          "precision": 0.8660633484162896,
+          "recall": 0.8970600766936515,
+          "f1": 0.8812892423608204,
+          "tp": 10527,
+          "fp": 1628,
+          "fn": 1208,
+          "support": 11735
+        },
+        "per_type": {
+          "AGE": {
+            "precision": 0.9187396351575456,
+            "recall": 0.9518900343642611,
+            "f1": 0.9350210970464135,
+            "tp": 554,
+            "fp": 49,
+            "fn": 28,
+            "support": 582
+          },
+          "DATE": {
+            "precision": 0.9506833036244801,
+            "recall": 0.9673518742442564,
+            "f1": 0.958945160323644,
+            "tp": 1600,
+            "fp": 83,
+            "fn": 54,
+            "support": 1654
+          },
+          "GENDER": {
+            "precision": 0.9145833333333333,
+            "recall": 0.9502164502164502,
+            "f1": 0.9320594479830149,
+            "tp": 439,
+            "fp": 41,
+            "fn": 23,
+            "support": 462
+          },
+          "JOB": {
+            "precision": 0.6095890410958904,
+            "recall": 0.5144508670520231,
+            "f1": 0.5579937304075235,
+            "tp": 89,
+            "fp": 57,
+            "fn": 84,
+            "support": 173
+          },
+          "LOCATION": {
+            "precision": 0.8541578725200507,
+            "recall": 0.9112812429632966,
+            "f1": 0.8817954025492973,
+            "tp": 4047,
+            "fp": 691,
+            "fn": 394,
+            "support": 4441
+          },
+          "NAME": {
+            "precision": 0.900523560209424,
+            "recall": 0.5408805031446541,
+            "f1": 0.6758349705304518,
+            "tp": 172,
+            "fp": 19,
+            "fn": 146,
+            "support": 318
+          },
+          "ORGANIZATION": {
+            "precision": 0.7029478458049887,
+            "recall": 0.8041504539559015,
+            "f1": 0.7501512401693889,
+            "tp": 620,
+            "fp": 262,
+            "fn": 151,
+            "support": 771
+          },
+          "PATIENT_ID": {
+            "precision": 0.9134931828866949,
+            "recall": 0.969077306733167,
+            "f1": 0.9404646660212973,
+            "tp": 1943,
+            "fp": 184,
+            "fn": 62,
+            "support": 2005
+          },
+          "SYMPTOM_AND_DISEASE": {
+            "precision": 0.8035874439461883,
+            "recall": 0.7887323943661971,
+            "f1": 0.7960906263882719,
+            "tp": 896,
+            "fp": 219,
+            "fn": 240,
+            "support": 1136
+          },
+          "TRANSPORTATION": {
+            "precision": 0.8789473684210526,
+            "recall": 0.8652849740932642,
+            "f1": 0.8720626631853785,
+            "tp": 167,
+            "fp": 23,
+            "fn": 26,
+            "support": 193
+          }
+        },
+        "macro_f1": 0.8300419004604681
+      },
+      "resources": {
+        "runtime_s": 236.3439235687256,
+        "max_gpu_memory_mb": null,
+        "best_dev_f1": 0.89052244683644,
+        "best_epoch": null,
+        "num_logged_epochs": 30
+      },
+      "test_indices_verified": true,
+      "char_unified_metrics": {
+        "precision": 0.8655697243932539,
+        "recall": 0.8965487856838518,
+        "f1": 0.8807869401423191,
+        "tp": 10521,
+        "fp": 1634,
+        "fn": 1214,
+        "support": 11735
+      },
+      "char_unified_macro_f1": 0.829911167265131
+    },
+    {
+      "exp_id": "bilstm_cnn_crf_phoner_word",
+      "label": "BiLSTM-CNN-CRF (TV1)",
+      "model_short": "BiLSTM-CNN-CRF (TV1)",
+      "dataset": "phoner_covid19",
+      "granularity": "word",
+      "gold_path": "data/processed/phoner_covid19/word/test.jsonl",
+      "pred_path": "outputs/predictions/bilstm_crf_test.jsonl",
+      "log_dir": "outputs/logs/bilstm_cnn_crf_phoner_word",
+      "metrics": {
+        "overall": {
+          "precision": 0.9322808833678399,
+          "recall": 0.9209203238176396,
+          "f1": 0.9265657821408668,
+          "tp": 10807,
+          "fp": 785,
+          "fn": 928,
+          "support": 11735
+        },
+        "per_type": {
+          "AGE": {
+            "precision": 0.9382303839732888,
+            "recall": 0.9656357388316151,
+            "f1": 0.9517358171041491,
+            "tp": 562,
+            "fp": 37,
+            "fn": 20,
+            "support": 582
+          },
+          "DATE": {
+            "precision": 0.9807807807807808,
+            "recall": 0.9873035066505441,
+            "f1": 0.9840313347393793,
+            "tp": 1633,
+            "fp": 32,
+            "fn": 21,
+            "support": 1654
+          },
+          "GENDER": {
+            "precision": 0.9059304703476483,
+            "recall": 0.9588744588744589,
+            "f1": 0.9316508937960043,
+            "tp": 443,
+            "fp": 46,
+            "fn": 19,
+            "support": 462
+          },
+          "JOB": {
+            "precision": 0.7185185185185186,
+            "recall": 0.5606936416184971,
+            "f1": 0.6298701298701299,
+            "tp": 97,
+            "fp": 38,
+            "fn": 76,
+            "support": 173
+          },
+          "LOCATION": {
+            "precision": 0.9256012587098225,
+            "recall": 0.9272686331907228,
+            "f1": 0.9264341957255343,
+            "tp": 4118,
+            "fp": 331,
+            "fn": 323,
+            "support": 4441
+          },
+          "NAME": {
+            "precision": 0.9366666666666666,
+            "recall": 0.8836477987421384,
+            "f1": 0.9093851132686084,
+            "tp": 281,
+            "fp": 19,
+            "fn": 37,
+            "support": 318
+          },
+          "ORGANIZATION": {
+            "precision": 0.8769448373408769,
+            "recall": 0.8041504539559015,
+            "f1": 0.8389715832205684,
+            "tp": 620,
+            "fp": 87,
+            "fn": 151,
+            "support": 771
+          },
+          "PATIENT_ID": {
+            "precision": 0.9718518518518519,
+            "recall": 0.9815461346633416,
+            "f1": 0.9766749379652606,
+            "tp": 1968,
+            "fp": 57,
+            "fn": 37,
+            "support": 2005
+          },
+          "SYMPTOM_AND_DISEASE": {
+            "precision": 0.8764478764478765,
+            "recall": 0.7992957746478874,
+            "f1": 0.8360957642725599,
+            "tp": 908,
+            "fp": 128,
+            "fn": 228,
+            "support": 1136
+          },
+          "TRANSPORTATION": {
+            "precision": 0.946524064171123,
+            "recall": 0.917098445595855,
+            "f1": 0.9315789473684212,
+            "tp": 177,
+            "fp": 10,
+            "fn": 16,
+            "support": 193
+          }
+        },
+        "macro_f1": 0.8916428717330616
+      },
+      "resources": {
+        "runtime_s": 952.5793693065643,
+        "max_gpu_memory_mb": null,
+        "best_dev_f1": 0.935410232308312,
+        "best_epoch": null,
+        "num_logged_epochs": 30
+      },
+      "test_indices_verified": true,
+      "char_unified_metrics": {
+        "precision": 0.9314182194616977,
+        "recall": 0.92006817213464,
+        "f1": 0.925708406567497,
+        "tp": 10797,
+        "fp": 795,
+        "fn": 938,
+        "support": 11735
+      },
+      "char_unified_macro_f1": 0.8906666688372878
+    }
+  ],
+  "paired_bootstrap": {
+    "vlsp_phobert_word_vs_syllable": {
+      "n_sentences": 1872,
+      "f1_a": 0.9420849420849421,
+      "f1_b": 0.9266155531215772,
+      "delta_f1": 0.015469388963364916,
+      "ci95_low": 0.006798200642766664,
+      "ci95_high": 0.02427386460856698,
+      "p_value_two_sided": 0.0,
+      "significant_005": true,
+      "sentence_a_better": 56,
+      "sentence_b_better": 24,
+      "sentence_ties": 1792
+    },
+    "vlsp_xlmr_syllable_vs_word": {
+      "n_sentences": 1872,
+      "f1_a": 0.9346567411083541,
+      "f1_b": 0.9294924554183813,
+      "delta_f1": 0.005164285689972736,
+      "ci95_low": -0.0034944081866626034,
+      "ci95_high": 0.013726691911429317,
+      "p_value_two_sided": 0.234,
+      "significant_005": false,
+      "sentence_a_better": 50,
+      "sentence_b_better": 39,
+      "sentence_ties": 1783
+    },
+    "vlsp_phobert_word_vs_xlmr_syllable": {
+      "n_sentences": 1872,
+      "f1_a": 0.9420849420849421,
+      "f1_b": 0.9346567411083541,
+      "delta_f1": 0.007428200976588029,
+      "ci95_low": -0.003055845169695867,
+      "ci95_high": 0.017800469238517917,
+      "p_value_two_sided": 0.14,
+      "significant_005": false,
+      "sentence_a_better": 54,
+      "sentence_b_better": 45,
+      "sentence_ties": 1773
+    },
+    "phoner_phobert_word_vs_syllable": {
+      "n_sentences": 3000,
+      "f1_a": 0.9380844073793277,
+      "f1_b": 0.92758867337064,
+      "delta_f1": 0.010495734008687752,
+      "ci95_low": 0.006359958222228579,
+      "ci95_high": 0.01476185275639836,
+      "p_value_two_sided": 0.0,
+      "significant_005": true,
+      "sentence_a_better": 313,
+      "sentence_b_better": 202,
+      "sentence_ties": 2485
+    },
+    "phoner_xlmr_syllable_vs_word": {
+      "n_sentences": 3000,
+      "f1_a": 0.9410821981358863,
+      "f1_b": 0.9386324280947755,
+      "delta_f1": 0.002449770041110799,
+      "ci95_low": -0.0008275484925362037,
+      "ci95_high": 0.0061407524341483,
+      "p_value_two_sided": 0.15,
+      "significant_005": false,
+      "sentence_a_better": 191,
+      "sentence_b_better": 168,
+      "sentence_ties": 2641
+    },
+    "phoner_phobert_word_vs_xlmr_syllable": {
+      "n_sentences": 3000,
+      "f1_a": 0.9380844073793277,
+      "f1_b": 0.9410821981358863,
+      "delta_f1": -0.0029977907565585937,
+      "ci95_low": -0.006905603661567184,
+      "ci95_high": 0.000740690590589298,
+      "p_value_two_sided": 0.116,
+      "significant_005": false,
+      "sentence_a_better": 224,
+      "sentence_b_better": 240,
+      "sentence_ties": 2536
+    },
+    "phoner_phobert_word_vs_bilstm_crf": {
+      "n_sentences": 3000,
+      "f1_a": 0.9380844073793277,
+      "f1_b": 0.9265657821408668,
+      "delta_f1": 0.011518625238460922,
+      "ci95_low": 0.0068848065498932545,
+      "ci95_high": 0.016086773152751678,
+      "p_value_two_sided": 0.0,
+      "significant_005": true,
+      "sentence_a_better": 449,
+      "sentence_b_better": 295,
+      "sentence_ties": 2256
+    },
+    "phoner_xlmr_syllable_vs_bilstm_crf": {
+      "n_sentences": 3000,
+      "f1_a": 0.9410821981358863,
+      "f1_b": 0.9265657821408668,
+      "delta_f1": 0.014516415995019516,
+      "ci95_low": 0.010125572464867897,
+      "ci95_high": 0.018824530965745268,
+      "p_value_two_sided": 0.0,
+      "significant_005": true,
+      "sentence_a_better": 455,
+      "sentence_b_better": 266,
+      "sentence_ties": 2279
+    },
+    "phoner_xlmr_word_vs_bilstm_crf": {
+      "n_sentences": 3000,
+      "f1_a": 0.9386324280947755,
+      "f1_b": 0.9265657821408668,
+      "delta_f1": 0.012066645953908717,
+      "ci95_low": 0.007257028502538346,
+      "ci95_high": 0.016517605591416514,
+      "p_value_two_sided": 0.0,
+      "significant_005": true,
+      "sentence_a_better": 443,
+      "sentence_b_better": 281,
+      "sentence_ties": 2276
+    }
+  },
+  "divergence_examples": {
+    "phoner_phobert_word_vs_bilstm_crf": {
+      "PhoBERT_word_better": [
+        {
+          "id": "phoner_word_test_00010",
+          "text": "Theo đó , ca bệnh 785 ( bệnh_nhân 785 ) là nam , 42 tuổi , có địa chỉ tại Đức Thượng , Hoài Đức , Hà Nội .",
+          "gold": [
+            [
+              "785",
+              "PATIENT_ID"
+            ],
+            [
+              "785",
+              "PATIENT_ID"
+            ],
+            [
+              "nam",
+              "GENDER"
+            ],
+            [
+              "42",
+              "AGE"
+            ],
+            [
+              "Đức Thượng",
+              "LOCATION"
+            ],
+            [
+              "Hoài Đức",
+              "LOCATION"
+            ],
+            [
+              "Hà Nội",
+              "LOCATION"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "785",
+              "PATIENT_ID"
+            ],
+            [
+              "785",
+              "PATIENT_ID"
+            ],
+            [
+              "nam",
+              "GENDER"
+            ],
+            [
+              "42",
+              "AGE"
+            ],
+            [
+              "Đức Thượng",
+              "LOCATION"
+            ],
+            [
+              "Hoài Đức",
+              "LOCATION"
+            ],
+            [
+              "Hà Nội",
+              "LOCATION"
+            ]
+          ],
+          "BiLSTM_CRF": [
+            [
+              "785",
+              "PATIENT_ID"
+            ],
+            [
+              "785",
+              "PATIENT_ID"
+            ],
+            [
+              "nam",
+              "GENDER"
+            ],
+            [
+              "42",
+              "AGE"
+            ],
+            [
+              "tại Đức Thượng",
+              "LOCATION"
+            ],
+            [
+              "Hoài Đức",
+              "LOCATION"
+            ],
+            [
+              "Hà Nội",
+              "LOCATION"
+            ]
+          ]
+        },
+        {
+          "id": "phoner_word_test_00011",
+          "text": "Phát_biểu tại cuộc họp , Chủ_tịch UBND tỉnh Thanh_Hoá Nguyễn_Đình_Xứng khẳng_định việc xuất_hiện trường_hợp bà Đ.T.H. tại Sầm_Sơn đã cảnh_báo lỗ_hổng trong công_tác giám_sát , cách_ly các ca bệnh ở Thanh_Hoá .",
+          "gold": [
+            [
+              "UBND tỉnh Thanh_Hoá",
+              "ORGANIZATION"
+            ],
+            [
+              "Đ.T.H.",
+              "NAME"
+            ],
+            [
+              "Sầm_Sơn",
+              "LOCATION"
+            ],
+            [
+              "Thanh_Hoá",
+              "LOCATION"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "UBND tỉnh Thanh_Hoá",
+              "ORGANIZATION"
+            ],
+            [
+              "Đ.T.H.",
+              "NAME"
+            ],
+            [
+              "Sầm_Sơn",
+              "LOCATION"
+            ],
+            [
+              "Thanh_Hoá",
+              "LOCATION"
+            ]
+          ],
+          "BiLSTM_CRF": [
+            [
+              "UBND tỉnh Thanh_Hoá Nguyễn_Đình_Xứng",
+              "ORGANIZATION"
+            ],
+            [
+              "Đ.T.H.",
+              "NAME"
+            ],
+            [
+              "Sầm_Sơn",
+              "LOCATION"
+            ],
+            [
+              "Thanh_Hoá",
+              "LOCATION"
+            ]
+          ]
+        },
+        {
+          "id": "phoner_word_test_00013",
+          "text": "Trong thời_gian ở đây , em đi chơi công_viên SunWorld Đà_Nẵng , siêu_thị Lotte_Mart và ăn_ở một_số quán .",
+          "gold": [
+            [
+              "công_viên SunWorld Đà_Nẵng",
+              "LOCATION"
+            ],
+            [
+              "siêu_thị Lotte_Mart",
+              "LOCATION"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "công_viên SunWorld Đà_Nẵng",
+              "LOCATION"
+            ],
+            [
+              "siêu_thị Lotte_Mart",
+              "LOCATION"
+            ]
+          ],
+          "BiLSTM_CRF": [
+            [
+              "Đà_Nẵng",
+              "LOCATION"
+            ],
+            [
+              "siêu_thị Lotte_Mart",
+              "LOCATION"
+            ]
+          ]
+        }
+      ],
+      "BiLSTM_CRF_better": [
+        {
+          "id": "phoner_word_test_00009",
+          "text": "Theo đó bệnh_nhân tên N.M.C. , là nhân_viên ngân_hàng tại 38 Hàng Da , phường Hàng Bông , quận Hoàn_Kiếm .",
+          "gold": [
+            [
+              "N.M.C.",
+              "NAME"
+            ],
+            [
+              "nhân_viên ngân_hàng",
+              "JOB"
+            ],
+            [
+              "38 Hàng Da",
+              "LOCATION"
+            ],
+            [
+              "phường Hàng Bông",
+              "LOCATION"
+            ],
+            [
+              "quận Hoàn_Kiếm",
+              "LOCATION"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "N.M.C.",
+              "NAME"
+            ],
+            [
+              "38 Hàng Da",
+              "LOCATION"
+            ],
+            [
+              "phường Hàng Bông",
+              "LOCATION"
+            ],
+            [
+              "quận Hoàn_Kiếm",
+              "LOCATION"
+            ]
+          ],
+          "BiLSTM_CRF": [
+            [
+              "N.M.C.",
+              "NAME"
+            ],
+            [
+              "nhân_viên ngân_hàng",
+              "JOB"
+            ],
+            [
+              "38 Hàng Da",
+              "LOCATION"
+            ],
+            [
+              "phường Hàng Bông",
+              "LOCATION"
+            ],
+            [
+              "quận Hoàn_Kiếm",
+              "LOCATION"
+            ]
+          ]
+        },
+        {
+          "id": "phoner_word_test_00033",
+          "text": "\" Bệnh_nhân 1013 \" , 51 tuổi , tiểu_thương bán hải_sản ở chợ Siêu_Thị , từng được lấy mẫu xét_nghiệm nCoV lần một ngày 16/8 và có kết_quả âm_tính .",
+          "gold": [
+            [
+              "1013",
+              "PATIENT_ID"
+            ],
+            [
+              "51",
+              "AGE"
+            ],
+            [
+              "tiểu_thương bán hải_sản",
+              "JOB"
+            ],
+            [
+              "chợ Siêu_Thị",
+              "LOCATION"
+            ],
+            [
+              "16/8",
+              "DATE"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "1013",
+              "PATIENT_ID"
+            ],
+            [
+              "51",
+              "AGE"
+            ],
+            [
+              "tiểu_thương",
+              "JOB"
+            ],
+            [
+              "bán",
+              "JOB"
+            ],
+            [
+              "chợ Siêu_Thị",
+              "LOCATION"
+            ],
+            [
+              "16/8",
+              "DATE"
+            ]
+          ],
+          "BiLSTM_CRF": [
+            [
+              "1013",
+              "PATIENT_ID"
+            ],
+            [
+              "51",
+              "AGE"
+            ],
+            [
+              "tiểu_thương bán hải_sản",
+              "JOB"
+            ],
+            [
+              "chợ Siêu_Thị",
+              "LOCATION"
+            ],
+            [
+              "16/8",
+              "DATE"
+            ]
+          ]
+        },
+        {
+          "id": "phoner_word_test_00105",
+          "text": "Chưa kể những ca bệnh là người tuổi cao , họ có bệnh_lý nền như tiểu_đường , ung_thư vú , tiền_sử động_kinh , mãn_tính nặng … cũng gây khó_khăn cho quá_trình điều_trị .",
+          "gold": [
+            [
+              "tiểu_đường",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "ung_thư vú",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "tiền_sử động_kinh",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "mãn_tính nặng",
+              "SYMPTOM_AND_DISEASE"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "tiểu_đường",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "ung_thư vú",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "động_kinh",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "mãn_tính nặng",
+              "SYMPTOM_AND_DISEASE"
+            ]
+          ],
+          "BiLSTM_CRF": [
+            [
+              "tiểu_đường",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "ung_thư vú",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "tiền_sử động_kinh",
+              "SYMPTOM_AND_DISEASE"
+            ],
+            [
+              "mãn_tính nặng",
+              "SYMPTOM_AND_DISEASE"
+            ]
+          ]
+        }
+      ]
+    },
+    "vlsp_phobert_word_vs_xlmr_word": {
+      "PhoBERT_word_better": [
+        {
+          "id": "vlsp_word_test_00018",
+          "text": "800 triệu đồng là số tiền quyên_góp được ngay trong buổi ra_mắt chi_hội bảo_trợ bệnh_nhân nghèo Thiện_Nhân vào sáng 21-3 , tại khách_sạn Majestic , TP. HCM .",
+          "gold": [
+            [
+              "chi_hội bảo_trợ bệnh_nhân nghèo Thiện_Nhân",
+              "ORG"
+            ],
+            [
+              "khách_sạn Majestic",
+              "LOC"
+            ],
+            [
+              "TP. HCM",
+              "LOC"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "chi_hội bảo_trợ bệnh_nhân nghèo Thiện_Nhân",
+              "ORG"
+            ],
+            [
+              "khách_sạn Majestic",
+              "LOC"
+            ],
+            [
+              "TP. HCM",
+              "LOC"
+            ]
+          ],
+          "XLMR_word": [
+            [
+              "khách_sạn Majestic",
+              "LOC"
+            ],
+            [
+              "TP. HCM",
+              "LOC"
+            ]
+          ]
+        },
+        {
+          "id": "vlsp_word_test_00055",
+          "text": "Cha tôi bị phát_xít Đức bắt giam bên Áo .",
+          "gold": [
+            [
+              "Đức",
+              "LOC"
+            ],
+            [
+              "Áo",
+              "LOC"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "Đức",
+              "LOC"
+            ],
+            [
+              "Áo",
+              "LOC"
+            ]
+          ],
+          "XLMR_word": [
+            [
+              "Đức",
+              "PER"
+            ],
+            [
+              "Áo",
+              "LOC"
+            ]
+          ]
+        },
+        {
+          "id": "vlsp_word_test_00082",
+          "text": "Đêm đầu tuần , trời mưa suốt nên H. \" ế hàng \" cứ rảo tới rảo lui , mãi đến gần 22 g mới có một khách đi xe cà_tàng lạng tới .",
+          "gold": [
+            [
+              "H.",
+              "PER"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "H.",
+              "PER"
+            ]
+          ],
+          "XLMR_word": [
+            [
+              "H. \" ế",
+              "PER"
+            ],
+            [
+              "\"",
+              "PER"
+            ]
+          ]
+        }
+      ],
+      "XLMR_word_better": [
+        {
+          "id": "vlsp_word_test_00008",
+          "text": "... Nếu Tấn Thành mở ra bến phà Vĩnh_Hưng thì phải nói rằng anh đã có “ gen ” di_truyền từ người cha của mình .",
+          "gold": [
+            [
+              "Tấn Thành",
+              "PER"
+            ],
+            [
+              "bến phà Vĩnh_Hưng",
+              "LOC"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "Tấn Thành",
+              "PER"
+            ],
+            [
+              "phà Vĩnh_Hưng",
+              "LOC"
+            ]
+          ],
+          "XLMR_word": [
+            [
+              "Tấn Thành",
+              "PER"
+            ],
+            [
+              "bến phà Vĩnh_Hưng",
+              "LOC"
+            ]
+          ]
+        },
+        {
+          "id": "vlsp_word_test_00020",
+          "text": "Đó là nhật_ký của một Việt_cộng , chính là nữ bác_sĩ đứng đầu cái bệnh_viện nhỏ mà đơn_vị Fred càn vào .",
+          "gold": [
+            [
+              "Fred",
+              "PER"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "Fred",
+              "ORG"
+            ]
+          ],
+          "XLMR_word": [
+            [
+              "Fred",
+              "PER"
+            ]
+          ]
+        },
+        {
+          "id": "vlsp_word_test_00294",
+          "text": "Mặt_mũi thằng Mỹ thế_nào ?",
+          "gold": [
+            [
+              "Mỹ",
+              "LOC"
+            ]
+          ],
+          "PhoBERT_word": [
+            [
+              "Mỹ",
+              "PER"
+            ]
+          ],
+          "XLMR_word": [
+            [
+              "Mỹ",
+              "LOC"
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

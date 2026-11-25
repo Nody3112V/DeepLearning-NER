@@ -33,6 +33,7 @@ from transformers import (
 from src.common.metrics import compute_metrics, format_report
 from src.common.logger import ExperimentLogger
 from src.models.pretrained.model import PretrainedNERModel
+from src.models.pretrained.subword_align import recover_word_predictions
 
 
 def set_seed(seed: int = 42) -> None:
@@ -350,14 +351,26 @@ class PLMTrainer:
             preds = torch.argmax(logits, dim=-1).cpu().numpy()       # [B, L]
             labels_np = labels.cpu().numpy()                         # [B, L]
 
-            # Khôi phục nhãn thực thể tại các vị trí không phải ignore_index (-100)
+            # Khôi phục nhãn thực thể về đúng độ dài token gốc (kể cả khi có truncation hoặc token zero-width)
+            batch_word_ids = batch.get("word_ids")
+            batch_gold_tags = batch.get("tags")
             for b in range(len(preds)):
-                gold_seq: List[str] = []
-                pred_seq: List[str] = []
-                for l_id, p_id in zip(labels_np[b], preds[b]):
-                    if l_id != -100:  # Bỏ qua padding, special tokens, subwords phụ
-                        gold_seq.append(self.id2tag.get(int(l_id), "O"))
-                        pred_seq.append(self.id2tag.get(int(p_id), "O"))
+                if batch_word_ids is not None and batch_gold_tags is not None:
+                    gold_seq = list(batch_gold_tags[b])
+                    pred_seq = recover_word_predictions(
+                        pred_ids=preds[b],
+                        word_ids=batch_word_ids[b],
+                        num_tokens=len(gold_seq),
+                        id2tag=self.id2tag,
+                        fallback_tag="O",
+                    )
+                else:
+                    gold_seq = []
+                    pred_seq = []
+                    for l_id, p_id in zip(labels_np[b], preds[b]):
+                        if l_id != -100:  # Bỏ qua padding, special tokens, subwords phụ
+                            gold_seq.append(self.id2tag.get(int(l_id), "O"))
+                            pred_seq.append(self.id2tag.get(int(p_id), "O"))
 
                 all_gold_tags.append(gold_seq)
                 all_pred_tags.append(pred_seq)
@@ -380,9 +393,19 @@ class PLMTrainer:
         ckpt_path = Path(checkpoint_path)
         ckpt_path.parent.mkdir(parents=True, exist_ok=True)
 
+        save_fp16 = bool(self.train_cfg.get("save_fp16", False))
+        raw_state = self.model.state_dict()
+        if save_fp16:
+            model_state = {
+                k: (v.detach().cpu().half() if v.is_floating_point() else v.detach().cpu())
+                for k, v in raw_state.items()
+            }
+        else:
+            model_state = raw_state
+
         checkpoint_dict = {
             "epoch": epoch,
-            "model_state_dict": self.model.state_dict(),
+            "model_state_dict": model_state,
             "optimizer_state_dict": self.optimizer.state_dict() if save_optimizer else None,
             "scheduler_state_dict": self.scheduler.state_dict() if (save_optimizer and self.scheduler is not None) else None,
             "scaler_state_dict": self.scaler.state_dict() if (save_optimizer and self.scaler is not None) else None,
@@ -394,6 +417,7 @@ class PLMTrainer:
             "seed": self.seed,
             "pooling_strategy": self.model.pooling_strategy,
             "pytorch_version": str(torch.__version__),
+            "saved_fp16": save_fp16,
         }
 
         tmp_path = ckpt_path.with_suffix(".tmp")
@@ -468,6 +492,9 @@ class PLMTrainer:
               f"({param_stats['trainable_ratio']:.2f}%)")
         print(f"=======================================================\n")
 
+        if torch.cuda.is_available() and self.device.type == "cuda":
+            torch.cuda.reset_peak_memory_stats(self.device)
+
         total_training_start = time.time()
 
         with ExperimentLogger(
@@ -537,10 +564,16 @@ class PLMTrainer:
                         break
 
             total_duration = time.time() - total_training_start
+            max_mem_mb = (
+                torch.cuda.max_memory_allocated(self.device) / (1024 ** 2)
+                if (torch.cuda.is_available() and self.device.type == "cuda")
+                else 0.0
+            )
             logger.log_summary({
                 "best_dev_f1_micro": self.best_f1,
                 "best_epoch": self.best_epoch,
                 "total_training_time_s": total_duration,
+                "max_gpu_memory_mb": max_mem_mb,
             })
 
             print(f"\n=======================================================")

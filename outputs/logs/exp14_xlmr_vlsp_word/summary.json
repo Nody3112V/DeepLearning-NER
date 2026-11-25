@@ -1,0 +1,6 @@
+{
+  "best_dev_f1_micro": 0.9365020423319719,
+  "best_epoch": 4,
+  "total_training_time_s": 2664.5236670970917,
+  "max_gpu_memory_mb": 9380.28466796875
+}

@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llcccccccc}
+\hline
+\textbf{Model} & \textbf{Granularity} & \textbf{P (\%)} & \textbf{R (\%)} & \textbf{Micro-F1} & \textbf{Macro-F1} & \textbf{Time (s)} & \textbf{VRAM (MB)} & \textbf{Avg Tok} & \textbf{Avg SW} \\
+\hline
+PhoBERT-base-v2 & word & 92.75 & 94.90 & 93.81 & 89.05 & 327.1 & 5911 & 28.56 & 32.20 (1.06$\times$) \\
+PhoBERT-base-v2 & syllable & 91.61 & 93.93 & 92.76 & 86.14 & 286.1 & 6765 & 36.12 & 39.52 (1.04$\times$) \\
+XLM-RoBERTa-base & syllable & 93.16 & 95.07 & \textbf{94.11} & 91.45 & 1599.0 & 10373 & 36.12 & 45.06 (1.19$\times$) \\
+XLM-RoBERTa-base & word & 93.05 & 94.69 & 93.86 & 91.04 & 3577.1 & 10563 & 28.56 & 60.19 (2.04$\times$) \\
+\hline
+\end{tabular}
+\caption{So sánh hiệu năng và chi phí tài nguyên theo ma trận $2\times 2$ (Mô hình $\times$ Mức biểu diễn) trên tập test PhoNER\_COVID19 (3.000 câu).}
+\label{tab:granularity-phoner}
+\end{table*}

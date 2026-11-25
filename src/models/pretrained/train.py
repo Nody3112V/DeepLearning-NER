@@ -24,7 +24,7 @@ from transformers import AutoTokenizer
 from src.common.schema import load_jsonl, TAG_SETS, NERSample, save_jsonl
 from src.common.metrics import compute_metrics, format_report, to_latex_table
 from src.models.pretrained.model import PretrainedNERModel
-from src.models.pretrained.subword_align import NERDataset, create_ner_collate_fn
+from src.models.pretrained.subword_align import NERDataset, create_ner_collate_fn, recover_word_predictions
 from src.models.pretrained.trainer import PLMTrainer, set_seed
 
 
@@ -214,25 +214,29 @@ def run_pipeline(cfg: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any
     print("\nBÁO CÁO KẾT QUẢ TEST (Entity-level):")
     print(report_str)
 
-    # 7. Dự đoán chi tiết và xuất kết quả
+    # 7. Dự đoán chi tiết và xuất kết quả (phục hồi chính xác 1-1 về mức token gốc)
     model.eval()
     all_pred_tags: List[List[str]] = []
     with torch.no_grad():
         for batch in test_loader:
             input_ids = batch["input_ids"].to(device)
             attention_mask = batch["attention_mask"].to(device)
-            labels = batch["labels"].to(device)
 
-            outputs = model(input_ids=input_ids, attention_mask=attention_mask)
-            logits = outputs["logits"]
+            with torch.amp.autocast("cuda", enabled=(device.type == "cuda")):
+                outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+                logits = outputs["logits"]
             preds = torch.argmax(logits, dim=-1).cpu().numpy()
-            labels_np = labels.cpu().numpy()
+            batch_word_ids = batch["word_ids"]
+            batch_tokens = batch["tokens"]
 
             for b in range(len(preds)):
-                sent_preds = []
-                for l_id, p_id in zip(labels_np[b], preds[b]):
-                    if l_id != -100:
-                        sent_preds.append(id2tag.get(int(p_id), "O"))
+                sent_preds = recover_word_predictions(
+                    pred_ids=preds[b],
+                    word_ids=batch_word_ids[b],
+                    num_tokens=len(batch_tokens[b]),
+                    id2tag=id2tag,
+                    fallback_tag="O",
+                )
                 all_pred_tags.append(sent_preds)
 
     # Xuất file dự đoán theo cấu hình nhóm
