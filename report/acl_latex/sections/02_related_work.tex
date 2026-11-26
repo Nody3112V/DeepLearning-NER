@@ -1,0 +1,54 @@
+% 02_related_work.tex -- DRAFT (TV3). Assumes natbib (\citep / \citet) and an English ACL-style template.
+% Every citation below was checked against its paper or ACL Anthology page; see related_work_refs.bib
+% for the entries that still carry a TODO. Replace [TODO: ...] markers before submission.
+
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Vietnamese NER resources.}
+Vietnamese NER has long relied on the VLSP 2016 and VLSP 2018 shared tasks
+\citep{nguyen2016vlsp,nguyen2018vlsp}, which cover generic entity types
+(persons, organizations, locations) in news text.
+\citet{truong2021covid} introduced PhoNER\_COVID19, a domain-specific dataset for
+COVID-19 patient reports with 10 entity types and about 35K entities over 10K sentences.
+The annotation was done on syllable-level text, and a word-level variant was
+obtained with RDRSegmenter \citep{nguyen2018rdr}, which is part of VnCoreNLP \citep{vu2018vncorenlp}.
+The benchmark systems are BiLSTM-CNN-CRF \citep{ma2016endtoend} and the pre-trained
+encoders XLM-R \citep{conneau2020xlmr} and PhoBERT \citep{nguyen2020phobert};
+the best system, PhoBERT$_{\text{large}}$, reaches 0.945 micro-F1 on the word-level data, and word
+segmentation was found to help.
+Their error analysis shows that the hardest cases are the \textsc{location}/\textsc{organization}
+ambiguity and over-generation of generic place mentions.
+Later work treats NER as text-to-text generation; for instance, ViT5 reports
+94.5 micro-F1 on PhoNER\_COVID19 \citep{phan2022vit5}.
+These supervised systems are our reference point (Section~\ref{sec:experiments}).
+
+\paragraph{NER with large language models.}
+Sequence labeling does not fit the output format of a generative LLM directly.
+GPT-NER \citep{wang2023gptner} therefore casts NER as generation: the model
+copies the input and marks entity positions, and the output is mapped back to labels.
+On five widely used benchmarks it reaches results comparable to supervised baselines and
+is particularly strong when labeled data is scarce.
+\citet{xie2023empirical} present an empirical study of zero-shot NER with ChatGPT.
+Our setting differs in two ways: the text is Vietnamese and domain-specific, and we
+ask the model for a list of entity strings with types instead of a marked copy of the sentence.
+This list is aligned to the tokens by a deterministic procedure
+(Section~\ref{sec:method-llm}), so every failure of the model (invented strings,
+strings that cross token boundaries, ill-formed JSON) can be counted.
+
+\paragraph{LLMs for Vietnamese and medical NER.}
+Evidence for Vietnamese is still thin.
+In the construction of the VietMed-NER spoken medical corpus, \citet{vietmed2024} report that
+prompting GPT-4 to pre-tag entities did not reach acceptable accuracy for their entity types.
+[TODO: add 1--2 recent Vietnamese LLM-for-NER or Vietnamese LLM benchmark papers after a
+targeted literature search; none were found in the search done for this draft.]
+
+\paragraph{Position of this work.}
+We compare a prompted LLM (Gemini, zero-shot [TODO: and few-shot]) with the supervised
+baselines of \citet{truong2021covid} on PhoNER\_COVID19 under the same strict
+entity-level scoring, and we report the rate of malformed outputs and unmatched entities
+alongside F1 [TODO: insert numbers from the Week 4 runs].
+The annotation guidelines contain context-dependent rules, for example that a hospital is a
+\textsc{location} when the patient was there and an \textsc{organization} when it acts as an agent,
+and that occupations, ages and genders are tagged only when linked to a named person or patient ID;
+we examine whether a zero-shot model can follow such rules from the prompt alone.
