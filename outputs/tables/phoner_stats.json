@@ -1,0 +1,120 @@
+{
+  "word": {
+    "train": {
+      "num_sentences": 5027,
+      "total_tokens": 132511,
+      "avg_length": 26.36,
+      "bio_fixes": 0,
+      "entity_counts": {
+        "ORGANIZATION": 1137,
+        "SYMPTOM_AND_DISEASE": 1439,
+        "LOCATION": 5398,
+        "DATE": 2549,
+        "PATIENT_ID": 3240,
+        "AGE": 682,
+        "NAME": 349,
+        "JOB": 205,
+        "TRANSPORTATION": 226,
+        "GENDER": 542
+      },
+      "o_token_ratio": 79.05
+    },
+    "dev": {
+      "num_sentences": 2000,
+      "total_tokens": 56283,
+      "avg_length": 28.14,
+      "bio_fixes": 0,
+      "entity_counts": {
+        "ORGANIZATION": 551,
+        "DATE": 1103,
+        "SYMPTOM_AND_DISEASE": 766,
+        "PATIENT_ID": 1276,
+        "GENDER": 277,
+        "AGE": 361,
+        "JOB": 132,
+        "LOCATION": 2737,
+        "NAME": 188,
+        "TRANSPORTATION": 87
+      },
+      "o_token_ratio": 74.92
+    },
+    "test": {
+      "num_sentences": 3000,
+      "total_tokens": 85678,
+      "avg_length": 28.56,
+      "bio_fixes": 0,
+      "entity_counts": {
+        "DATE": 1654,
+        "NAME": 318,
+        "AGE": 582,
+        "LOCATION": 4441,
+        "JOB": 173,
+        "ORGANIZATION": 771,
+        "PATIENT_ID": 2005,
+        "SYMPTOM_AND_DISEASE": 1136,
+        "GENDER": 462,
+        "TRANSPORTATION": 193
+      },
+      "o_token_ratio": 74.17
+    }
+  },
+  "syllable": {
+    "train": {
+      "num_sentences": 5027,
+      "total_tokens": 167541,
+      "avg_length": 33.33,
+      "bio_fixes": 0,
+      "entity_counts": {
+        "ORGANIZATION": 1137,
+        "SYMPTOM_AND_DISEASE": 1439,
+        "LOCATION": 5398,
+        "DATE": 2549,
+        "PATIENT_ID": 3240,
+        "AGE": 682,
+        "NAME": 349,
+        "JOB": 205,
+        "TRANSPORTATION": 226,
+        "GENDER": 542
+      },
+      "o_token_ratio": 77.22
+    },
+    "dev": {
+      "num_sentences": 2000,
+      "total_tokens": 71325,
+      "avg_length": 35.66,
+      "bio_fixes": 0,
+      "entity_counts": {
+        "ORGANIZATION": 551,
+        "DATE": 1103,
+        "SYMPTOM_AND_DISEASE": 766,
+        "PATIENT_ID": 1276,
+        "GENDER": 277,
+        "AGE": 361,
+        "JOB": 132,
+        "LOCATION": 2737,
+        "NAME": 188,
+        "TRANSPORTATION": 87
+      },
+      "o_token_ratio": 72.5
+    },
+    "test": {
+      "num_sentences": 3000,
+      "total_tokens": 108354,
+      "avg_length": 36.12,
+      "bio_fixes": 0,
+      "entity_counts": {
+        "DATE": 1654,
+        "NAME": 318,
+        "AGE": 582,
+        "LOCATION": 4441,
+        "JOB": 173,
+        "ORGANIZATION": 771,
+        "PATIENT_ID": 2005,
+        "SYMPTOM_AND_DISEASE": 1136,
+        "GENDER": 462,
+        "TRANSPORTATION": 193
+      },
+      "o_token_ratio": 71.78
+    }
+  }
+}
