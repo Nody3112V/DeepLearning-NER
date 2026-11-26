@@ -1,0 +1,43 @@
+# LLM branch (TV3) - zero-shot / few-shot NER with Gemini.
+# Run:  python -m src.models.llm_ner.run_zeroshot --config configs/llm_fewshot.yaml
+# Pipeline check without the API:  ... --mock oracle   (or --mock noisy)
+# Score the subset:  python -m src.common.metrics --gold <data.subset.gold_path> --pred <output.predictions_path>
+# The disk cache (outputs/llm_cache/gemini_<model>.jsonl) is handled by api_client.py.
+
+experiment:
+  name: llm_zeroshot_smoke
+
+model:
+  name: gemini-3.1-flash-lite
+  # thinking: null (model default = high for Gemini 3), minimal|low|medium|high, or an int budget (2.5 family).
+  # api_client.py advises trying "low" for NER. A 400 error means the model rejects that value.
+  # Always report the model name AND this value together with latency numbers.
+  thinking: low
+  temperature: null     # null = model default (Google advises this for Gemini 3)
+  seed: 42
+  max_output_tokens: 4096   # thinking tokens count against it; finish_reason=MAX_TOKENS => raise it or lower thinking
+  json_mode: true
+
+rate_limit:
+  rpm: 10            # PLACEHOLDER: set to the real quota of your free-tier key
+
+data:
+  dataset: phoner                                          # key of TYPE_SETS in prompt_templates.py
+  test_path: data/processed/phoner_covid19/word/test.jsonl # rows: id, tokens, tags
+  subset:
+    n: 100                                                 # fixed subset; the free tier has a small quota
+    seed: 42
+    gold_path: outputs/subsets/phoner_test_n100_seed42.gold.jsonl  # written once, then reused (frozen)
+
+prompt:
+  n_shot: 0                               # zero-shot; few-shot examples are a Week 3 step
+  include_guidelines: true                # false = type names only (ablation)
+
+postprocess:
+  repeat: all                             # label every occurrence of an entity text (or: first)
+  case_fallback: true
+
+output:
+  predictions_path: outputs/predictions/llm_test.jsonl
+  diagnostics_path: outputs/predictions/llm_test.diagnostics.jsonl   # id, status, issues, finish_reason, raw
+  stats_path: outputs/predictions/llm_test.postprocess_stats.json
