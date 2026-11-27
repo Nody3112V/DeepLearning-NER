@@ -1,0 +1,1525 @@
+{
+  "model_specs": {
+    "phobert_vlsp": {
+      "model_name": "vinai/phobert-base-v2",
+      "encoder_class": "RobertaModel",
+      "tokenizer_class": "PhobertTokenizer",
+      "is_fast_tokenizer": false,
+      "num_layers": 12,
+      "num_heads": 12,
+      "hidden_size": 768,
+      "head_dim": 64,
+      "supports_output_attentions": true,
+      "attention_tuple_len": 12,
+      "sample_layer_shape": [
+        1,
+        12,
+        5,
+        5
+      ]
+    },
+    "xlmr_vlsp": {
+      "model_name": "xlm-roberta-base",
+      "encoder_class": "XLMRobertaModel",
+      "tokenizer_class": "XLMRobertaTokenizerFast",
+      "is_fast_tokenizer": true,
+      "num_layers": 12,
+      "num_heads": 12,
+      "hidden_size": 768,
+      "head_dim": 64,
+      "supports_output_attentions": true,
+      "attention_tuple_len": 12,
+      "sample_layer_shape": [
+        1,
+        12,
+        9,
+        9
+      ]
+    }
+  },
+  "validations": {
+    "phobert_vlsp_00627": {
+      "valid": true,
+      "shape": [
+        12,
+        12,
+        14,
+        14
+      ],
+      "min_val": 5.669342639609124e-22,
+      "max_val": 0.9999961853027344,
+      "max_row_sum_error": 2.384185791015625e-07,
+      "num_subwords": 14,
+      "num_original_tokens": 12,
+      "num_mapped_words": 12
+    },
+    "xlmr_vlsp_00627": {
+      "valid": true,
+      "shape": [
+        12,
+        12,
+        21,
+        21
+      ],
+      "min_val": 4.054892742416436e-32,
+      "max_val": 1.0,
+      "max_row_sum_error": 2.384185791015625e-07,
+      "num_subwords": 21,
+      "num_original_tokens": 16,
+      "num_mapped_words": 16
+    },
+    "phobert_phoner_00277": {
+      "valid": true,
+      "shape": [
+        12,
+        12,
+        17,
+        17
+      ],
+      "min_val": 1.0773887376806418e-22,
+      "max_val": 0.9999959468841553,
+      "max_row_sum_error": 2.384185791015625e-07,
+      "num_subwords": 17,
+      "num_original_tokens": 15,
+      "num_mapped_words": 15
+    },
+    "xlmr_phoner_00277": {
+      "valid": true,
+      "shape": [
+        12,
+        12,
+        27,
+        27
+      ],
+      "min_val": 4.931856803029468e-34,
+      "max_val": 1.0,
+      "max_row_sum_error": 2.980232238769531e-07,
+      "num_subwords": 27,
+      "num_original_tokens": 20,
+      "num_mapped_words": 20
+    }
+  },
+  "saved_figures": [
+    "outputs\\figures\\attention\\phobert_vlsp_word_test_00627_L12_Hmean_word.png",
+    "outputs\\figures\\attention\\phobert_vlsp_word_test_00627_L12_Hheads_0_2_4_6_8_11_word.png",
+    "outputs\\figures\\attention\\phobert_vlsp_word_test_00627_L1_4_8_12_Hmean_word.png",
+    "outputs\\figures\\attention\\xlmr_vlsp_syllable_test_00627_L12_Hmean_subword.png",
+    "outputs\\figures\\attention\\phobert_vs_xlmr_vlsp_test_00627_L12_Hmean_word.png",
+    "outputs\\figures\\attention\\phobert_phoner_word_test_00277_L12_Hmean_subword.png",
+    "outputs\\figures\\attention\\phobert_phoner_word_test_00277_L12_Hmean_word.png",
+    "outputs\\figures\\attention\\xlmr_phoner_syllable_test_00277_L1_4_8_12_Hmean_word.png",
+    "outputs\\figures\\attention\\phobert_vs_xlmr_phoner_test_00277_L12_Hmean_word.png"
+  ],
+  "quantitative_patterns": {
+    "phobert_vlsp_00627": {
+      "model_name": "vinai/phobert-base-v2",
+      "sentence_id": "vlsp_word_test_00627",
+      "layer": 12,
+      "head": "mean",
+      "num_original_tokens": 12,
+      "num_subwords": 14,
+      "tokens": [
+        "Ban",
+        "biên_tập",
+        "Tuổi_Trẻ",
+        "quyết_định",
+        "cử",
+        "nữ",
+        "phóng_viên",
+        "Uyên",
+        "Ly",
+        "sang",
+        "Mỹ",
+        "."
+      ],
+      "subwords": [
+        "<s>",
+        "Ban",
+        "biên_tập",
+        "Tuổi_Trẻ",
+        "quyết_định",
+        "cử",
+        "nữ",
+        "phóng_viên",
+        "Uyên",
+        "Ly",
+        "sang",
+        "Mỹ",
+        ".",
+        "</s>"
+      ],
+      "gold_tags": [
+        "O",
+        "O",
+        "B-ORG",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-PER",
+        "I-PER",
+        "O",
+        "B-LOC",
+        "O"
+      ],
+      "predicted_tags": [
+        "O",
+        "B-ORG",
+        "B-ORG",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-PER",
+        "I-PER",
+        "O",
+        "B-LOC",
+        "O"
+      ],
+      "exact_tag_match": false,
+      "aggregation_method": "Key=sum, Query=mean (loại bỏ <s>/</s> (khối lượng sink TB=53.5%), chuẩn hóa tổng hàng=1)",
+      "multi_subword_words": {},
+      "entity_query_focus": [
+        {
+          "query_idx": 1,
+          "query_token": "biên_tập",
+          "pred_tag": "B-ORG",
+          "gold_tag": "O",
+          "top_attended_keys": [
+            {
+              "token": "biên_tập",
+              "tag": "B-ORG",
+              "weight": 0.7115
+            },
+            {
+              "token": "Tuổi_Trẻ",
+              "tag": "B-ORG",
+              "weight": 0.2027
+            },
+            {
+              "token": "Ban",
+              "tag": "O",
+              "weight": 0.0662
+            },
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.0038
+            }
+          ]
+        },
+        {
+          "query_idx": 2,
+          "query_token": "Tuổi_Trẻ",
+          "pred_tag": "B-ORG",
+          "gold_tag": "B-ORG",
+          "top_attended_keys": [
+            {
+              "token": "Tuổi_Trẻ",
+              "tag": "B-ORG",
+              "weight": 0.6962
+            },
+            {
+              "token": "biên_tập",
+              "tag": "B-ORG",
+              "weight": 0.2605
+            },
+            {
+              "token": "Ban",
+              "tag": "O",
+              "weight": 0.0223
+            },
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.0051
+            }
+          ]
+        },
+        {
+          "query_idx": 7,
+          "query_token": "Uyên",
+          "pred_tag": "B-PER",
+          "gold_tag": "B-PER",
+          "top_attended_keys": [
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.3697
+            },
+            {
+              "token": "phóng_viên",
+              "tag": "O",
+              "weight": 0.176
+            },
+            {
+              "token": "nữ",
+              "tag": "O",
+              "weight": 0.0942
+            },
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.0853
+            }
+          ]
+        },
+        {
+          "query_idx": 8,
+          "query_token": "Ly",
+          "pred_tag": "I-PER",
+          "gold_tag": "I-PER",
+          "top_attended_keys": [
+            {
+              "token": "Ly",
+              "tag": "I-PER",
+              "weight": 0.9109
+            },
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.0719
+            },
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.0026
+            },
+            {
+              "token": "nữ",
+              "tag": "O",
+              "weight": 0.0022
+            }
+          ]
+        },
+        {
+          "query_idx": 10,
+          "query_token": "Mỹ",
+          "pred_tag": "B-LOC",
+          "gold_tag": "B-LOC",
+          "top_attended_keys": [
+            {
+              "token": "Mỹ",
+              "tag": "B-LOC",
+              "weight": 0.4132
+            },
+            {
+              "token": "sang",
+              "tag": "O",
+              "weight": 0.115
+            },
+            {
+              "token": "Ban",
+              "tag": "O",
+              "weight": 0.0914
+            },
+            {
+              "token": "phóng_viên",
+              "tag": "O",
+              "weight": 0.0716
+            }
+          ]
+        }
+      ],
+      "per_layer_stats": [
+        {
+          "layer": 1,
+          "special_token_sink_pct": 19.87,
+          "avg_entropy_nats": 2.424,
+          "word_self_attn_mean": 0.1985
+        },
+        {
+          "layer": 2,
+          "special_token_sink_pct": 64.67,
+          "avg_entropy_nats": 1.543,
+          "word_self_attn_mean": 0.151
+        },
+        {
+          "layer": 3,
+          "special_token_sink_pct": 53.6,
+          "avg_entropy_nats": 1.797,
+          "word_self_attn_mean": 0.1884
+        },
+        {
+          "layer": 4,
+          "special_token_sink_pct": 62.65,
+          "avg_entropy_nats": 1.764,
+          "word_self_attn_mean": 0.1716
+        },
+        {
+          "layer": 5,
+          "special_token_sink_pct": 61.35,
+          "avg_entropy_nats": 1.63,
+          "word_self_attn_mean": 0.2645
+        },
+        {
+          "layer": 6,
+          "special_token_sink_pct": 70.96,
+          "avg_entropy_nats": 1.703,
+          "word_self_attn_mean": 0.1568
+        },
+        {
+          "layer": 7,
+          "special_token_sink_pct": 70.17,
+          "avg_entropy_nats": 1.562,
+          "word_self_attn_mean": 0.2413
+        },
+        {
+          "layer": 8,
+          "special_token_sink_pct": 62.04,
+          "avg_entropy_nats": 1.448,
+          "word_self_attn_mean": 0.1935
+        },
+        {
+          "layer": 9,
+          "special_token_sink_pct": 59.52,
+          "avg_entropy_nats": 1.43,
+          "word_self_attn_mean": 0.2337
+        },
+        {
+          "layer": 10,
+          "special_token_sink_pct": 41.41,
+          "avg_entropy_nats": 1.592,
+          "word_self_attn_mean": 0.1924
+        },
+        {
+          "layer": 11,
+          "special_token_sink_pct": 37.31,
+          "avg_entropy_nats": 1.722,
+          "word_self_attn_mean": 0.3126
+        },
+        {
+          "layer": 12,
+          "special_token_sink_pct": 53.54,
+          "avg_entropy_nats": 1.873,
+          "word_self_attn_mean": 0.3937
+        }
+      ]
+    },
+    "xlmr_vlsp_00627": {
+      "model_name": "xlm-roberta-base",
+      "sentence_id": "vlsp_syllable_test_00627",
+      "layer": 12,
+      "head": "mean",
+      "num_original_tokens": 16,
+      "num_subwords": 21,
+      "tokens": [
+        "Ban",
+        "biên",
+        "tập",
+        "Tuổi",
+        "Trẻ",
+        "quyết",
+        "định",
+        "cử",
+        "nữ",
+        "phóng",
+        "viên",
+        "Uyên",
+        "Ly",
+        "sang",
+        "Mỹ",
+        "."
+      ],
+      "subwords": [
+        "<s>",
+        "▁Ban",
+        "▁biên",
+        "▁tập",
+        "▁T",
+        "uổi",
+        "▁Trẻ",
+        "▁quyết",
+        "▁định",
+        "▁cử",
+        "▁nữ",
+        "▁phóng",
+        "▁viên",
+        "▁U",
+        "yên",
+        "▁Ly",
+        "▁sang",
+        "▁Mỹ",
+        "▁",
+        ".",
+        "</s>"
+      ],
+      "gold_tags": [
+        "O",
+        "O",
+        "O",
+        "B-ORG",
+        "I-ORG",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-PER",
+        "I-PER",
+        "O",
+        "B-LOC",
+        "O"
+      ],
+      "predicted_tags": [
+        "O",
+        "O",
+        "O",
+        "B-ORG",
+        "I-ORG",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-PER",
+        "I-PER",
+        "O",
+        "B-LOC",
+        "O"
+      ],
+      "exact_tag_match": true,
+      "aggregation_method": "Key=sum, Query=mean (loại bỏ <s>/</s> (khối lượng sink TB=41.0%), chuẩn hóa tổng hàng=1)",
+      "multi_subword_words": {
+        "Tuổi": [
+          "▁T",
+          "uổi"
+        ],
+        "Uyên": [
+          "▁U",
+          "yên"
+        ],
+        ".": [
+          "▁",
+          "."
+        ]
+      },
+      "entity_query_focus": [
+        {
+          "query_idx": 3,
+          "query_token": "Tuổi",
+          "pred_tag": "B-ORG",
+          "gold_tag": "B-ORG",
+          "top_attended_keys": [
+            {
+              "token": "Tuổi",
+              "tag": "B-ORG",
+              "weight": 0.7479
+            },
+            {
+              "token": "Trẻ",
+              "tag": "I-ORG",
+              "weight": 0.2466
+            },
+            {
+              "token": "định",
+              "tag": "O",
+              "weight": 0.002
+            },
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.001
+            }
+          ]
+        },
+        {
+          "query_idx": 4,
+          "query_token": "Trẻ",
+          "pred_tag": "I-ORG",
+          "gold_tag": "I-ORG",
+          "top_attended_keys": [
+            {
+              "token": "Trẻ",
+              "tag": "I-ORG",
+              "weight": 0.7483
+            },
+            {
+              "token": "Tuổi",
+              "tag": "B-ORG",
+              "weight": 0.2472
+            },
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.0021
+            },
+            {
+              "token": "định",
+              "tag": "O",
+              "weight": 0.0007
+            }
+          ]
+        },
+        {
+          "query_idx": 11,
+          "query_token": "Uyên",
+          "pred_tag": "B-PER",
+          "gold_tag": "B-PER",
+          "top_attended_keys": [
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.9048
+            },
+            {
+              "token": "Ly",
+              "tag": "I-PER",
+              "weight": 0.0619
+            },
+            {
+              "token": "Trẻ",
+              "tag": "I-ORG",
+              "weight": 0.018
+            },
+            {
+              "token": "Tuổi",
+              "tag": "B-ORG",
+              "weight": 0.0128
+            }
+          ]
+        },
+        {
+          "query_idx": 12,
+          "query_token": "Ly",
+          "pred_tag": "I-PER",
+          "gold_tag": "I-PER",
+          "top_attended_keys": [
+            {
+              "token": "Ly",
+              "tag": "I-PER",
+              "weight": 0.9239
+            },
+            {
+              "token": "Uyên",
+              "tag": "B-PER",
+              "weight": 0.0319
+            },
+            {
+              "token": "Tuổi",
+              "tag": "B-ORG",
+              "weight": 0.0247
+            },
+            {
+              "token": "Trẻ",
+              "tag": "I-ORG",
+              "weight": 0.0165
+            }
+          ]
+        },
+        {
+          "query_idx": 14,
+          "query_token": "Mỹ",
+          "pred_tag": "B-LOC",
+          "gold_tag": "B-LOC",
+          "top_attended_keys": [
+            {
+              "token": "Mỹ",
+              "tag": "B-LOC",
+              "weight": 0.9276
+            },
+            {
+              "token": "Ban",
+              "tag": "O",
+              "weight": 0.028
+            },
+            {
+              "token": "Tuổi",
+              "tag": "B-ORG",
+              "weight": 0.0148
+            },
+            {
+              "token": "Trẻ",
+              "tag": "I-ORG",
+              "weight": 0.01
+            }
+          ]
+        }
+      ],
+      "per_layer_stats": [
+        {
+          "layer": 1,
+          "special_token_sink_pct": 15.35,
+          "avg_entropy_nats": 2.885,
+          "word_self_attn_mean": 0.1314
+        },
+        {
+          "layer": 2,
+          "special_token_sink_pct": 60.84,
+          "avg_entropy_nats": 1.646,
+          "word_self_attn_mean": 0.1024
+        },
+        {
+          "layer": 3,
+          "special_token_sink_pct": 62.27,
+          "avg_entropy_nats": 1.429,
+          "word_self_attn_mean": 0.184
+        },
+        {
+          "layer": 4,
+          "special_token_sink_pct": 68.1,
+          "avg_entropy_nats": 1.274,
+          "word_self_attn_mean": 0.3879
+        },
+        {
+          "layer": 5,
+          "special_token_sink_pct": 59.26,
+          "avg_entropy_nats": 1.624,
+          "word_self_attn_mean": 0.1714
+        },
+        {
+          "layer": 6,
+          "special_token_sink_pct": 55.4,
+          "avg_entropy_nats": 1.643,
+          "word_self_attn_mean": 0.1524
+        },
+        {
+          "layer": 7,
+          "special_token_sink_pct": 59.53,
+          "avg_entropy_nats": 1.519,
+          "word_self_attn_mean": 0.1696
+        },
+        {
+          "layer": 8,
+          "special_token_sink_pct": 72.92,
+          "avg_entropy_nats": 1.213,
+          "word_self_attn_mean": 0.21
+        },
+        {
+          "layer": 9,
+          "special_token_sink_pct": 57.13,
+          "avg_entropy_nats": 1.689,
+          "word_self_attn_mean": 0.2471
+        },
+        {
+          "layer": 10,
+          "special_token_sink_pct": 37.12,
+          "avg_entropy_nats": 2.065,
+          "word_self_attn_mean": 0.2343
+        },
+        {
+          "layer": 11,
+          "special_token_sink_pct": 54.53,
+          "avg_entropy_nats": 1.752,
+          "word_self_attn_mean": 0.3609
+        },
+        {
+          "layer": 12,
+          "special_token_sink_pct": 40.96,
+          "avg_entropy_nats": 1.844,
+          "word_self_attn_mean": 0.5532
+        }
+      ]
+    },
+    "phobert_phoner_00277": {
+      "model_name": "vinai/phobert-base-v2",
+      "sentence_id": "phoner_word_test_00277",
+      "layer": 12,
+      "head": "mean",
+      "num_original_tokens": 15,
+      "num_subwords": 17,
+      "tokens": [
+        "\"",
+        "Bệnh_nhân",
+        "448",
+        "\"",
+        ",",
+        "thực_tập_sinh",
+        "tại",
+        "Bệnh_viện",
+        "Đà_Nẵng",
+        "từ",
+        "ngày",
+        "22/6",
+        "đến",
+        "17/7",
+        "."
+      ],
+      "subwords": [
+        "<s>",
+        "\"",
+        "Bệnh_nhân",
+        "448",
+        "\"",
+        ",",
+        "thực_tập_sinh",
+        "tại",
+        "Bệnh_viện",
+        "Đà_Nẵng",
+        "từ",
+        "ngày",
+        "22/6",
+        "đến",
+        "17/7",
+        ".",
+        "</s>"
+      ],
+      "gold_tags": [
+        "O",
+        "O",
+        "B-PATIENT_ID",
+        "O",
+        "O",
+        "B-JOB",
+        "O",
+        "B-LOCATION",
+        "I-LOCATION",
+        "O",
+        "O",
+        "B-DATE",
+        "O",
+        "B-DATE",
+        "O"
+      ],
+      "predicted_tags": [
+        "O",
+        "O",
+        "B-PATIENT_ID",
+        "O",
+        "O",
+        "B-JOB",
+        "O",
+        "B-LOCATION",
+        "I-LOCATION",
+        "O",
+        "O",
+        "B-DATE",
+        "O",
+        "B-DATE",
+        "O"
+      ],
+      "exact_tag_match": true,
+      "aggregation_method": "Key=sum, Query=mean (loại bỏ <s>/</s> (khối lượng sink TB=43.0%), chuẩn hóa tổng hàng=1)",
+      "multi_subword_words": {},
+      "entity_query_focus": [
+        {
+          "query_idx": 2,
+          "query_token": "448",
+          "pred_tag": "B-PATIENT_ID",
+          "gold_tag": "B-PATIENT_ID",
+          "top_attended_keys": [
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.6023
+            },
+            {
+              "token": "448",
+              "tag": "B-PATIENT_ID",
+              "weight": 0.1605
+            },
+            {
+              "token": "thực_tập_sinh",
+              "tag": "B-JOB",
+              "weight": 0.0671
+            },
+            {
+              "token": "Bệnh_nhân",
+              "tag": "O",
+              "weight": 0.0286
+            }
+          ]
+        },
+        {
+          "query_idx": 5,
+          "query_token": "thực_tập_sinh",
+          "pred_tag": "B-JOB",
+          "gold_tag": "B-JOB",
+          "top_attended_keys": [
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.7374
+            },
+            {
+              "token": "thực_tập_sinh",
+              "tag": "B-JOB",
+              "weight": 0.1088
+            },
+            {
+              "token": "448",
+              "tag": "B-PATIENT_ID",
+              "weight": 0.0189
+            },
+            {
+              "token": "Bệnh_nhân",
+              "tag": "O",
+              "weight": 0.0178
+            }
+          ]
+        },
+        {
+          "query_idx": 7,
+          "query_token": "Bệnh_viện",
+          "pred_tag": "B-LOCATION",
+          "gold_tag": "B-LOCATION",
+          "top_attended_keys": [
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.4027
+            },
+            {
+              "token": "Bệnh_viện",
+              "tag": "B-LOCATION",
+              "weight": 0.1681
+            },
+            {
+              "token": "Đà_Nẵng",
+              "tag": "I-LOCATION",
+              "weight": 0.0642
+            },
+            {
+              "token": "tại",
+              "tag": "O",
+              "weight": 0.0517
+            }
+          ]
+        },
+        {
+          "query_idx": 8,
+          "query_token": "Đà_Nẵng",
+          "pred_tag": "I-LOCATION",
+          "gold_tag": "I-LOCATION",
+          "top_attended_keys": [
+            {
+              "token": "Đà_Nẵng",
+              "tag": "I-LOCATION",
+              "weight": 0.4231
+            },
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.3443
+            },
+            {
+              "token": "Bệnh_viện",
+              "tag": "B-LOCATION",
+              "weight": 0.2047
+            },
+            {
+              "token": "thực_tập_sinh",
+              "tag": "B-JOB",
+              "weight": 0.0084
+            }
+          ]
+        },
+        {
+          "query_idx": 11,
+          "query_token": "22/6",
+          "pred_tag": "B-DATE",
+          "gold_tag": "B-DATE",
+          "top_attended_keys": [
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.5874
+            },
+            {
+              "token": "17/7",
+              "tag": "B-DATE",
+              "weight": 0.0923
+            },
+            {
+              "token": "22/6",
+              "tag": "B-DATE",
+              "weight": 0.0803
+            },
+            {
+              "token": "thực_tập_sinh",
+              "tag": "B-JOB",
+              "weight": 0.0335
+            }
+          ]
+        },
+        {
+          "query_idx": 13,
+          "query_token": "17/7",
+          "pred_tag": "B-DATE",
+          "gold_tag": "B-DATE",
+          "top_attended_keys": [
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.561
+            },
+            {
+              "token": "17/7",
+              "tag": "B-DATE",
+              "weight": 0.0951
+            },
+            {
+              "token": "22/6",
+              "tag": "B-DATE",
+              "weight": 0.0765
+            },
+            {
+              "token": "thực_tập_sinh",
+              "tag": "B-JOB",
+              "weight": 0.0435
+            }
+          ]
+        }
+      ],
+      "per_layer_stats": [
+        {
+          "layer": 1,
+          "special_token_sink_pct": 19.97,
+          "avg_entropy_nats": 2.609,
+          "word_self_attn_mean": 0.1631
+        },
+        {
+          "layer": 2,
+          "special_token_sink_pct": 62.49,
+          "avg_entropy_nats": 1.601,
+          "word_self_attn_mean": 0.1015
+        },
+        {
+          "layer": 3,
+          "special_token_sink_pct": 50.27,
+          "avg_entropy_nats": 1.949,
+          "word_self_attn_mean": 0.1594
+        },
+        {
+          "layer": 4,
+          "special_token_sink_pct": 53.66,
+          "avg_entropy_nats": 1.986,
+          "word_self_attn_mean": 0.1782
+        },
+        {
+          "layer": 5,
+          "special_token_sink_pct": 41.89,
+          "avg_entropy_nats": 2.005,
+          "word_self_attn_mean": 0.279
+        },
+        {
+          "layer": 6,
+          "special_token_sink_pct": 54.64,
+          "avg_entropy_nats": 2.054,
+          "word_self_attn_mean": 0.1781
+        },
+        {
+          "layer": 7,
+          "special_token_sink_pct": 58.73,
+          "avg_entropy_nats": 1.893,
+          "word_self_attn_mean": 0.2334
+        },
+        {
+          "layer": 8,
+          "special_token_sink_pct": 36.29,
+          "avg_entropy_nats": 1.893,
+          "word_self_attn_mean": 0.1368
+        },
+        {
+          "layer": 9,
+          "special_token_sink_pct": 34.62,
+          "avg_entropy_nats": 1.845,
+          "word_self_attn_mean": 0.1034
+        },
+        {
+          "layer": 10,
+          "special_token_sink_pct": 34.11,
+          "avg_entropy_nats": 1.686,
+          "word_self_attn_mean": 0.1173
+        },
+        {
+          "layer": 11,
+          "special_token_sink_pct": 34.7,
+          "avg_entropy_nats": 1.729,
+          "word_self_attn_mean": 0.0517
+        },
+        {
+          "layer": 12,
+          "special_token_sink_pct": 43.01,
+          "avg_entropy_nats": 2.2,
+          "word_self_attn_mean": 0.1193
+        }
+      ]
+    },
+    "xlmr_phoner_00277": {
+      "model_name": "xlm-roberta-base",
+      "sentence_id": "phoner_syllable_test_00277",
+      "layer": 12,
+      "head": "mean",
+      "num_original_tokens": 20,
+      "num_subwords": 27,
+      "tokens": [
+        "\"",
+        "Bệnh",
+        "nhân",
+        "448",
+        "\"",
+        ",",
+        "thực",
+        "tập",
+        "sinh",
+        "tại",
+        "Bệnh",
+        "viện",
+        "Đà",
+        "Nẵng",
+        "từ",
+        "ngày",
+        "22/6",
+        "đến",
+        "17/7",
+        "."
+      ],
+      "subwords": [
+        "<s>",
+        "▁\"",
+        "▁Bệnh",
+        "▁nhân",
+        "▁",
+        "448",
+        "▁\"",
+        "▁",
+        ",",
+        "▁thực",
+        "▁tập",
+        "▁sinh",
+        "▁tại",
+        "▁Bệnh",
+        "▁viện",
+        "▁Đà",
+        "▁Nẵng",
+        "▁từ",
+        "▁ngày",
+        "▁22",
+        "/6",
+        "▁đến",
+        "▁17",
+        "/7",
+        "▁",
+        ".",
+        "</s>"
+      ],
+      "gold_tags": [
+        "O",
+        "O",
+        "O",
+        "B-PATIENT_ID",
+        "O",
+        "O",
+        "B-JOB",
+        "I-JOB",
+        "I-JOB",
+        "O",
+        "B-LOCATION",
+        "I-LOCATION",
+        "I-LOCATION",
+        "I-LOCATION",
+        "O",
+        "O",
+        "B-DATE",
+        "O",
+        "B-DATE",
+        "O"
+      ],
+      "predicted_tags": [
+        "O",
+        "O",
+        "O",
+        "B-PATIENT_ID",
+        "O",
+        "O",
+        "B-JOB",
+        "I-JOB",
+        "I-JOB",
+        "O",
+        "B-LOCATION",
+        "I-LOCATION",
+        "I-LOCATION",
+        "I-LOCATION",
+        "O",
+        "O",
+        "B-DATE",
+        "O",
+        "B-DATE",
+        "O"
+      ],
+      "exact_tag_match": true,
+      "aggregation_method": "Key=sum, Query=mean (loại bỏ <s>/</s> (khối lượng sink TB=46.7%), chuẩn hóa tổng hàng=1)",
+      "multi_subword_words": {
+        "448": [
+          "▁",
+          "448"
+        ],
+        ",": [
+          "▁",
+          ","
+        ],
+        "22/6": [
+          "▁22",
+          "/6"
+        ],
+        "17/7": [
+          "▁17",
+          "/7"
+        ],
+        ".": [
+          "▁",
+          "."
+        ]
+      },
+      "entity_query_focus": [
+        {
+          "query_idx": 3,
+          "query_token": "448",
+          "pred_tag": "B-PATIENT_ID",
+          "gold_tag": "B-PATIENT_ID",
+          "top_attended_keys": [
+            {
+              "token": "448",
+              "tag": "B-PATIENT_ID",
+              "weight": 0.9939
+            },
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.001
+            },
+            {
+              "token": "sinh",
+              "tag": "I-JOB",
+              "weight": 0.0009
+            },
+            {
+              "token": "\"",
+              "tag": "O",
+              "weight": 0.0008
+            }
+          ]
+        },
+        {
+          "query_idx": 6,
+          "query_token": "thực",
+          "pred_tag": "B-JOB",
+          "gold_tag": "B-JOB",
+          "top_attended_keys": [
+            {
+              "token": "thực",
+              "tag": "B-JOB",
+              "weight": 0.8822
+            },
+            {
+              "token": "tập",
+              "tag": "I-JOB",
+              "weight": 0.0725
+            },
+            {
+              "token": "sinh",
+              "tag": "I-JOB",
+              "weight": 0.025
+            },
+            {
+              "token": "Nẵng",
+              "tag": "I-LOCATION",
+              "weight": 0.0051
+            }
+          ]
+        },
+        {
+          "query_idx": 7,
+          "query_token": "tập",
+          "pred_tag": "I-JOB",
+          "gold_tag": "I-JOB",
+          "top_attended_keys": [
+            {
+              "token": "tập",
+              "tag": "I-JOB",
+              "weight": 0.8282
+            },
+            {
+              "token": "sinh",
+              "tag": "I-JOB",
+              "weight": 0.1301
+            },
+            {
+              "token": "thực",
+              "tag": "B-JOB",
+              "weight": 0.0354
+            },
+            {
+              "token": "Bệnh",
+              "tag": "O",
+              "weight": 0.0014
+            }
+          ]
+        },
+        {
+          "query_idx": 8,
+          "query_token": "sinh",
+          "pred_tag": "I-JOB",
+          "gold_tag": "I-JOB",
+          "top_attended_keys": [
+            {
+              "token": "sinh",
+              "tag": "I-JOB",
+              "weight": 0.498
+            },
+            {
+              "token": "tập",
+              "tag": "I-JOB",
+              "weight": 0.4003
+            },
+            {
+              "token": "thực",
+              "tag": "B-JOB",
+              "weight": 0.0955
+            },
+            {
+              "token": "Bệnh",
+              "tag": "O",
+              "weight": 0.0019
+            }
+          ]
+        },
+        {
+          "query_idx": 10,
+          "query_token": "Bệnh",
+          "pred_tag": "B-LOCATION",
+          "gold_tag": "B-LOCATION",
+          "top_attended_keys": [
+            {
+              "token": "Bệnh",
+              "tag": "B-LOCATION",
+              "weight": 0.7471
+            },
+            {
+              "token": "Nẵng",
+              "tag": "I-LOCATION",
+              "weight": 0.11
+            },
+            {
+              "token": "thực",
+              "tag": "B-JOB",
+              "weight": 0.0471
+            },
+            {
+              "token": "viện",
+              "tag": "I-LOCATION",
+              "weight": 0.0323
+            }
+          ]
+        },
+        {
+          "query_idx": 11,
+          "query_token": "viện",
+          "pred_tag": "I-LOCATION",
+          "gold_tag": "I-LOCATION",
+          "top_attended_keys": [
+            {
+              "token": "viện",
+              "tag": "I-LOCATION",
+              "weight": 0.4825
+            },
+            {
+              "token": "Đà",
+              "tag": "I-LOCATION",
+              "weight": 0.255
+            },
+            {
+              "token": "Nẵng",
+              "tag": "I-LOCATION",
+              "weight": 0.2459
+            },
+            {
+              "token": "sinh",
+              "tag": "I-JOB",
+              "weight": 0.0025
+            }
+          ]
+        },
+        {
+          "query_idx": 12,
+          "query_token": "Đà",
+          "pred_tag": "I-LOCATION",
+          "gold_tag": "I-LOCATION",
+          "top_attended_keys": [
+            {
+              "token": "Đà",
+              "tag": "I-LOCATION",
+              "weight": 0.3855
+            },
+            {
+              "token": "viện",
+              "tag": "I-LOCATION",
+              "weight": 0.3244
+            },
+            {
+              "token": "Nẵng",
+              "tag": "I-LOCATION",
+              "weight": 0.2733
+            },
+            {
+              "token": "nhân",
+              "tag": "O",
+              "weight": 0.0023
+            }
+          ]
+        },
+        {
+          "query_idx": 13,
+          "query_token": "Nẵng",
+          "pred_tag": "I-LOCATION",
+          "gold_tag": "I-LOCATION",
+          "top_attended_keys": [
+            {
+              "token": "Nẵng",
+              "tag": "I-LOCATION",
+              "weight": 0.4028
+            },
+            {
+              "token": "viện",
+              "tag": "I-LOCATION",
+              "weight": 0.3005
+            },
+            {
+              "token": "Đà",
+              "tag": "I-LOCATION",
+              "weight": 0.2733
+            },
+            {
+              "token": "Bệnh",
+              "tag": "B-LOCATION",
+              "weight": 0.0072
+            }
+          ]
+        },
+        {
+          "query_idx": 16,
+          "query_token": "22/6",
+          "pred_tag": "B-DATE",
+          "gold_tag": "B-DATE",
+          "top_attended_keys": [
+            {
+              "token": "22/6",
+              "tag": "B-DATE",
+              "weight": 0.6037
+            },
+            {
+              "token": "17/7",
+              "tag": "B-DATE",
+              "weight": 0.3794
+            },
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.0054
+            },
+            {
+              "token": ",",
+              "tag": "O",
+              "weight": 0.0018
+            }
+          ]
+        },
+        {
+          "query_idx": 18,
+          "query_token": "17/7",
+          "pred_tag": "B-DATE",
+          "gold_tag": "B-DATE",
+          "top_attended_keys": [
+            {
+              "token": "17/7",
+              "tag": "B-DATE",
+              "weight": 0.4802
+            },
+            {
+              "token": "22/6",
+              "tag": "B-DATE",
+              "weight": 0.4761
+            },
+            {
+              "token": ".",
+              "tag": "O",
+              "weight": 0.0202
+            },
+            {
+              "token": ",",
+              "tag": "O",
+              "weight": 0.0053
+            }
+          ]
+        }
+      ],
+      "per_layer_stats": [
+        {
+          "layer": 1,
+          "special_token_sink_pct": 9.58,
+          "avg_entropy_nats": 3.141,
+          "word_self_attn_mean": 0.115
+        },
+        {
+          "layer": 2,
+          "special_token_sink_pct": 46.74,
+          "avg_entropy_nats": 2.07,
+          "word_self_attn_mean": 0.1202
+        },
+        {
+          "layer": 3,
+          "special_token_sink_pct": 62.64,
+          "avg_entropy_nats": 1.498,
+          "word_self_attn_mean": 0.1669
+        },
+        {
+          "layer": 4,
+          "special_token_sink_pct": 59.04,
+          "avg_entropy_nats": 1.573,
+          "word_self_attn_mean": 0.3294
+        },
+        {
+          "layer": 5,
+          "special_token_sink_pct": 49.42,
+          "avg_entropy_nats": 1.942,
+          "word_self_attn_mean": 0.1573
+        },
+        {
+          "layer": 6,
+          "special_token_sink_pct": 55.51,
+          "avg_entropy_nats": 1.766,
+          "word_self_attn_mean": 0.1412
+        },
+        {
+          "layer": 7,
+          "special_token_sink_pct": 55.12,
+          "avg_entropy_nats": 1.808,
+          "word_self_attn_mean": 0.14
+        },
+        {
+          "layer": 8,
+          "special_token_sink_pct": 67.85,
+          "avg_entropy_nats": 1.459,
+          "word_self_attn_mean": 0.1939
+        },
+        {
+          "layer": 9,
+          "special_token_sink_pct": 58.85,
+          "avg_entropy_nats": 1.745,
+          "word_self_attn_mean": 0.2093
+        },
+        {
+          "layer": 10,
+          "special_token_sink_pct": 44.41,
+          "avg_entropy_nats": 2.09,
+          "word_self_attn_mean": 0.1955
+        },
+        {
+          "layer": 11,
+          "special_token_sink_pct": 52.52,
+          "avg_entropy_nats": 1.803,
+          "word_self_attn_mean": 0.2828
+        },
+        {
+          "layer": 12,
+          "special_token_sink_pct": 46.71,
+          "avg_entropy_nats": 1.856,
+          "word_self_attn_mean": 0.4896
+        }
+      ]
+    }
+  }
+}
