@@ -21,6 +21,7 @@ DeepLearning-NER/
 ├── configs/                # Cấu hình siêu tham số (YAML) cho 3 nhánh
 ├── data/                   # Kịch bản tải dữ liệu & danh sách chỉ số test cố định (không lưu data nặng trên Git)
 ├── docs/                   # Tài liệu quy ước định dạng dữ liệu chung
+├── examples/               # Kịch bản ví dụ minh họa suy luận và căn chỉnh từ phụ
 ├── outputs/                # Thống kê, bảng biểu, hình vẽ, dự đoán (checkpoints được loại trừ bởi .gitignore)
 ├── report/acl_latex/       # Mã nguồn báo cáo LaTeX chuẩn ACL & slide thuyết trình
 ├── scripts/                # Kịch bản tái tạo bảng kết quả chính
@@ -29,6 +30,7 @@ DeepLearning-NER/
 │   ├── data_prep/          # Tiền xử lý PhoNER_COVID19 và VLSP về chuẩn JSONL chung
 │   ├── models/             # 3 nhánh mô hình độc lập: bilstm_crf/, pretrained/, llm_ner/
 │   └── analysis/           # Phân tích lỗi chéo và trực quan hóa
+├── tests/                  # Bộ kiểm thử đơn vị (unit tests) cho cả 3 nhánh và hạ tầng chung
 ├── requirements.txt        # Danh sách thư viện Python
 └── README.md
 ```
@@ -63,7 +65,11 @@ PYTHONUTF8=1 python src/data_prep/process_vlsp.py
 
 ## 6. Kiểm thử hạ tầng (Unit Tests)
 ```bash
-PYTHONUTF8=1 python -m unittest tests_schema.py tests_metrics.py tests_logger.py tests_word_segmenter.py tests_process_vlsp.py tests_bilstm.py -v
+# Chạy toàn bộ bộ kiểm thử unittest (Nhánh 1, Nhánh 2 & hạ tầng chung)
+PYTHONUTF8=1 python -m unittest discover -s tests -p "tests_*.py" -v
+
+# Hoặc chạy toàn bộ 16 tệp (gồm cả 2 tệp pytest của Nhánh 3) nếu đã cài pytest:
+PYTHONUTF8=1 python -m pytest tests/ -v
 ```
 
 ## 7. Huấn luyện, đánh giá và theo dõi thí nghiệm
