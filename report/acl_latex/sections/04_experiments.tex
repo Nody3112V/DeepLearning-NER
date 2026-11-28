@@ -1,0 +1,87 @@
+\section{Thực nghiệm}
+\label{sec:experiments}
+
+\subsection{Tập dữ liệu và Quy trình Tiền xử lý}
+\label{sec:exp-data}
+
+Nhóm tiến hành thực nghiệm và đối chiếu trên hai bộ dữ liệu NER tiếng Việt chuẩn thuộc hai miền ngữ liệu bổ trợ cho nhau: \textbf{PhoNER\_COVID19} \citep{truong-etal-2021-covid} (miền dịch tễ chuyên biệt, 10 loại thực thể, 21 nhãn BIO) và \textbf{VLSP 2016} \citep{nguyen2016vlsp} (miền tin tức tổng quát, 4 loại thực thể \texttt{PER}, \texttt{LOC}, \texttt{ORG}, \texttt{MISC}, 9 nhãn BIO). Cả hai tập dữ liệu đều được chuẩn hóa về cùng cấu trúc tệp JSONL (\texttt{src/common/schema.py}) ở cả hai cấp độ biểu diễn: mức từ (\textit{word-level}, nối âm tiết trong từ ghép bằng dấu gạch dưới \texttt{\_}) và mức âm tiết (\textit{syllable-level}). Thống kê chi tiết được trình bày tại Bảng~\ref{tab:dataset-stats}.
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llrrrrrr}
+\hline
+\textbf{Bộ dữ liệu} & \textbf{Tập} & \textbf{Số câu} & \textbf{Token (Word)} & \textbf{TB (Word)} & \textbf{Token (Syl)} & \textbf{Tổng thực thể} & \textbf{Tỷ lệ `O' (Word)} \\
+\hline
+\multirow{3}{*}{\textbf{PhoNER\_COVID19}}
+  & Train & 5.027  & 132.511 & 26,36 & 167.541 & 15.767 & 79,05\% \\
+  & Dev   & 2.000  & 56.283  & 28,14 & 71.325  & 7.478  & 74,92\% \\
+  & Test  & 3.000  & 85.678  & 28,56 & 108.354 & 11.735 & 74,17\% \\
+\hline
+\multirow{3}{*}{\textbf{VLSP 2016}}
+  & Train & 13.486 & 294.501 & 21,84 & 348.783 & 12.083 & 93,58\% \\
+  & Dev   & 1.500  & 32.233  & 21,49 & 38.279  & 1.333  & 93,46\% \\
+  & Test  & 1.872  & 42.666  & 22,79 & 50.612  & 1.804  & 93,33\% \\
+\hline
+\end{tabular}
+\caption{Thống kê chi tiết hai bộ dữ liệu PhoNER\_COVID19 và VLSP 2016 sau chuẩn hóa về định dạng JSONL ở cả mức từ (\textit{Word}) và mức âm tiết (\textit{Syl}).}
+\label{tab:dataset-stats}
+\end{table*}
+
+\paragraph{Lưu ý về nguồn và phân chia tập VLSP 2016.}
+Do tập kiểm thử gốc của VLSP 2016 không công khai rộng rãi, nhóm sử dụng bản chuẩn hóa công khai trên HuggingFace Hub (\texttt{datnth1709/VLSP2016-NER-data}), gồm 13.486 câu huấn luyện (\texttt{train}) và 3.372 câu thẩm định (\texttt{valid}) đã tách từ sẵn ở mức từ. Nhóm chia cố định tập \texttt{valid} thành 1.500 câu \texttt{dev} đầu tiên và 1.872 câu \texttt{test} còn lại (\texttt{data/download\_vlsp.py}), đồng thời chuyển đổi ngược từ mức từ sang mức âm tiết bảo toàn 100\% ranh giới và tổng số thực thể (\texttt{src/data\_prep/process\_vlsp.py}). Kiểm tra trùng lặp nguyên bản cho thấy có 9 câu trùng giữa Train--Dev, 10 câu giữa Train--Test và 1 câu giữa Dev--Test (chủ yếu là tiêu đề ngắn hoặc chữ ký phóng viên). Vì cách chia kiểm thử này khác tập test 2.831 câu của các công bố gốc, mọi kết quả trên VLSP 2016 trong báo cáo chỉ dùng để đối chiếu công bằng nội bộ giữa các nhánh của dự án trên cùng 1.872 câu kiểm thử.
+
+\subsection{Thiết lập Huấn luyện và Chỉ số Đánh giá}
+\label{sec:exp-setup}
+
+\paragraph{Giao thức đánh giá thống nhất.}
+Toàn bộ các nhánh mô hình đều sử dụng chung mô-đun chấm điểm \texttt{src/common/metrics.py} đã đóng băng từ cuối Tuần 1. Một thực thể dự đoán chỉ được tính là đúng (\textit{True Positive}) khi khớp tuyệt đối cả ranh giới bắt đầu, ranh giới kết thúc và loại thực thể (\textit{Exact Entity-level Match}). Chỉ số chính là \textbf{Micro-F1} và chỉ số phụ là \textbf{Macro-F1} nhằm phản ánh hiệu năng trên các lớp thực thể hiếm (như \texttt{JOB}, \texttt{TRANSPORTATION} trong PhoNER hoặc \texttt{MISC}, \texttt{ORG} trong VLSP).
+
+\paragraph{Cấu hình siêu tham số và phần cứng.}
+\begin{itemize}
+    \item \textbf{Nhánh 1 (BiLSTM \& BiLSTM-CNN-CRF):} Vector nhúng từ $d_w = 100$ học từ đầu, Char-CNN ($d_{\text{char}} = 30$, 50 bộ lọc $k = 3$), BiLSTM 1 tầng hai chiều ($2d_h = 256$), dropout $0.5$, batch size $32$, tối ưu bằng \texttt{AdamW} ($\eta = 10^{-3}$, weight decay $10^{-5}$), bộ giảm tốc độ học \texttt{ReduceLROnPlateau} (hệ số $0.5$, patience $2$), cắt gradient $5.0$ và dừng sớm với patience $5$ trong tối đa $30$ epoch (seed $= 42$).
+    \item \textbf{Nhánh 2 (PhoBERT \& XLM-R):} Độ dài chuỗi tối đa $L_{\max} = 256$, batch size $16$, tối đa $10$ epoch (early stopping patience $3$), \texttt{AdamW} với $\eta_{\text{enc}} = 2\times 10^{-5}$, $\eta_{\text{cls}} = 10^{-4}$, weight decay $0.01$, linear warmup $10\%$, classifier dropout $0.2$, grad clip $1.0$ và Mixed Precision (AMP) trên GPU. PhoBERT tiêu thụ khoảng $4.48$--$6.77$ GB VRAM (4,8--7,4 phút/lượt), trong khi XLM-R tiêu thụ $7.25$--$10.56$ GB VRAM (24,7--59,6 phút/lượt) do bộ từ điển đa ngữ lớn hơn (250K so với 64K).
+\end{itemize}
+
+\subsection{Kết quả Cơ sở (Baseline) và Mốc Tiến độ (Milestone)}
+\label{sec:exp-results}
+
+Bảng~\ref{tab:milestone-results} tổng hợp kết quả trên tập kiểm thử của cả Nhánh 1 và Nhánh 2 trên hai bộ dữ liệu PhoNER\_COVID19 (3.000 câu) và VLSP 2016 (1.872 câu).
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llcccc}
+\hline
+\textbf{Bộ dữ liệu} & \textbf{Mô hình (Cấp độ)} & \textbf{Precision} & \textbf{Recall} & \textbf{Micro-F1} & \textbf{Macro-F1} \\
+\hline
+\multirow{6}{*}{\textbf{PhoNER\_COVID19}}
+  & Baseline BiLSTM (Word, Tuần 2) & 86,61 & 89,71 & 88,13 & 83,00 \\
+  & BiLSTM-CNN-CRF tự cài đặt (Word, Tuần 3) & 93,23 & 92,09 & 92,66 & 89,16 \\
+  & PhoBERT-base-v2 (\texttt{last}, Word) & 92,75 & 94,90 & 93,81 & 89,05 \\
+  & PhoBERT-base-v2 (\texttt{last}, Syllable) & 91,61 & 93,93 & 92,76 & 86,14 \\
+  & XLM-RoBERTa-base (\texttt{last}, Syllable) & 93,16 & 95,07 & \textbf{94,11} & \textbf{91,45} \\
+  & XLM-RoBERTa-base (\texttt{last}, Word) & 93,05 & 94,69 & 93,86 & 91,04 \\
+\hline
+\multirow{7}{*}{\textbf{VLSP 2016}}
+  & Baseline BiLSTM (Word) & 86,65 & 85,98 & 86,31 & 80,82 \\
+  & BiLSTM-CNN-CRF tự cài đặt (Word) & 90,84 & 90,69 & 90,76 & 85,43 \\
+  & PhoBERT-base-v2 (Đóng băng thân, Word, Tuần 2) & 55,38 & 11,97 & 19,69 & 8,78 \\
+  & PhoBERT-base-v2 (\texttt{last}, Word) & 93,74 & 94,68 & 94,21 & 89,76 \\
+  & PhoBERT-base-v2 (\texttt{concat\_4}, Word) & 94,14 & 95,34 & \textbf{94,74} & \textbf{91,14} \\
+  & PhoBERT-base-v2 (\texttt{last}, Syllable) & 91,56 & 93,79 & 92,66 & 86,78 \\
+  & XLM-RoBERTa-base (\texttt{last}, Syllable) & 92,98 & 93,96 & 93,47 & 89,25 \\
+\hline
+\end{tabular}
+\caption{Kết quả đánh giá Entity-level (\%) trên tập kiểm thử của Nhánh 1 (BiLSTM-CRF tự cài đặt) và Nhánh 2 (PhoBERT \& XLM-R) trên cả hai bộ dữ liệu.}
+\label{tab:milestone-results}
+\end{table*}
+
+\paragraph{Nhận xét chính và khó khăn kỹ thuật đến mốc Tuần 3.}
+\begin{enumerate}
+    \item \textbf{Đóng góp rõ rệt của Char-CNN và CRF (Nhánh 1):} Bổ sung tầng trích xuất hình thái ký tự và tầng quy hoạch động CRF tự cài đặt giúp Micro-F1 tăng mạnh \textbf{+4,53\%} trên PhoNER\_COVID19 (88,13\% $\to$ 92,66\%; riêng lớp \texttt{NAME} tăng +23,36\%) và \textbf{+4,45\%} trên VLSP 2016 (86,31\% $\to$ 90,76\%; lớp khó \texttt{ORG} tăng +12,65\%).
+    \item \textbf{Tầm quan trọng của tinh chỉnh toàn phần và ghép tầng ẩn (Nhánh 2):} Đóng băng toàn bộ thân PhoBERT chỉ đạt 19,69\% F1 do biểu diễn tiền huấn luyện tổng quát chưa phân tách tốt ranh giới nhãn BIO; mở khóa toàn bộ tham số đưa F1 lên 94,21\% và ghép 4 tầng ẩn cuối (\texttt{concat\_4}) nâng đỉnh lên \textbf{94,74\%} trên VLSP 2016. Trên PhoNER\_COVID19, XLM-RoBERTa mức âm tiết đạt cao nhất (\textbf{94,11\%} Micro-F1, \textbf{91,45\%} Macro-F1) nhờ khả năng biểu diễn linh hoạt các mã bệnh nhân, số hiệu chuyến bay và từ mượn y tế.
+    \item \textbf{Khó khăn kỹ thuật đã giải quyết:} (i) Xử lý sự không tương thích giữa Slow Tokenizer của PhoBERT và Fast Tokenizer của XLM-R trong căn chỉnh từ phụ; (ii) hiện tượng phình số lượng từ phụ (\textit{fertility}) của XLM-R khi đưa đầu vào có dấu gạch dưới \texttt{\_} (trung bình 2,04 subword/từ trên PhoNER word-level, đẩy VRAM lên 10,56 GB); và (iii) kiểm soát đồng nhất tập kiểm thử cùng giao thức tính F1 giữa các nhánh.
+\end{enumerate}
+
+% --- [Phần của Thành viên 3: Bảng kết quả nhánh LLM Zero-shot / Few-shot trên tập con 100 câu sẽ được bổ sung tại đây] ---

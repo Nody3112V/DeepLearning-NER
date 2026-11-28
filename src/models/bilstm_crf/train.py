@@ -88,6 +88,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Huấn luyện nhánh BiLSTM-CRF (Thành viên 1)")
     parser.add_argument("--config", type=str, default="configs/bilstm_crf.yaml")
     parser.add_argument("--exp-name", type=str, default=None)
+    parser.add_argument("--dataset", type=str, choices=["phoner_covid19", "vlsp"], default=None)
+    parser.add_argument("--granularity", type=str, choices=["word", "syllable"], default=None)
+    parser.add_argument("--char-type", type=str, choices=["cnn", "lstm"], default=None)
+    parser.add_argument("--lr", type=float, default=None)
+    parser.add_argument("--dropout", type=float, default=None)
+    parser.add_argument("--hidden-dim", type=int, default=None)
+    parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--epochs", type=int, default=None)
     parser.add_argument("--no-char", action="store_true", help="Tắt tầng CharEncoder")
     parser.add_argument("--no-crf", action="store_true", help="Tắt tầng CRF (dùng CrossEntropy)")
@@ -97,12 +104,34 @@ def main() -> None:
     with open(args.config, "r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
 
+    # Ghi đè cấu hình từ CLI để hỗ trợ chạy Ablation và đa tập dữ liệu mà không sửa YAML
+    if args.dataset is not None or args.granularity is not None:
+        ds = args.dataset or cfg["data"]["dataset"]
+        gran = args.granularity or cfg["data"]["granularity"]
+        cfg["data"]["dataset"] = ds
+        cfg["data"]["granularity"] = gran
+        cfg["data"]["train_path"] = f"data/processed/{ds}/{gran}/train.jsonl"
+        cfg["data"]["dev_path"] = f"data/processed/{ds}/{gran}/dev.jsonl"
+        cfg["data"]["test_path"] = f"data/processed/{ds}/{gran}/test.jsonl"
+    if args.char_type is not None:
+        cfg["model"]["char_encoder_type"] = args.char_type
+    if args.lr is not None:
+        cfg["train"]["learning_rate"] = args.lr
+    if args.dropout is not None:
+        cfg["model"]["dropout"] = args.dropout
+    if args.hidden_dim is not None:
+        cfg["model"]["bilstm_hidden_dim"] = args.hidden_dim
+    if args.seed is not None:
+        cfg["seed"] = args.seed
+
     seed = cfg.get("seed", 42)
     set_seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     use_char = cfg["model"].get("use_char_encoder", False) and not args.no_char
     use_crf = cfg["model"].get("use_crf", False) and not args.no_crf
+    cfg["model"]["use_char_encoder"] = use_char
+    cfg["model"]["use_crf"] = use_crf
     num_epochs = args.epochs or cfg["train"]["num_epochs"]
     exp_name = args.exp_name or cfg["experiment_name"]
 
@@ -166,17 +195,34 @@ def main() -> None:
         crf=crf_layer,
     ).to(device)
 
-    optimizer = torch.optim.AdamW(
-        model.parameters(),
-        lr=cfg["train"]["learning_rate"],
-        weight_decay=cfg["train"]["weight_decay"],
-    )
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer,
-        mode="max",
-        factor=cfg["train"]["lr_factor"],
-        patience=cfg["train"]["lr_patience"],
-    )
+    if cfg["model"].get("freeze_word_emb", False):
+        model.word_embedding.weight.requires_grad = False
+
+    trainable_params = [p for p in model.parameters() if p.requires_grad]
+    opt_name = str(cfg["train"].get("optimizer", "adamw")).lower()
+    lr = float(cfg["train"]["learning_rate"])
+    weight_decay = float(cfg["train"]["weight_decay"])
+    if opt_name == "adamw":
+        optimizer = torch.optim.AdamW(trainable_params, lr=lr, weight_decay=weight_decay)
+    elif opt_name == "adam":
+        optimizer = torch.optim.Adam(trainable_params, lr=lr, weight_decay=weight_decay)
+    elif opt_name == "sgd":
+        optimizer = torch.optim.SGD(trainable_params, lr=lr, momentum=0.9, weight_decay=weight_decay)
+    else:
+        raise ValueError(f"optimizer không hợp lệ: {opt_name!r} (hỗ trợ: adamw, adam, sgd)")
+
+    sched_name = str(cfg["train"].get("lr_scheduler", "reduce_on_plateau")).lower()
+    if sched_name == "reduce_on_plateau":
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode="max",
+            factor=cfg["train"]["lr_factor"],
+            patience=cfg["train"]["lr_patience"],
+        )
+    elif sched_name == "none":
+        scheduler = None
+    else:
+        raise ValueError(f"lr_scheduler không hợp lệ: {sched_name!r} (hỗ trợ: reduce_on_plateau, none)")
 
     # 5. Chuẩn bị thư mục lưu checkpoint và W&B
     ckpt_dir = Path(cfg["logging"]["checkpoint_dir"]) / exp_name
@@ -220,7 +266,8 @@ def main() -> None:
         train_loss = train_loss_sum / max(len(train_loader), 1)
         dev_loss, dev_metrics = evaluate(model, dev_loader, vocab, device)
         dev_f1 = dev_metrics["overall"]["f1"]
-        scheduler.step(dev_f1)
+        if scheduler is not None:
+            scheduler.step(dev_f1)
         elapsed = time.time() - t0
         lr_now = optimizer.param_groups[0]["lr"]
 

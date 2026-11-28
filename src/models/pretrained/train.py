@@ -294,7 +294,6 @@ def main():
     run_pipeline(cfg, args)
     sys.stdout.flush()
     sys.stderr.flush()
-    os._exit(0)
 
 
 if __name__ == "__main__":

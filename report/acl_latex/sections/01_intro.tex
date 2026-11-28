@@ -12,10 +12,11 @@ Trong dự án này, nhóm thực hiện nghiên cứu đối chiếu toàn di�
 \end{enumerate}
 
 \subsection{Phát biểu bài toán hình thức}
-Cho một câu tiếng Việt đầu vào biểu diễn dưới dạng chuỗi $n$ đơn vị từ vựng $\mathbf{x} = (x_1, x_2, \dots, x_n)$, trong đó mỗi $x_i$ có thể là một từ đã qua tách từ (\textit{word-level}) hoặc một âm tiết đơn lẻ (\textit{syllable-level}). Gọi $\mathcal{C}$ là tập hợp các loại thực thể đích (với $|\mathcal{C}| = 10$ trên PhoNER\_COVID19). Theo lược đồ gán nhãn \textbf{BIO} (\textit{Beginning -- Inside -- Outside}), không gian nhãn đầu ra được định nghĩa là:
+Cho một câu tiếng Việt đầu vào biểu diễn dưới dạng chuỗi $n$ đơn vị từ vựng $\mathbf{x} = (x_1, x_2, \dots, x_n)$, trong đó mỗi $x_i$ có thể là một từ đã qua tách từ (\textit{word-level}) hoặc một âm tiết đơn lẻ (\textit{syllable-level}). Gọi $\mathcal{C}$ là tập hợp các loại thực thể đích, với $|\mathcal{C}| = 10$ trên PhoNER\_COVID19 và $|\mathcal{C}| = 4$ (\texttt{PER}, \texttt{LOC}, \texttt{ORG}, \texttt{MISC}) trên VLSP 2016. Theo lược đồ gán nhãn \textbf{BIO} (\textit{Beginning -- Inside -- Outside}), không gian nhãn đầu ra được định nghĩa là:
 \begin{equation}
-    \mathcal{Y} = \{\text{O}\} \cup \{\text{B-}c, \text{I-}c \mid c \in \mathcal{C}\}, \quad |\mathcal{Y}| = 2|\mathcal{C}| + 1 = 21.
+    \mathcal{Y} = \{\text{O}\} \cup \{\text{B-}c, \text{I-}c \mid c \in \mathcal{C}\}, \quad |\mathcal{Y}| = 2|\mathcal{C}| + 1,
 \end{equation}
+tương ứng với $|\mathcal{Y}| = 21$ nhãn trên PhoNER\_COVID19 và $|\mathcal{Y}| = 9$ nhãn trên VLSP 2016.
 
 Mục tiêu của mô hình gán nhãn chuỗi là tìm ánh xạ $f_{\Theta}: \mathcal{X}^n \to \mathcal{Y}^n$ để dự đoán chuỗi nhãn tối ưu $\hat{\mathbf{y}} = (\hat{y}_1, \hat{y}_2, \dots, \hat{y}_n) \in \mathcal{Y}^n$ thỏa mãn ràng buộc chuyển tiếp hợp lệ của cấu trúc BIO:
 \begin{equation}

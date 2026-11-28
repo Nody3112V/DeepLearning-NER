@@ -17,7 +17,7 @@ Chuỗi biểu diễn sau khi đi qua lớp điều chuẩn \textit{Dropout} ($p
 \begin{equation}
     \mathbf{h}_i = \left[\,\overrightarrow{\text{LSTM}}(\mathbf{u}_{1:i}) \,;\, \overleftarrow{\text{LSTM}}(\mathbf{u}_{i:n})\,\right] \in \mathbb{R}^{2d_h},
 \end{equation}
-với tổng kích thước ẩn $2d_h = 256$. Một tầng chiếu tuyến tính ánh xạ $\mathbf{h}_i$ sang vector điểm phát xạ (\textit{emission scores}) $\mathbf{P}_i \in \mathbb{R}^{|\mathcal{Y}|}$ tương ứng với $|\mathcal{Y}| = 21$ nhãn BIO.
+với tổng kích thước ẩn $2d_h = 256$. Một tầng chiếu tuyến tính ánh xạ $\mathbf{h}_i$ sang vector điểm phát xạ (\textit{emission scores}) $\mathbf{P}_i \in \mathbb{R}^{|\mathcal{Y}|}$ tương ứng với $|\mathcal{Y}| = 21$ nhãn BIO trên PhoNER\_COVID19 và $|\mathcal{Y}| = 9$ nhãn trên VLSP 2016.
 
 \paragraph{Mô hình cơ sở (Baseline) và Tầng CRF tự cài đặt.}
 Ở cấu hình cơ sở Tuần 2 (\textit{Baseline BiLSTM}), mô hình dự đoán độc lập tại từng bước thời gian và tối ưu hàm mất mát \textit{Masked Cross-Entropy} (bỏ qua vị trí đệm bằng mặt nạ nhị phân \texttt{mask}). Ở cấu hình đầy đủ Tuần 3 (\textbf{BiLSTM-CNN-CRF}), tầng \textbf{CRF} (\texttt{crf.py}) bổ sung bộ tham số chuyển tiếp học được gồm $\mathbf{A} \in \mathbb{R}^{|\mathcal{Y}|\times|\mathcal{Y}|}$, $\mathbf{a}_{\text{start}}, \mathbf{a}_{\text{end}} \in \mathbb{R}^{|\mathcal{Y}|}$ để mô hình hóa ràng buộc hợp lệ giữa các nhãn BIO liên tiếp. Điểm của chuỗi nhãn $\mathbf{y}$ và hàm mất mát âm log-hợp lý (NLL) được định nghĩa như sau:
@@ -27,5 +27,37 @@ với tổng kích thước ẩn $2d_h = 256$. Một tầng chiếu tuyến tín
 \end{align}
 Hàm phân hoạch $\log Z(\mathbf{x})$ được tính chính xác bằng thuật toán quy hoạch động \textbf{Forward} trên miền \textit{log-sum-exp} kết hợp mặt nạ \texttt{mask} theo từng bước thời gian, và quá trình suy luận tìm chuỗi nhãn tối ưu $\hat{\mathbf{y}} = \arg\max_{\tilde{\mathbf{y}}} s(\mathbf{x}, \tilde{\mathbf{y}})$ sử dụng thuật toán \textbf{Viterbi} có truy vết ngược (\textit{backtracking}) với độ phức tạp $\mathcal{O}(n \cdot |\mathcal{Y}|^2)$. Toàn bộ thuật toán Forward và Viterbi đã được kiểm chứng khớp tuyệt đối với cách tính vét cạn trên các câu ngắn trong bộ kiểm thử đơn vị \texttt{tests\_bilstm.py}.
 
-% --- [Phần của Thành viên 2: Nhánh 2 - PhoBERT & XLM-R sẽ được ghép tại đây] ---
+\subsection{Nhánh 2: Tinh chỉnh Mô hình Ngôn ngữ Tiền huấn luyện (PhoBERT và XLM-RoBERTa)}
+\label{sec:method-plm}
+
+Nhánh 2 tiếp cận bài toán NER tiếng Việt theo hướng học chuyển giao (\textit{transfer learning}) bằng cách tinh chỉnh (\textit{fine-tuning}) hai mô hình Transformer tiêu biểu là \textbf{PhoBERT} (\texttt{vinai/phobert-base-v2}, mô hình đơn ngữ tiếng Việt tiền huấn luyện ở mức từ đã tách) \citep{nguyen2020phobert} và \textbf{XLM-RoBERTa} (\texttt{xlm-roberta-base}, mô hình đa ngữ tiền huấn luyện bằng SentencePiece không cần tách từ) \citep{conneau2020xlmr}. Nhóm nạp trọng số backbone từ thư viện \texttt{transformers} của HuggingFace, trong khi toàn bộ cơ chế căn chỉnh nhãn từ phụ (\texttt{subword\_align.py}), kiến trúc gộp đa tầng ẩn và chiến lược đóng băng tham số (\texttt{model.py}), cùng quy trình huấn luyện tối ưu bộ nhớ (\texttt{trainer.py}) đều do nhóm tự xây dựng.
+
+\paragraph{Căn chỉnh nhãn từ gốc -- từ phụ (\textit{Subword Alignment}).}
+Các bộ tách từ phụ như BPE (PhoBERT) hoặc SentencePiece (XLM-R) có thể tách một token gốc $x_i$ thành $k \ge 1$ từ phụ $(s_{i,1}, s_{i,2}, \dots, s_{i,k})$. Trong \texttt{subword\_align.py}, nhóm triển khai luồng xử lý thống nhất cho cả \textit{Fast Tokenizer} (khai thác trực tiếp \texttt{encoding.word\_ids()} với XLM-R) và \textit{Slow Tokenizer} (mã hóa từng token gốc rồi ánh xạ chỉ số từ thủ công với \texttt{PhobertTokenizer}). Nhãn huấn luyện $\tilde{y}_{i,j}$ tại từng vị trí từ phụ được gán theo quy tắc:
+\begin{equation}
+    \tilde{y}_{i,j} =
+    \begin{cases}
+        y_i & \text{nếu } j = 1 \text{ (từ phụ đầu tiên của } x_i\text{)}, \\
+        -100 & \text{nếu } j > 1 \text{ hoặc là token đặc biệt / đệm.}
+    \end{cases}
+\end{equation}
+Khi đánh giá và suy luận, hàm \texttt{recover\_word\_predictions} chỉ lấy nhãn dự đoán tại từ phụ đầu tiên của mỗi từ gốc và áp dụng nhãn dự phòng \texttt{O} cho các token bị cắt do giới hạn độ dài tối đa ($L_{\max}=256$), bảo đảm ánh xạ 1--1 chính xác về độ dài câu nguyên bản.
+
+\paragraph{Kiến trúc gộp đa tầng ẩn và hàm mất mát.}
+Cho chuỗi đầu vào sau mã hóa có độ dài $L$, backbone Transformer xuất ra tập trạng thái ẩn của toàn bộ các tầng $\mathbf{H}^{(0)}, \mathbf{H}^{(1)}, \dots, \mathbf{H}^{(M)} \in \mathbb{R}^{L \times H}$ ($M=12$, $H=768$). Lớp \texttt{PretrainedNERModel} trong \texttt{model.py} hỗ trợ bốn chiến lược kết hợp tầng ẩn để phục vụ thí nghiệm cắt bỏ:
+\begin{itemize}
+    \item \texttt{last}: sử dụng trực tiếp tầng ẩn cuối cùng $\mathbf{z}_t = \mathbf{h}_t^{(M)} \in \mathbb{R}^{H}$;
+    \item \texttt{concat\_4}: ghép nối 4 tầng ẩn cuối $\mathbf{z}_t = [\mathbf{h}_t^{(M-3)}; \mathbf{h}_t^{(M-2)}; \mathbf{h}_t^{(M-1)}; \mathbf{h}_t^{(M)}] \in \mathbb{R}^{4H}$;
+    \item \texttt{mean\_4}: trung bình cộng 4 tầng ẩn cuối $\mathbf{z}_t = \frac{1}{4}\sum_{l=M-3}^{M} \mathbf{h}_t^{(l)}$;
+    \item \texttt{weighted}: tổng có trọng số softmax học được trên toàn bộ $M+1$ tầng $\mathbf{z}_t = \sum_{l=0}^{M} \alpha_l \mathbf{h}_t^{(l)}$ với $\alpha_l = \text{softmax}(\mathbf{w})_l$.
+\end{itemize}
+Vector đặc trưng $\mathbf{z}_t$ đi qua lớp \textit{Dropout} ($p=0.2$) và một tầng chiếu tuyến tính sang không gian nhãn $\mathbf{o}_t = \mathbf{W}\mathbf{z}_t + \mathbf{b} \in \mathbb{R}^{|\mathcal{Y}|}$. Mô hình tối ưu hàm mất mát \textit{Cross-Entropy} bỏ qua toàn bộ vị trí mang nhãn $-100$:
+\begin{equation}
+    \mathcal{L}_{\text{PLM}} = -\frac{1}{|\Omega|} \sum_{t \in \Omega} \log \frac{\exp(o_{t, \tilde{y}_t})}{\sum_{c=1}^{|\mathcal{Y}|} \exp(o_{t, c})},
+\end{equation}
+trong đó $\Omega = \{t \in \{1, \dots, L\} \mid \tilde{y}_t \neq -100\}$ là tập các vị trí từ phụ đầu tiên hợp lệ.
+
+\paragraph{Chiến lược đóng băng và tinh chỉnh tối ưu.}
+Trong \texttt{trainer.py}, nhóm triển khai cả hai chế độ huấn luyện: (i) \textit{mô hình cơ sở đóng băng thân} (\texttt{freeze\_entire\_encoder=True}, chỉ cập nhật 6.921 tham số của tầng phân loại tuyến tính) và (ii) \textit{tinh chỉnh toàn phần} (mở khóa toàn bộ 135,0M tham số ở PhoBERT và 278,1M tham số ở XLM-R). Bộ tối ưu \texttt{AdamW} áp dụng tốc độ học phân biệt (\textit{differential learning rates}: $\eta_{\text{enc}} = 2\times 10^{-5}$ cho encoder và $\eta_{\text{cls}} = 10^{-4}$ cho tầng phân loại), không áp dụng \textit{weight decay} cho các tham số \texttt{bias} và \texttt{LayerNorm}, kết hợp lịch trình ấm dần tuyến tính (\textit{linear warmup} 10\%), cắt ngưỡng gradient ($1.0$) và huấn luyện độ chính xác hỗn hợp (\textit{Mixed Precision} AMP).
+
 % --- [Phần của Thành viên 3: Nhánh 3 - LLM Few-shot sẽ được ghép tại đây] ---
