@@ -8,14 +8,12 @@ data:
   train_path: "data/processed/phoner_covid19/word/train.jsonl"
   dev_path: "data/processed/phoner_covid19/word/dev.jsonl"
   test_path: "data/processed/phoner_covid19/word/test.jsonl"
-  test_indices_path: "data/splits/test_indices.json"
   min_word_freq: 1
   max_seq_len: 256
   max_word_len: 25
 
 model:
   word_emb_dim: 100
-  pretrained_word_emb: null  # Có thể nạp PhoW2V/FastText nếu mở rộng
   freeze_word_emb: false
 
   # Tầng biểu diễn ký tự (Char-CNN / Char-LSTM) - Bật/tắt khi chạy Ablation ở Tuần 4
